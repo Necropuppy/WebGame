@@ -57,6 +57,7 @@
 
 	socket.on('addToChat',function(data){
 		chatText.innerHTML += '<div>' + data + '</div>';
+		chatText.scrollTop = chatText.scrollHeight;
 	});
 	socket.on('evalAnswer',function(data){
 		console.log(data);
