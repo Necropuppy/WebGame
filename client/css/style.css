@@ -1,6 +1,15 @@
 /* config.css */
 
 /* helpers/align.css */
+h1{
+	text-align:center;
+	margin-bottom:5px;
+}
+h3{
+	text-align:center;
+	margin-bottom:25px;
+	margin-top: 5px;
+}
 
 .align {
   -webkit-box-align: center;
