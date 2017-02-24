@@ -12,7 +12,7 @@ fs.readFile('config.txt', 'utf8', function (err, data) {
     } else {
         port = data;
     }
-}
+});
 
 app.get('/',function(req, res) {
 	res.sendFile(__dirname + '/client/index.html');
