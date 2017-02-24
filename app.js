@@ -36,7 +36,7 @@ var Entity = function(){
 	return self;
 }
 
-var Player = function(id){
+var Player = function(id, username){
 	var self = Entity();
 	self.id = id;
 	self.number = "" + Math.floor(10 * Math.random());
@@ -50,6 +50,7 @@ var Player = function(id){
 	self.hp = 10;
 	self.hpMax = 10;
 	self.score = 0;
+	self.username = username;
 
 	var super_update = self.update;
 	self.update = function(){
@@ -88,6 +89,7 @@ var Player = function(id){
 			x:self.x,
 			y:self.y,
 			number:self.number,
+			name:self.username,
 			hp:self.hp,
 			hpMax:self.hpMax,
 			score:self.score,
@@ -100,6 +102,7 @@ var Player = function(id){
 			y:self.y,
 			hp:self.hp,
 			score:self.score,
+			name:self.username,
 		}
 	}
 
@@ -109,8 +112,8 @@ var Player = function(id){
 	return self;
 }
 Player.list = {};
-Player.onConnect = function(socket){
-	var player = Player(socket.id);
+Player.onConnect = function(socket, username){
+	var player = Player(socket.id, username);
 	socket.on('keyPress',function(data){
 		if(data.inputId === 'left')
 			player.pressingLeft = data.state;
@@ -259,7 +262,7 @@ io.sockets.on('connection', function(socket){
 	socket.on('signIn',function(data){
 		isValidPassword(data,function(res){
 			if(res){
-				Player.onConnect(socket);
+				Player.onConnect(socket, data.username);
 				socket.emit('signInResponse',{success:true});
 			} else {
 				socket.emit('signInResponse',{success:false});
@@ -284,7 +287,7 @@ io.sockets.on('connection', function(socket){
 		Player.onDisconnect(socket);
 	});
 	socket.on('sendMsgToServer',function(data){
-		var playerName = ("" + socket.id).slice(2,7);
+		var playerName = ("" + Player.list[socket.id].username).slice(0,20);
 		for(var i in SOCKET_LIST){
 			SOCKET_LIST[i].emit('addToChat',playerName + ': ' + data);
 		}
