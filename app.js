@@ -1,5 +1,5 @@
 var mongojs = require("mongojs");
-var db = mongojs('localhost:27017/myGame', ['account','progress']);
+var db = mongojs('dummy@localhost:27017/myGame', ['account','progress']);
 
 var express = require('express');
 var app = express();
