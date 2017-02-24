@@ -4,22 +4,14 @@ var db = mongojs('dummy@localhost:27017/myGame', ['account','progress']);
 var express = require('express');
 var app = express();
 var serv = require('http').Server(app);
-var port = 2000;
-var fs = require('fs')
-fs.readFile('config.txt', 'utf8', function (err, data) {
-    if (err) {
-        console.log(err);
-    } else {
-        port = data;
-    }
-});
+var config = require('./config.json');
 
 app.get('/',function(req, res) {
 	res.sendFile(__dirname + '/client/index.html');
 });
 app.use('/client',express.static(__dirname + '/client'));
 
-serv.listen(port);
+serv.listen(config.port);
 console.log("Server started.");
 
 var SOCKET_LIST = {};
