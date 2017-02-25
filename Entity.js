@@ -1,23 +1,23 @@
 var initPack = {player:[],bullet:[]};
 var removePack = {player:[],bullet:[]};
 
+require('./Vector2');
+
 Entity = function(){
 	var self = {
-		x:250,
-		y:250,
-		spdX:0,
-		spdY:0,
+		pos: Vector2(250, 250),
+		vel: Vector2(0, 0),
+		size: Vector2(0, 0),
 		id:"",
 	}
 	self.update = function(){
 		self.updatePosition();
 	}
 	self.updatePosition = function(){
-		self.x += self.spdX;
-		self.y += self.spdY;
+		pos = pos.add(vel);
 	}
 	self.getDistance = function(pt){
-		return Math.sqrt(Math.pow(self.x-pt.x,2) + Math.pow(self.y-pt.y,2));
+		return pos.dist(pt);
 	}
 	return self;
 }
@@ -71,31 +71,30 @@ Player = function(id, username){
 	}
 	self.shootBullet = function(angle){
 		var b = Bullet(self.id,angle);
-		b.x = self.x;
-		b.y = self.y;
+		b.pos = self.pos;
 	}
 
 	self.updateSpd = function(){
 		if(self.pressingRight)
-			self.spdX = self.maxSpd;
+			self.vel.x = self.maxSpd;
 		else if(self.pressingLeft)
-			self.spdX = -self.maxSpd;
+			self.vel.x = -self.maxSpd;
 		else
-			self.spdX = 0;
+			self.vel.x = 0;
 
 		if(self.pressingUp)
-			self.spdY = -self.maxSpd;
+			self.vel.y = -self.maxSpd;
 		else if(self.pressingDown)
-			self.spdY = self.maxSpd;
+			self.vel.y = self.maxSpd;
 		else
-			self.spdY = 0;
+			self.vel.y = 0;
 	}
 
 	self.getInitPack = function(){
 		return {
 			id:self.id,
-			x:self.x,
-			y:self.y,
+			x:self.pos.x,
+			y:self.pos.y,
 			number:self.number,
 			name:self.username,
 			hp:self.hp,
@@ -106,8 +105,8 @@ Player = function(id, username){
 	self.getUpdatePack = function(){
 		return {
 			id:self.id,
-			x:self.x,
-			y:self.y,
+			x:self.pos.x,
+			y:self.pos.y,
 			hp:self.hp,
 			score:self.score,
 			name:self.username,
@@ -168,8 +167,7 @@ Player.update = function(){
 Bullet = function(parent,angle){
 	var self = Entity();
 	self.id = Math.random();
-	self.spdX = Math.cos(angle/180*Math.PI) * 10;
-	self.spdY = Math.sin(angle/180*Math.PI) * 10;
+	self.vel = Vector2.Polar(10, angle);
 	self.parent = parent;
 	self.timer = 0;
 	self.toRemove = false;
@@ -189,8 +187,7 @@ Bullet = function(parent,angle){
 					if(shooter)
 						shooter.score += 1;
 					p.hp = p.hpMax;
-					p.x = Math.random() * 500;
-					p.y = Math.random() * 500;
+					p.pos = Vector2.Random(500, 500);
 				}
 				self.toRemove = true;
 			}
@@ -199,15 +196,15 @@ Bullet = function(parent,angle){
 	self.getInitPack = function(){
 		return {
 			id:self.id,
-			x:self.x,
-			y:self.y,
+			x:self.pos.x,
+			y:self.pos.y,
 		};
 	}
 	self.getUpdatePack = function(){
 		return {
 			id:self.id,
-			x:self.x,
-			y:self.y,
+			x:self.pos.x,
+			y:self.pos.y,
 		};
 	}
 
