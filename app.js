@@ -7,8 +7,6 @@ var db = mongojs('Public:secret@localhost:27017/myGame', ['account','progress'])
 require('./Entity');
 require('./Map');
 
-var map = Map('./simplemap.tmx');
-
 // Express imports and setup
 var express = require('express');
 var app = express();

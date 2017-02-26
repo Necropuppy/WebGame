@@ -1,20 +1,17 @@
 var tmx = require('tmx-parser');
 // Map object constructor
-Map = function() {
-    self = function (err, map) {
-        self = {
-            tileWidth: map.tileWidth,
-            tileHeight: map.tileheight,
-            width: map.width,
-            height: map.height,
-            tiles: map.layers[0]
-        }
-    }
+Map = {}
 
-    tmx.parseFile('./simplemap.tmx', self);
-    self.getTileAt = function(pos) {
-        return self.tileAt(pos.x / tileWidth, pos.y / tileHeight);
+tmx.parseFile('./simplemap.tmx', function (err, map) {
+    Map = {
+        tiles: map.layers[0],
+        tileWidth: map.tileWidth,
+        tileHeight: map.tileHeight,
+        width: map.width,
+        height: map.height
     }
+});
 
-    return self;
+Map.getTileAtPos(pos) {
+    return Map.tiles.tileAt(Math.floor(pos.x / tileWidth), Math.floor(pos.y / tileHeight);
 }
