@@ -1,9 +1,19 @@
+var tmx = require('tmx-parser');
 // Map object constructor
-// tiles is a 2D array of ints representing the tile type
-Map = function(tiles) {
-    var self = {
-        tileSize: 32,   // Side length of tiles in px
-        tiles: tiles    // 2D Array of tiles contained in the map
+Map = function() {
+    self = function (err, map) {
+        self = {
+            tileWidth: map.tileWidth,
+            tileHeight: map.tileheight,
+            width: map.width,
+            height: map.height,
+            tiles: map.layers[0]
+        }
+    }
+
+    tmx.parseFile('./simplemap.tmx', self);
+    self.getTileAt = function(pos) {
+        return self.tileAt(pos.x / tileWidth, pos.y / tileHeight);
     }
 
     return self;
