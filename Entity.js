@@ -90,6 +90,11 @@ Player = function(id, username){
 			self.vel.y = 0;
 	}
 
+	self.respawn() {
+		p.pos = Vector2(Math.random()*500, Math.random()*500);
+		p.hp = p.hpMax;
+	}
+
 	self.getInitPack = function(){
 		return {
 			id:self.id,
@@ -186,8 +191,7 @@ Bullet = function(parent,angle){
 					var shooter = Player.list[self.parent];
 					if(shooter)
 						shooter.score += 1;
-					p.hp = p.hpMax;
-					p.pos = Vector2.Random(500, 500);
+					p.respawn();
 				}
 				self.toRemove = true;
 			}
