@@ -12,6 +12,6 @@ tmx.parseFile('./simplemap.tmx', function (err, map) {
     }
 });
 
-Map.getTileAtPos(pos) {
+Map.getTileAtPos = function(pos) {
     return Map.tiles.tileAt(Math.floor(pos.x / tileWidth), Math.floor(pos.y / tileHeight);
 }
