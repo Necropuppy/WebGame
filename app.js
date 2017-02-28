@@ -125,6 +125,4 @@ setInterval(function(){
 		socket.emit('update',packs.updatePack);
 		socket.emit('remove',packs.removePack);
 	}
-
-// Run at 25 FPS.
-},1000/25);
+},1000/fps);

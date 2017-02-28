@@ -1,5 +1,6 @@
 var initPack = {player:[],bullet:[]};
 var removePack = {player:[],bullet:[]};
+fps = 25;
 
 require('./Vector2');
 
@@ -54,7 +55,7 @@ Player = function(id, username){
 	self.pressingDown = false;
 	self.pressingAttack = false;
 	self.mouseAngle = 0;
-	self.maxSpd = 10;
+	self.maxSpd = 250 / fps;
 	self.hp = 10;
 	self.hpMax = 10;
 	self.score = 0;
@@ -172,7 +173,7 @@ Player.update = function(){
 Bullet = function(parent,angle){
 	var self = Entity();
 	self.id = Math.random();
-	self.vel = Vector2.Polar(10, angle);
+	self.vel = Vector2.Polar(250 / fps, angle);
 	self.parent = parent;
 	self.timer = 0;
 	self.toRemove = false;
