@@ -10,14 +10,11 @@ Vector2 = function (x, y) {
     }
 
     self.dist = function(vec) {
-        return Vector2.sub(Vector2.abs(self), Vector2.abs(vec)).mag();
+        return Vector2.sub(self, vec).mag();
     }
     return self;
 }
 
-Vector2.abs = function(vec) {
-    return Vector2(Math.abs(vec.x), Math.abs(vec.y));
-}
 Vector2.add = function(vec1, vec2) {
     return Vector2(vec1.x + vec2.x, vec1.y + vec2.y);
 }
