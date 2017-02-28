@@ -1,4 +1,3 @@
-// vec1.add(vec2) modifies vec1.
 // Vector2.add(vec1, vec2) does not modify vec1 or vec2.
 Vector2 = function (x, y) {
     var self = {
@@ -29,7 +28,7 @@ Vector2.neg = function(vec) {
 }
 
 Vector2.Polar = function (mag, angle) {
-    return Vector2(Math.cos(angle/180*Math.PI) * mag, Math.sin(angle/180*Math.PI));
+    return Vector2(Math.cos(angle/180*Math.PI) * mag, Math.sin(angle/180*Math.PI) * mag);
 }
 
 Vector2.Random = function (x, y) {
