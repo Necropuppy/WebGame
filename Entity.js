@@ -91,7 +91,7 @@ Player = function(id, username){
 			self.vel.y = 0;
 	}
 
-	self.respawn() {
+	self.respawn = function (){
 		p.pos = Vector2(Math.random()*500, Math.random()*500);
 		p.hp = p.hpMax;
 	}
