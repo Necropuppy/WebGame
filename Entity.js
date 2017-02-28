@@ -92,8 +92,8 @@ Player = function(id, username){
 	}
 
 	self.respawn = function (){
-		p.pos = Vector2(Math.random()*500, Math.random()*500);
-		p.hp = p.hpMax;
+		self.pos = Vector2(Math.random()*500, Math.random()*500);
+		self.hp = self.hpMax;
 	}
 
 	self.getInitPack = function(){
@@ -162,9 +162,8 @@ Player.onDisconnect = function(socket){
 Player.update = function(){
 	var pack = [];
 	for(var i in Player.list){
-		var player = Player.list[i];
-		player.update();
-		pack.push(player.getUpdatePack());
+		Player.list[i].update();
+		pack.push(Player.list[i].getUpdatePack());
 	}
 	return pack;
 }
@@ -185,7 +184,7 @@ Bullet = function(parent,angle){
 
 		for(var i in Player.list){
 			var p = Player.list[i];
-			if(self.getDistance(p) < 32 && self.parent !== p.id){
+			if(self.getDistance(p.pos) < 32 && self.parent !== p.id){
 				p.hp -= 1;
 
 				if(p.hp <= 0){
