@@ -15,10 +15,10 @@ Entity = function(){
 		self.updatePosition();
 	}
 	self.updatePosition = function(){
-		pos = pos.add(vel);
+		self.pos = Vector2.add(self.pos, self.vel);
 	}
 	self.getDistance = function(pt){
-		return pos.dist(pt);
+		return self.pos.dist(pt);
 	}
 	return self;
 }

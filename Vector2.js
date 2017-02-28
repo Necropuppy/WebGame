@@ -6,28 +6,14 @@ Vector2 = function (x, y) {
         y: y
     }
 
-    self.add = function(vec) {
-        self.x += vec.x;
-        self.y += vec.y;
-    }
-
-    self.sub = function(vec) {
-        self.x -= vec.x;
-        self.y -= vec.y;
-    }
-
-    self.neg = function() {
-        self.x = -self.x;
-        self.y = -self.y;
-    }
-
     self.mag = function() {
         return Math.sqrt(Math.pow(self.x,2)+Math.pow(self.y,2));
     }
 
     self.dist = function(vec) {
-        return Vector2.sub(self, vec).magnitude();
+        return Vector2.sub(self, vec).mag();
     }
+    return self;
 }
 
 Vector2.add = function(vec1, vec2) {

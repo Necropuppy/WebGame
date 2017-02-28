@@ -2,7 +2,7 @@
 
 // Mongo DB imports and setup
 var mongojs = require("mongojs");
-var db = mongojs('Public:secret@localhost:27017/myGame', ['account','progress']);
+var db = mongojs('Public:secret@localhost:27017/myGame', ['account']);
 
 require('./Entity');
 //require('./Map');
