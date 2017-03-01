@@ -31,15 +31,20 @@ var SOCKET_LIST = {};
 /******** SERVER CALLBACKS ********/
 // Allows DEBUG commands to be used in chat. DANGER!!!
 var DEBUG = true;
+var DB_ON = false;
 
 // Check if the client entered a valid password.
 var isValidPassword = function(data,cb){
-	db.account.find({username:data.username,password:data.password},function(err,res){
-		if(res.length > 0)
-			cb(true);
-		else
-			cb(false);
-	});
+	if (DB_ON) {
+		db.account.find({username:data.username,password:data.password},function(err,res){
+			if(res.length > 0)
+				cb(true);
+			else
+				cb(false);
+		});
+	} else {
+		cb(true);
+	}
 }
 
 // Check if the client entered an existing username

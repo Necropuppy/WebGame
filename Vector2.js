@@ -20,7 +20,7 @@ Vector2.add = function(vec1, vec2) {
 }
 
 Vector2.sub = function(vec1, vec2) {
-    return Vector2(vec1.x - vec2.x, vec1.x - vec2.y);
+    return Vector2(vec1.x - vec2.x, vec1.y - vec2.y);
 }
 
 Vector2.neg = function(vec) {

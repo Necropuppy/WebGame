@@ -17,9 +17,6 @@ Entity = function(){
 	self.updatePosition = function(){
 		self.pos = Vector2.add(self.pos, self.vel);
 	}
-	self.getDistance = function(pt){
-		return self.pos.dist(pt);
-	}
 	return self;
 }
 
@@ -184,7 +181,7 @@ Bullet = function(parent,angle){
 
 		for(var i in Player.list){
 			var p = Player.list[i];
-			if(self.getDistance(p.pos) < 32 && self.parent !== p.id){
+			if(self.pos.dist(p.pos) < 32 && self.parent !== p.id){
 				p.hp -= 1;
 
 				if(p.hp <= 0){
