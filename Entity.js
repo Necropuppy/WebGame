@@ -92,8 +92,8 @@ Player = function(id, username){
 	}
 
 	self.respawn = function (){
-		p.pos = Vector2(Math.random()*500, Math.random()*500);
-		p.hp = p.hpMax;
+		self.pos = Vector2(Math.random()*500, Math.random()*500);
+		self.hp = self.hpMax;
 	}
 
 	self.getInitPack = function(){
