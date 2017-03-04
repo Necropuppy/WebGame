@@ -137,6 +137,13 @@ Player.onConnect = function(socket, username){
 			player.pressingAttack = data.state;
 		else if(data.inputId === 'mouseAngle')
 			player.mouseAngle = data.state;
+		else if(data.inputId === 'stop') {
+			player.pressingRight = false;
+			player.pressingDown = false;
+			player.pressingLeft = false;
+			player.pressingUp = false;
+			player.pressingAttack = false;
+		}
 	});
 
 	socket.emit('init',{
