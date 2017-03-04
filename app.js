@@ -29,13 +29,10 @@ console.log("Server started.");
 var SOCKET_LIST = {};
 
 /******** SERVER CALLBACKS ********/
-// Allows DEBUG commands to be used in chat. DANGER!!!
-var DEBUG = true;
-var DB_ON = false;
 
 // Check if the client entered a valid password.
 var isValidPassword = function(data,cb){
-	if (DB_ON) {
+	if (config.db_on) {
 		db.account.find({username:data.username,password:data.password},function(err,res){
 			if(res.length > 0)
 				cb(true);
@@ -116,7 +113,7 @@ io.sockets.on('connection', function(socket){
 
 	// Handles incoming DEBUG commands from the client.
 	socket.on('evalServer',function(data){
-		if(!DEBUG)
+		if(!config.debug)
 			return;
 		var res = eval(data);
 		socket.emit('evalAnswer',res);
