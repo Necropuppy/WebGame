@@ -5,7 +5,7 @@ var mongojs = require("mongojs");
 var db = mongojs('Public:secret@localhost:27017/myGame', ['account']);
 
 require('./Entity');
-//require('./Map');
+require('./Map');
 
 // Express imports and setup
 var express = require('express');
@@ -68,7 +68,7 @@ var addUser = function(data,cb){
 var io = require('socket.io')(serv,{});
 // Establishes data connection to client.
 
-Map.onStart("One");
+Map.onStart();
 
 io.sockets.on('connection', function(socket){
 	socket.id = Math.random();
@@ -133,6 +133,6 @@ setInterval(function(){
 		socket.emit('init',packs.initPack);
 		socket.emit('update',packs.updatePack);
 		socket.emit('remove',packs.removePack);
-		socket.emit(mInit',mapPacks.initPack);
+		socket.emit('mapInit',mapPacks.initPack);
 	}
 },1000/fps);
