@@ -133,6 +133,6 @@ setInterval(function(){
 		socket.emit('init',packs.initPack);
 		socket.emit('update',packs.updatePack);
 		socket.emit('remove',packs.removePack);
-		socket.emit(mInit',mapPacks.initPack);
+		socket.emit('mapInit',mapPacks.initPack);
 	}
 },1000/fps);
