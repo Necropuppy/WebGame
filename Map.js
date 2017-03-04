@@ -26,6 +26,7 @@ World.getMapUpdateData = function(){
 		},
 	};
 	initPack.map = [];
+	return pack;
 }
 
 Map = function(id){
@@ -35,7 +36,7 @@ Map = function(id){
 	for(var r = 0;r < self.rows;r++){
 		self.tiles[r] = [];
 		for(var c = 0; c<self.cols;c++){
-			self.tiles[r][c] = new Tile(r,c,simple[r][c]);
+			self.tiles[r][c] = new Tile(r,c,1);
 		}
 	}
 	self.tiles = simple;
@@ -43,6 +44,7 @@ Map = function(id){
 	
 	self.getInitPack = function(){
 		return {
+			id:self.id,
 			rows:self.rows,
 			cols:self.cols,
 			tiles:self.tiles,
@@ -57,12 +59,11 @@ Map = function(id){
 Map.list = {};
 
 
-Map.onStart = function(){
+Map.onStart = function(socket){
 	var map = Map("One");
 	
 	socket.emit('mapInit',{
-		selfId:
-		tiles:Map.getAllInitPack()
+		map:Map.getAllInitPack(),
 		})
 }
 Map.getAllInitPack = function(){

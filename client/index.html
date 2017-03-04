@@ -217,7 +217,7 @@
 		return self;
 	}
 	Map.list = {};
-	}
+	
 
 	var Player = function(initPack){
 		var self = {};
@@ -335,9 +335,9 @@
 	});
 	
 	socket.on('mapInit',function(data){
-		for(var i = 0 ; i < data.map.length; i++){
-			new Map(data.map[i]);
-		}
+		
+		new Map(data.map[0]);
+		
 	});
 
 	var focused = true;
