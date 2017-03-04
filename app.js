@@ -73,11 +73,13 @@ var mapGen = false;
 io.sockets.on('connection', function(socket){
 	socket.id = Math.random();
 	SOCKET_LIST[socket.id] = socket;
-	
+
 	if(!mapGen){
 		Map.onStart(socket);
 		mapGen = true;
 	}
+
+	socket.emit("mapInit", World.getMapUpdateData().initPack);
 
 	// Handles client sign-ins. 'data' contains the username and password
 	socket.on('signIn',function(data){
@@ -131,13 +133,13 @@ io.sockets.on('connection', function(socket){
 // The main game loop.
 setInterval(function(){
 	var packs = Entity.getFrameUpdateData();
-	var mapPacks = World.getMapUpdateData();
+	//var mapPacks = World.getMapUpdateData();
 	for(var i in SOCKET_LIST){
 		// Send the updates to all of the clients.
 		var socket = SOCKET_LIST[i];
 		socket.emit('init',packs.initPack);
 		socket.emit('update',packs.updatePack);
 		socket.emit('remove',packs.removePack);
-		socket.emit('mapInit',mapPacks.initPack);
+		//socket.emit('mapInit',mapPacks.initPack);
 	}
 },1000/fps);
