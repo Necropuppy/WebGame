@@ -68,11 +68,16 @@ var addUser = function(data,cb){
 var io = require('socket.io')(serv,{});
 // Establishes data connection to client.
 
-Map.onStart();
+var mapGen = false;
 
 io.sockets.on('connection', function(socket){
 	socket.id = Math.random();
 	SOCKET_LIST[socket.id] = socket;
+	
+	if(!mapGen){
+		Map.onStart(socket);
+		mapGen = true;
+	}
 
 	// Handles client sign-ins. 'data' contains the username and password
 	socket.on('signIn',function(data){
