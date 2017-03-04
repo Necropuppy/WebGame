@@ -135,8 +135,7 @@ Player.onConnect = function(socket, username){
 			player.pressingDown = data.state;
 		else if(data.inputId === 'attack')
 			player.pressingAttack = data.state;
-		else if(data.inputId === 'mouseAngle')
-			player.mouseAngle = data.state;
+
 		else if(data.inputId === 'stop') {
 			player.pressingRight = false;
 			player.pressingDown = false;
@@ -146,6 +145,9 @@ Player.onConnect = function(socket, username){
 		}
 	});
 
+	socket.on('mouseMove',function(data) {
+		player.mouseAngle = data.state;
+	})
 	socket.emit('init',{
 		selfId:socket.id,
 		player:Player.getAllInitPack(),

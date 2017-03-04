@@ -412,7 +412,7 @@
 		var x =-(width/2) + event.clientX - 8;
 		var y = -(height/2) + 50 + event.clientY - 8;
 		var angle = Math.atan2(y,x) / Math.PI * 180;
-		socket.emit('keyPress',{inputId:'mouseAngle',state:angle});
+		socket.emit('mouseMove',{inputId:'mouseAngle',state:angle});
 	}
 
 	var onLossOfFocus = function () {
