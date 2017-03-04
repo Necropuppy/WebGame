@@ -39,7 +39,7 @@ Map = function(id){
 			self.tiles[r][c] = new Tile(r,c,1);
 		}
 	}
-	self.tiles = simple;
+	
 	
 	
 	self.getInitPack = function(){
@@ -78,7 +78,8 @@ var Tile = function(row, col, type){
 		row: 0,
 		col: 0,
 		solid: false,
-		color: "rgb(90, 90, 90)",
+		name: "bitch",
+		color: 'yellow',
 		parent: 'none',
 		changed: false,
 		width:32,
@@ -89,10 +90,10 @@ var Tile = function(row, col, type){
 	if(type === 1){
 		self.solid = true;
 	}
-	self.color = "rgb(Math.random(10) + 85, Math.random(10) + 85,Math.random(10) + 85)"; 
 	
 	
 	
+	return self;
 }
 
 Tile.changeColor = function(r,g,b){

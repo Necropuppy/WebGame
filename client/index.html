@@ -204,8 +204,10 @@
 			
 			for(var r = 0; r < self.rows; r++){
 				for(var c = 0;c < self.cols;c++){
-					ctx.fillStyle = 'blue';
-					ctx.fillRect(x + tileWidth*r, y + tileWidth*c, tileWidth,tileWidth);
+					ctx.fillStyle = self.tiles[r][c].color;
+					
+					
+					ctx.fillRect(x + tileWidth*r , y + tileWidth*c , tileWidth,tileWidth);
 				}
 			}
 			//ctx.drawImage(Img.map,x,y);
