@@ -5,7 +5,7 @@ var mongojs = require("mongojs");
 var db = mongojs('Public:secret@localhost:27017/myGame', ['account']);
 
 require('./Entity');
-//require('./Map');
+require('./Map');
 
 // Express imports and setup
 var express = require('express');
