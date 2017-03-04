@@ -189,6 +189,35 @@
 
 	var WIDTH = 1920;
 	var HEIGHT = 950;
+	
+	var Map = function(initPack){
+		var self = {};
+		self.id = initPack.id;
+		self.rows = initPack.rows;
+		self.cols = initPack.cols;
+		self.tiles = initPack.tiles;
+		
+		self.draw = function(){
+			var x = WIDTH/2 - Player.list[selfId].x;
+			var y = HEIGHT/2 - Player.list[selfId].y;
+			var tileWidth = 32;
+			
+			for(var r = 0; r < self.rows; r++){
+				for(var c = 0;c < self.cols;c++){
+					ctx.fillStyle = self.tiles[r][c].color;
+					ctx.fillRect(x + tileWidth*r, y + tileWidth*c, tileWidth,tileWidth);
+				}
+			}
+			//ctx.drawImage(Img.map,x,y);
+		}
+		
+		Map.list[self.id] = self;
+
+
+		return self;
+	}
+	Map.list = {};
+	}
 
 	var Player = function(initPack){
 		var self = {};
@@ -304,6 +333,12 @@
 			delete Bullet.list[data.bullet[i]];
 		}
 	});
+	
+	socket.on('mapInit',function(data){
+		for(var i = 0 ; i < data.map.length; i++){
+			new Map(data.map[i]);
+		}
+	});
 
 	var focused = true;
 
@@ -311,7 +346,9 @@
 		if(!selfId)
 			return;
 		ctx.clearRect(0,0,WIDTH,HEIGHT);
-		drawMap();
+		//drawMap();
+		for(var i in Map.list)
+			Map.list[i].draw();
 		drawScore();
 		for(var i in Player.list)
 			Player.list[i].draw();
