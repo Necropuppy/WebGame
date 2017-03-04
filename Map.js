@@ -58,7 +58,7 @@ Map.list = {};
 
 
 Map.onStart = function(){
-	var map = Map();
+	var map = Map("One");
 	
 	socket.emit('mapInit',{
 		selfId:

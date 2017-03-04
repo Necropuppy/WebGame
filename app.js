@@ -68,7 +68,7 @@ var addUser = function(data,cb){
 var io = require('socket.io')(serv,{});
 // Establishes data connection to client.
 
-Map.onStart("One");
+Map.onStart();
 
 io.sockets.on('connection', function(socket){
 	socket.id = Math.random();
