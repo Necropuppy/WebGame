@@ -1,6 +1,18 @@
 /* config.css */
 
 /* helpers/align.css */
+#gameDiv{
+	margin:0;
+	padding:0;
+	background-color:purple;
+}
+#ctx{
+	position:absolute;
+	top:0;
+	left:0;
+	width:100vw;
+	height:100vh;
+}
 #errorText{
 	text-align:center;
 	color:red;
