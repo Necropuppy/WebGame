@@ -67,6 +67,9 @@ var addUser = function(data,cb){
 // Import the socket.io library.
 var io = require('socket.io')(serv,{});
 // Establishes data connection to client.
+
+Map.onStart("One");
+
 io.sockets.on('connection', function(socket){
 	socket.id = Math.random();
 	SOCKET_LIST[socket.id] = socket;
@@ -123,11 +126,13 @@ io.sockets.on('connection', function(socket){
 // The main game loop.
 setInterval(function(){
 	var packs = Entity.getFrameUpdateData();
+	var mapPacks = World.getMapUpdateData();
 	for(var i in SOCKET_LIST){
 		// Send the updates to all of the clients.
 		var socket = SOCKET_LIST[i];
 		socket.emit('init',packs.initPack);
 		socket.emit('update',packs.updatePack);
 		socket.emit('remove',packs.removePack);
+		socket.emit(mInit',mapPacks.initPack);
 	}
 },1000/fps);
