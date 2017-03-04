@@ -121,8 +121,7 @@
 
 <script src="http://ec2-54-87-252-241.compute-1.amazonaws.com:8080/socket.io/socket.io.js"></script>
 <script>
-	var WIDTH = 500;
-	var HEIGHT = 500;
+	
 	var socket = io();
 
 	//sign
@@ -174,27 +173,7 @@
 	});
 
 	//chat
-	var chatText = document.getElementById('chat-text');
-	var chatInput = document.getElementById('chat-input');
-	var chatForm = document.getElementById('chat-form');
-
-	socket.on('addToChat',function(data){
-		chatText.innerHTML += '<div >' + data + '</div>';
-		chatText.scrollTop = chatText.scrollHeight;
-	});
-	socket.on('evalAnswer',function(data){
-		console.log(data);
-	});
-
-
-	chatForm.onsubmit = function(e){
-		e.preventDefault();
-		if(chatInput.value[0] === '/')
-			socket.emit('evalServer',chatInput.value.slice(1));
-		else
-			socket.emit('sendMsgToServer',chatInput.value);
-		chatInput.value = '';
-	}
+	
 
 	//game
 	var Img = {};
@@ -207,6 +186,9 @@
 
 	var ctx = document.getElementById("ctx").getContext("2d");
 	ctx.font = '30px Arial';
+	
+	var WIDTH = 1920;
+	var HEIGHT = 950;
 
 	var Player = function(initPack){
 		var self = {};
@@ -326,7 +308,7 @@
 	setInterval(function(){
 		if(!selfId)
 			return;
-		ctx.clearRect(0,0,500,500);
+		ctx.clearRect(0,0,WIDTH,HEIGHT);
 		drawMap();
 		drawScore();
 		for(var i in Player.list)
