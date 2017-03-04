@@ -25,7 +25,7 @@ World.getMapUpdateData = function(){
 			map:initPack.map,
 		},
 	};
-	initPack.map = [];
+	//initPack.map = [];
 	return pack;
 }
 
@@ -51,7 +51,7 @@ Map = function(id){
 			
 		};
 	}
-	Map.list[id] = self;
+	Map.list[0] = self;
 	
 	initPack.map.push(self.getInitPack());
 	return self;
@@ -67,10 +67,10 @@ Map.onStart = function(socket){
 		})
 }
 Map.getAllInitPack = function(){
-	var maps = [];
-	for(var i in Map.list)
-		maps.push(Map.list[i].getInitPack());
-	return maps;
+	//var maps = [];
+	
+		return Map.list[0].getInitPack();
+	
 }
 
 var Tile = function(row, col, type){

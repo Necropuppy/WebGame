@@ -204,7 +204,7 @@
 			
 			for(var r = 0; r < self.rows; r++){
 				for(var c = 0;c < self.cols;c++){
-					ctx.fillStyle = self.tiles[r][c].color;
+					ctx.fillStyle = 'blue';
 					ctx.fillRect(x + tileWidth*r, y + tileWidth*c, tileWidth,tileWidth);
 				}
 			}
@@ -412,7 +412,7 @@
 		var x =-(width/2) + event.clientX - 8;
 		var y = -(height/2) + 50 + event.clientY - 8;
 		var angle = Math.atan2(y,x) / Math.PI * 180;
-		socket.emit('mouseMove',{inputId:'mouseAngle',state:angle});
+		socket.emit('keyPress',{inputId:'mouseAngle',state:angle});
 	}
 
 	var onLossOfFocus = function () {
