@@ -77,12 +77,9 @@ var Tile = function(row, col, type){
 		row: 0,
 		col: 0,
 		solid: false,
-		name: "bitch",
-		color: 'yellow',
-		parent: 'none',
-		changed: false,
-		width:32,
-		height:32,
+		
+		width:64,
+		
 	}
 	self.row = row;
 	self.col = col;

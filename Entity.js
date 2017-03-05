@@ -103,6 +103,10 @@ Player = function(id, username){
 			hp:self.hp,
 			hpMax:self.hpMax,
 			score:self.score,
+			right:self.pressingRight,
+			left:self.pressingLeft,
+			up:self.pressingUp,
+			down:self.pressingDown,
 		};
 	}
 	self.getUpdatePack = function(){
@@ -113,6 +117,10 @@ Player = function(id, username){
 			hp:self.hp,
 			score:self.score,
 			name:self.username,
+			right:self.pressingRight,
+			left:self.pressingLeft,
+			up:self.pressingUp,
+			down:self.pressingDown,
 		}
 	}
 

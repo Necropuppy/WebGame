@@ -177,12 +177,19 @@
 
 	//game
 	var Img = {};
-	Img.player = new Image();
-	Img.player.src = '/client/img/player.png';
+	Img.pu = new Image();
+	Img.pu.src = '/client/img/pu.png';
+	Img.pd = new Image();
+	Img.pd.src = '/client/img/pd.png';
+	Img.pl = new Image();
+	Img.pl.src = '/client/img/pl.png';
+	Img.pr = new Image();
+	Img.pr.src = '/client/img/pr.png';
+	
 	Img.bullet = new Image();
 	Img.bullet.src = '/client/img/bullet.png';
 	Img.map = new Image();
-	Img.map.src = '/client/img/map.png';
+	Img.map.src = '/client/img/map1.png';
 
 	var ctx = document.getElementById("ctx").getContext("2d");
 	ctx.font = '30px Arial';
@@ -202,15 +209,17 @@
 			var y = HEIGHT/2 - Player.list[selfId].y;
 			var tileWidth = 32;
 			
-			for(var r = 0; r < self.rows; r++){
-				for(var c = 0;c < self.cols;c++){
-					ctx.fillStyle = self.tiles[r][c].color;
+			ctx.drawImage(Img.map,x,y);
+			
+			//for(var r = 0; r < self.rows; r++){
+				//for(var c = 0;c < self.cols;c++){
+					//ctx.fillStyle = self.tiles[r][c].color;
 					
 					
-					ctx.fillRect(x + tileWidth*r , y + tileWidth*c , tileWidth,tileWidth);
-				}
-			}
-			//ctx.drawImage(Img.map,x,y);
+					//ctx.fillRect(x + tileWidth*r , y + tileWidth*c , tileWidth,tileWidth);
+				//}
+			//}
+			
 		}
 		
 		Map.list[self.id] = self;
@@ -230,6 +239,11 @@
 		self.hp = initPack.hp;
 		self.hpMax = initPack.hpMax;
 		self.score = initPack.score;
+		self.right = initPack.right;
+		self.left = initPack.left;
+		self.up = initPack.up;
+		self.down = initPack.down;
+		self.player = Img.pd;
 
 		self.draw = function(){
 			var x = self.x - Player.list[selfId].x + WIDTH/2;
@@ -239,17 +253,30 @@
 			ctx.fillStyle = 'red';
 			ctx.fillRect(x - hpWidth/2,y - 40,hpWidth,4);
 
-			var width = Img.player.width*2;
-			var height = Img.player.height*2;
+			var width = self.player.width*2;
+			var height = self.player.height*2;
 
-			ctx.fillStyle = 'blue';
-			ctx.fillRect(x-width/2 + 10,y-height/2 + 10,Img.player.width,Img.player.height);
+			//ctx.fillStyle = 'blue';
+			//ctx.fillRect(x-width/2 + 10,y-height/2 + 10,Img.player.width,Img.player.height);
 			//ctx.fillStyle = 'black';
 			//ctx.fillText(5,x-width/2,y-height/2);
-			//ctx.drawImage(Img.player,
-				//0,0,Img.player.width,Img.player.height,
-				//x-width/2,y-height/2,width,height);
+			console.log(self.up);
+			
+			if (self.down){
+				self.player = Img.pd;
+			} else if(self.up){
+				self.player = Img.pu;
+			} else if(self.right){
+				self.player = Img.pr;
+			} else if(self.left) {
+				self.player = Img.pl;
+			}
+			
+			ctx.drawImage(self.player,
+				0,0,self.player.width,self.player.height,
+				x-width/2,y-height/2,width,height);
 
+				
 			//ctx.fillText(self.score,self.x,self.y-60);
 		}
 
@@ -312,6 +339,10 @@
 					p.hp = pack.hp;
 				if(pack.score !== undefined)
 					p.score = pack.score;
+				p.right = pack.right;
+				p.left = pack.left;
+				p.up = pack.up;
+				p.down = pack.down;
 			}
 		}
 		for(var i = 0 ; i < data.bullet.length; i++){
