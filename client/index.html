@@ -186,6 +186,9 @@
 	Img.pr = new Image();
 	Img.pr.src = '/client/img/pr.png';
 	
+	Img.hp = new Image();
+	Img.hp.src = '/client/img/hp.png';
+	
 	Img.bullet = new Image();
 	Img.bullet.src = '/client/img/bullet.png';
 	Img.map = new Image();
@@ -193,6 +196,7 @@
 
 	var ctx = document.getElementById("ctx").getContext("2d");
 	ctx.font = '30px Arial';
+	ctx.imageSmoothingEnabled = false;
 
 	var WIDTH = 1920;
 	var HEIGHT = 950;
@@ -211,14 +215,14 @@
 			
 			ctx.drawImage(Img.map,x,y);
 			
-			//for(var r = 0; r < self.rows; r++){
-				//for(var c = 0;c < self.cols;c++){
+			for(var r = 0; r < self.rows; r++){
+				for(var c = 0;c < self.cols;c++){
 					//ctx.fillStyle = self.tiles[r][c].color;
-					
+					console.log(self.tiles[r][c].type);
 					
 					//ctx.fillRect(x + tileWidth*r , y + tileWidth*c , tileWidth,tileWidth);
-				//}
-			//}
+				}
+			}
 			
 		}
 		
@@ -249,7 +253,7 @@
 			var x = self.x - Player.list[selfId].x + WIDTH/2;
 			var y = self.y - Player.list[selfId].y + HEIGHT/2;
 
-			var hpWidth = 30 * self.hp / self.hpMax;
+			var hpWidth = (350 * self.hp / self.hpMax);
 			ctx.fillStyle = 'red';
 			ctx.fillRect(x - hpWidth/2,y - 40,hpWidth,4);
 
@@ -260,7 +264,6 @@
 			//ctx.fillRect(x-width/2 + 10,y-height/2 + 10,Img.player.width,Img.player.height);
 			//ctx.fillStyle = 'black';
 			//ctx.fillText(5,x-width/2,y-height/2);
-			console.log(self.up);
 			
 			if (self.down){
 				self.player = Img.pd;
@@ -278,6 +281,20 @@
 
 				
 			//ctx.fillText(self.score,self.x,self.y-60);
+			ctx.drawImage(Img.hp,(WIDTH/2)-(Img.hp.width/2), HEIGHT-Img.hp.height);
+			
+			ctx.fillStyle = 'black';
+			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +  20 + (350 * (self.hp/self.hpMax)),HEIGHT-Img.hp.height + 20,350 - ((350) * (self.hp/self.hpMax)) , 20 );
+			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 20,350 , 20 );
+			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 60,350 , 20 );
+			
+			ctx.fillStyle = 'red';
+			ctx.fillRect((WIDTH/2)-(Img.hp.width/2) + 25 ,HEIGHT-Img.hp.height + 20,hpWidth , 20 );
+			
+			ctx.fillStyle = 'blue';
+			ctx.fillRect((WIDTH/2)-(Img.hp.width/2) + 25 ,HEIGHT-Img.hp.height + 60,hpWidth , 20 );
+			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 20,350 , 20 );
+			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 60,350 , 20 );
 		}
 
 		Player.list[self.id] = self;
@@ -379,7 +396,7 @@
 		if(!selfId)
 			return;
 		ctx.clearRect(0,0,WIDTH,HEIGHT);
-		//drawMap();
+		
 		for(var i in Map.list)
 			Map.list[i].draw();
 		drawScore();
@@ -393,12 +410,15 @@
 		} else if (document.hasFocus() && !focused){
 			focused = true;
 		}
+		
+		//drawHud();
 	},40);
 
-	var drawMap = function(){
-		var x = WIDTH/2 - Player.list[selfId].x;
-		var y = HEIGHT/2 - Player.list[selfId].y;
-		ctx.drawImage(Img.map,x,y);
+	var drawHud = function(){
+		
+		//ctx.drawImage(Img.hp,(WIDTH/2)-(Img.hp.width/2), HEIGHT-Img.hp.height);
+		//ct.fillStyle = 'black';
+		//ctx.fillRect(Img.hp,(WIDTH/2)-(Img.hp.width/2) +  20,HEIGHT-Img.hp.height + 20,350 - (,20 );
 	}
 
 	var drawScore = function(){
@@ -449,7 +469,7 @@
 	}
 
 	var onLossOfFocus = function () {
-		console.log("Lost focus");
+		
 		socket.emit('keyPress', {inputId:'stop', state:false});
 	}
 

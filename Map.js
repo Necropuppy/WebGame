@@ -1,13 +1,14 @@
 var initPack = {map:[]};
 
+
 var simple = require('./simplemap.json');
 
 
 
 World = function(){
 	var self = {
-		rows:100,
-		cols:100,
+		rows:10,
+		cols:10,
 		id:"",
 		tiles:[],
 	}
@@ -31,15 +32,20 @@ World.getMapUpdateData = function(){
 Map = function(id){
 	var self = World();
 	self.id = id;
-	var numMap = simple;
+	
+
+	
 	for(var r = 0;r < self.rows;r++){
+		
 		self.tiles[r] = [];
-		for(var c = 0; c<self.cols;c++){
-			self.tiles[r][c] = new Tile(r,c,1);
+		
+		for(var c =0;c < self.cols;c++){
+			self.tiles[r][c] = new Tile(r,c,simple[r][c]);
 		}
+		
 	}
 
-
+	//console.log(self.tiles);
 
 	self.getInitPack = function(){
 		return {
@@ -77,15 +83,13 @@ var Tile = function(row, col, type){
 		row: 0,
 		col: 0,
 		solid: false,
-		
+		type: 0,
 		width:64,
 		
 	}
 	self.row = row;
 	self.col = col;
-	if(type === 1){
-		self.solid = true;
-	}
+	self.type = type;
 	return self;
 }
 
