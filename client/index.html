@@ -189,6 +189,11 @@
 	Img.hp = new Image();
 	Img.hp.src = '/client/img/hp.png';
 	
+	Img.bottom = new Image();
+	Img.bottom.src = '/client/img/bottom.png';
+	Img.bottomtop = new Image();
+	Img.bottomtop.src = '/client/img/bottom-top.png';
+	
 	Img.bullet = new Image();
 	Img.bullet.src = '/client/img/bullet.png';
 	Img.map = new Image();
@@ -253,7 +258,7 @@
 			var x = self.x - Player.list[selfId].x + WIDTH/2;
 			var y = self.y - Player.list[selfId].y + HEIGHT/2;
 
-			var hpWidth = (350 * self.hp / self.hpMax);
+			var hpWidth = (395 * self.hp / self.hpMax);
 			ctx.fillStyle = 'red';
 			ctx.fillRect(x - hpWidth/2,y - 40,hpWidth,4);
 
@@ -281,20 +286,22 @@
 
 				
 			//ctx.fillText(self.score,self.x,self.y-60);
-			ctx.drawImage(Img.hp,(WIDTH/2)-(Img.hp.width/2), HEIGHT-Img.hp.height);
+			ctx.drawImage(Img.bottom,0, HEIGHT-Img.bottom.height);
 			
 			ctx.fillStyle = 'black';
 			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +  20 + (350 * (self.hp/self.hpMax)),HEIGHT-Img.hp.height + 20,350 - ((350) * (self.hp/self.hpMax)) , 20 );
 			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 20,350 , 20 );
 			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 60,350 , 20 );
 			
-			ctx.fillStyle = 'red';
-			ctx.fillRect((WIDTH/2)-(Img.hp.width/2) + 25 ,HEIGHT-Img.hp.height + 20,hpWidth , 20 );
+			ctx.fillStyle = 'green';
+			ctx.fillRect(738 ,HEIGHT - 38,hpWidth , 20 );
 			
 			ctx.fillStyle = 'blue';
-			ctx.fillRect((WIDTH/2)-(Img.hp.width/2) + 25 ,HEIGHT-Img.hp.height + 60,hpWidth , 20 );
+			ctx.fillRect(738 ,HEIGHT-19,hpWidth , 20 );
 			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 20,350 , 20 );
 			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 60,350 , 20 );
+			
+			ctx.drawImage(Img.bottomtop,738, HEIGHT-38);
 		}
 
 		Player.list[self.id] = self;

@@ -250,3 +250,51 @@ Bullet.getAllInitPack = function(){
 		bullets.push(Bullet.list[i].getInitPack());
 	return bullets;
 }
+
+Base = function(){
+	self = Entity();
+	self.hp = 1000;
+	self.destroyed = false;
+	
+	self.getInitPack = function(){
+		return {
+			id:self.id,
+			x:self.pos.x,
+			y:self.pos.y,
+		};
+	}
+	self.getUpdatePack = function(){
+		return {
+			id:self.id,
+			x:self.pos.x,
+			y:self.pos.y,
+		};
+	}
+	
+	return self;
+	
+}
+
+Tower = function(){
+	self = Entity();
+	self.hp = 500;
+	self.destroyed = false;
+	
+	self.getInitPack = function(){
+		return {
+			id:self.id,
+			x:self.pos.x,
+			y:self.pos.y,
+		};
+	}
+	self.getUpdatePack = function(){
+		return {
+			id:self.id,
+			x:self.pos.x,
+			y:self.pos.y,
+		};
+	}
+	
+	return self;
+	
+}
