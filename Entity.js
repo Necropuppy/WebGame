@@ -57,19 +57,30 @@ Player = function(id, username){
 	self.hpMax = 10;
 	self.score = 0;
 	self.username = username;
+	self.mp = 100;
+	self.mpMax = 100;
+	self.xp = 0;
+	self.xpMax = 10;
 
 	var super_update = self.update;
 	self.update = function(){
 		self.updateSpd();
 		super_update();
+		
+		if(self.mp < self.mpMax){
+			self.mp +=1;
+		}
 
 		if(self.pressingAttack){
 			self.shootBullet(self.mouseAngle);
 		}
 	}
 	self.shootBullet = function(angle){
-		var b = Bullet(self.id,angle);
-		b.pos = self.pos;
+		if(self.mp > 9){
+			var b = Bullet(self.id,angle);
+			b.pos = self.pos;
+			self.mp -= 10;
+		}
 	}
 
 	self.updateSpd = function(){
@@ -107,6 +118,10 @@ Player = function(id, username){
 			left:self.pressingLeft,
 			up:self.pressingUp,
 			down:self.pressingDown,
+			mp:self.mp,
+			mpMax:self.mpMax,
+			xp:self.xp,
+			xpMax:self.xpMax,
 		};
 	}
 	self.getUpdatePack = function(){
@@ -121,6 +136,10 @@ Player = function(id, username){
 			left:self.pressingLeft,
 			up:self.pressingUp,
 			down:self.pressingDown,
+			mp:self.mp,
+			mpMax:self.mpMax,
+			xp:self.xp,
+			xpMax:self.xpMax,
 		}
 	}
 
@@ -203,6 +222,7 @@ Bullet = function(parent,angle){
 					var shooter = Player.list[self.parent];
 					if(shooter)
 						shooter.score += 1;
+						shooter.xp += 3;
 					p.respawn();
 				}
 				self.toRemove = true;

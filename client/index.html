@@ -223,7 +223,7 @@
 			for(var r = 0; r < self.rows; r++){
 				for(var c = 0;c < self.cols;c++){
 					//ctx.fillStyle = self.tiles[r][c].color;
-					console.log(self.tiles[r][c].type);
+					//console.log(self.tiles[r][c].type);
 					
 					//ctx.fillRect(x + tileWidth*r , y + tileWidth*c , tileWidth,tileWidth);
 				}
@@ -253,6 +253,10 @@
 		self.up = initPack.up;
 		self.down = initPack.down;
 		self.player = Img.pd;
+		self.mp = initPack.mp;
+		self.mpMax = initPack.mpMax;
+		self.xp = initPack.xp;
+		self.xpMax = initPack.xpMax;
 
 		self.draw = function(){
 			var x = self.x - Player.list[selfId].x + WIDTH/2;
@@ -260,7 +264,11 @@
 
 			var hpWidth = (395 * self.hp / self.hpMax);
 			ctx.fillStyle = 'red';
-			ctx.fillRect(x - hpWidth/2,y - 40,hpWidth,4);
+			ctx.fillRect(x - hpWidth/2,y - 40,hpWidth,16);
+			
+			var hpWidthSelf = (395 * Player.list[selfId].hp / Player.list[selfId].hpMax);
+			var mpWidthSelf = (395 * Player.list[selfId].mp / Player.list[selfId].mpMax);
+			var xpWidthSelf = (90 * Player.list[selfId].xp / Player.list[selfId].xpMax);
 
 			var width = self.player.width*2;
 			var height = self.player.height*2;
@@ -294,14 +302,19 @@
 			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 60,350 , 20 );
 			
 			ctx.fillStyle = 'green';
-			ctx.fillRect(738 ,HEIGHT - 38,hpWidth , 20 );
+			ctx.fillRect(738 ,HEIGHT - 38,hpWidthSelf , 16 );
 			
 			ctx.fillStyle = 'blue';
-			ctx.fillRect(738 ,HEIGHT-19,hpWidth , 20 );
+			ctx.fillRect(738 ,HEIGHT-19,mpWidthSelf , 16 );
 			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 20,350 , 20 );
 			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 60,350 , 20 );
 			
+			ctx.fillStyle = 'orange';
+			ctx.fillRect(3,HEIGHT -19, xpWidthSelf,16);
+			
 			ctx.drawImage(Img.bottomtop,738, HEIGHT-38);
+			
+			console.log(hpWidth);
 		}
 
 		Player.list[self.id] = self;
@@ -361,6 +374,10 @@
 					p.y = pack.y;
 				if(pack.hp !== undefined)
 					p.hp = pack.hp;
+				if(pack.mp !== undefined)
+					p.mp = pack.mp;
+				if(pack.xp !== undefined)
+					p.xp = pack.xp;
 				if(pack.score !== undefined)
 					p.score = pack.score;
 				p.right = pack.right;
