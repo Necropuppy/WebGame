@@ -80,13 +80,13 @@ Player = function(id, username,team){
 		self.updateSpd();
 		super_update();
 
-		
+
 		//mana regen
 
 		if(self.mp < self.mpMax){
 			self.mp +=1;
 		}
-		
+
 		//update xp -- level up!
 		if(self.xp >= self.xpMax){
 			self.xp = self.xp - self.xpMax;
@@ -109,16 +109,16 @@ Player = function(id, username,team){
 	}
 
 	self.updateSpd = function(){
-		if(self.pressingRight && !self.isPositionWall(Vector2.add(self.pos, Vector2(self.maxSpd, 0))))
+		if(self.pressingRight && !self.isPositionWall(Vector2.add(Vector2.add(self.pos, Vector2(0, 24)), Vector2(self.maxSpd, 0))))
 			self.vel.x = self.maxSpd;
-		else if(self.pressingLeft && !self.isPositionWall(Vector2.add(self.pos, Vector2(-self.maxSpd, 0))))
+		else if(self.pressingLeft && !self.isPositionWall(Vector2.add(Vector2.add(self.pos, Vector2(0, 24)), Vector2(-self.maxSpd, 0))))
 			self.vel.x = -self.maxSpd;
 		else
 			self.vel.x = 0;
 
-		if(self.pressingUp && !self.isPositionWall(Vector2.add(self.pos, Vector2(0, -self.maxSpd))))
+		if(self.pressingUp && !self.isPositionWall(Vector2.add(Vector2.add(self.pos, Vector2(0, 24)), Vector2(0, -self.maxSpd))))
 			self.vel.y = -self.maxSpd;
-		else if(self.pressingDown && !self.isPositionWall(Vector2.add(self.pos, Vector2(0, self.maxSpd))))
+		else if(self.pressingDown && !self.isPositionWall(Vector2.add(Vector2.add(self.pos, Vector2(0, 24)), Vector2(0, self.maxSpd))))
 			self.vel.y = self.maxSpd;
 		else
 			self.vel.y = 0;
@@ -319,19 +319,19 @@ Base = function(team,id){
 	self.id = id;
 	if(team === 0){
 		self.pos = Vector2(400,1920 - 400);
-		
+
 	}
 	if(team === 1){
 		self.pos = Vector2(1920 - 400,400);
 	}
-	
+
 	self.update = function(){
 		if(self.hp <= 0){
 			self.hp = 0;
 			self.destroyed = true;
 		}
 	}
-	
+
 
 	self.getInitPack = function(){
 		return {
@@ -389,18 +389,18 @@ Tower = function(team, id){
 	self.id = id;
 	if(self.team === 0){
 		self.pos = Vector2(600,1920 - 600);
-		
+
 	} else if(self.team === 1){
 		self.pos = Vector2(1920 - 600,600);
 	}
-	
+
 	self.update = function(){
 		if(self.hp <= 0){
 			self.hp = 0;
 			self.destroyed = true;
 		}
 	}
-	
+
 
 	self.getInitPack = function(){
 		return {
