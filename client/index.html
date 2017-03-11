@@ -188,6 +188,16 @@
 
 	Img.hp = new Image();
 	Img.hp.src = '/client/img/hp.png';
+	
+	Img.blue = new Image();
+	Img.yellow = new Image();
+	Img.red = new Image();
+	Img.black = new Image();
+	
+	Img.blue.src = '/client/img/bluebar.png';
+	Img.yellow.src = '/client/img/yellowbar.png';
+	Img.red.src = '/client/img/redbar.png';
+	Img.black.src = '/client/img/blackbar.png';
 
 	Img.bottom = new Image();
 	Img.bottom.src = '/client/img/bottom.png';
@@ -315,10 +325,36 @@
 			var x = self.x - Player.list[selfId].x + WIDTH/2;
 			var y = self.y - Player.list[selfId].y + HEIGHT/2;
 
-			var hpWidth = (395 * self.hp / self.hpMax);
+			var hpWidth = 90 - (90 * self.hp / self.hpMax);
+			var mpWidth = 90 - (90* self.mp / self.mpMax);
+			
+			
+			//player hp bars mini
 			ctx.fillStyle = 'red';
-			ctx.fillRect(x - hpWidth/2,y - 40,hpWidth,16);
-
+			if(self.id === Player.list[selfId].id){//you
+				ctx.drawImage(Img.yellow,x - 65,y - 60);
+			}else  if(self.team !== Player.list[selfId].team){//enemy team
+				ctx.drawImage(Img.red,x - 65,y - 60);
+			} else if(self.team === Player.list[selfId].team){//friendly team
+				ctx.drawImage(Img.blue,x - 65,y - 60);
+			}
+			
+			//hp
+			ctx.fillStyle = ctx.fillStyle = 'rgb(32, 74, 74)';
+			//hp grey
+			ctx.fillRect(x - 65 + 23 + 90 - (hpWidth),y-60+3,hpWidth,9);
+			//mp grey
+			ctx.fillRect(x - 65 + 23 + 90 - (mpWidth),y-60+15,mpWidth,4);
+			
+			
+			//top layer
+			ctx.drawImage(Img.black,x-65,y-60);
+			ctx.fillStyle = 'white';
+			ctx.font = '20px Arial';
+			ctx.fillText(self.lvl,x-60,y-42);
+			
+			
+			//player self status bar
 			var hpWidthSelf = (395 * Player.list[selfId].hp / Player.list[selfId].hpMax);
 			var mpWidthSelf = (395 * Player.list[selfId].mp / Player.list[selfId].mpMax);
 			var xpWidthSelf = (90 * Player.list[selfId].xp / Player.list[selfId].xpMax);
@@ -365,12 +401,13 @@
 			ctx.fillStyle = 'orange';
 			ctx.fillRect(3,HEIGHT -19, xpWidthSelf,16);
 
-			ctx.drawImage(Img.bottomtop,738, HEIGHT-38);
+			ctx.drawImage(Img.bottomtop,0, HEIGHT-Img.bottomtop.height);
 
 			
 			ctx.fillStyle = 'black';
 			ctx.fillRect(71,HEIGHT-47,25,25);
 			ctx.fillStyle = 'yellow';
+			ctx.font = '30px Arial';
 			ctx.fillText(Player.list[selfId].lvl,75,HEIGHT-20);
 			
 
