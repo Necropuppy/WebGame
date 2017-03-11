@@ -1,21 +1,19 @@
 
+<div id="everything">
 
 
-
-	
-	
 <div id="signDiv">
 	<!DOCTYPE html>
 <html >
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
-  
-  
-  
+
+
+
       <link rel="stylesheet" href="/client/css/style.css">
 
-  
+
 </head>
 
 <body>
@@ -33,11 +31,11 @@
   </head>
 
   <body class="align">
-  
-  
+
+
 
     <div class="grid">
-	
+
 		<h1>Lord of Light</h1>
 		<h3>Conflict Eternal</h3>
 
@@ -56,14 +54,14 @@
         <div class="form__field">
           <input id="signDiv-signIn" type="submit" value="Login">
         </div>
-		
+
 		<div class="form__field">
           <input id="signDiv-signUp" type="submit" value="Register">
         </div>
 
       </form>
 
-		
+
 		<div id="signupPass" style="display:none;">
 			<p id="passText" >Account Registered Successfully</p>
 	  </div>
@@ -73,63 +71,57 @@
 	  <div id="signupError" style="display:none;">
 			<p id="errorText" >Username Taken</p>
 	  </div>
-	  
-	  
+
+
     </div>
-    
+
     <svg xmlns="http://www.w3.org/2000/svg" class="icons"><symbol id="arrow-right" viewBox="0 0 1792 1792"><path d="M1600 960q0 54-37 91l-651 651q-39 37-91 37-51 0-90-37l-75-75q-38-38-38-91t38-91l293-293H245q-52 0-84.5-37.5T128 1024V896q0-53 32.5-90.5T245 768h704L656 474q-38-36-38-90t38-90l75-75q38-38 90-38 53 0 91 38l651 651q37 35 37 90z"/></symbol><symbol id="lock" viewBox="0 0 1792 1792"><path d="M640 768h512V576q0-106-75-181t-181-75-181 75-75 181v192zm832 96v576q0 40-28 68t-68 28H416q-40 0-68-28t-28-68V864q0-40 28-68t68-28h32V576q0-184 132-316t316-132 316 132 132 316v192h32q40 0 68 28t28 68z"/></symbol><symbol id="user" viewBox="0 0 1792 1792"><path d="M1600 1405q0 120-73 189.5t-194 69.5H459q-121 0-194-69.5T192 1405q0-53 3.5-103.5t14-109T236 1084t43-97.5 62-81 85.5-53.5T538 832q9 0 42 21.5t74.5 48 108 48T896 971t133.5-21.5 108-48 74.5-48 42-21.5q61 0 111.5 20t85.5 53.5 62 81 43 97.5 26.5 108.5 14 109 3.5 103.5zm-320-893q0 159-112.5 271.5T896 896 624.5 783.5 512 512t112.5-271.5T896 128t271.5 112.5T1280 512z"/></symbol></svg>
 
   </body>
 
 </html>
-  
-  
+
+
 </body>
 </html>
 
 </div>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	<div id="gameDiv" style="display:none;">
-		<canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>
+		<canvas id="ctx"  width ="1920" height="950" style="border:1px solid #000000;"></canvas>
 
-		<div id="chat-text" style="width:500px;height:100px;overflow-y:hidden">
-			<div>Hello!</div>
-		</div>
 
-		<form id="chat-form">
-			<input id="chat-input" type="text" style="width:500px"></input>
-		</form>
 	</div>
-	
-	
-</body>
 
-<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+
+</body>
+</div>
+
+<script src="http://ec2-54-87-252-241.compute-1.amazonaws.com:8080/socket.io/socket.io.js"></script>
 <script>
-	var WIDTH = 500;
-	var HEIGHT = 500;
+
 	var socket = io();
 
 	//sign
@@ -138,9 +130,9 @@
 	var signDivSignIn = document.getElementById('signDiv-signIn');
 	var signDivSignUp = document.getElementById('signDiv-signUp');
 	var signDivPassword = document.getElementById('signDiv-password');
-	
+
 	var loginForm = document.getElementById('loginForm');
-	
+
 	var loginError = document.getElementById('loginError');
 	var signupError = document.getElementById('signupError');
 	var signupPass = document.getElementById('signupPass');
@@ -165,13 +157,13 @@
 	});
 	socket.on('signUpResponse',function(data){
 		if(data.success){
-			
-			
+
+
 			signupError.style.display = 'none';
 			loginError.style.display = 'none';
 			signupPass.style.display = 'inline';
-		
-		
+
+
 		} else {
 			//alert("Sign up unsuccessul.");
 			signupPass.style.display = 'none';
@@ -181,39 +173,131 @@
 	});
 
 	//chat
-	var chatText = document.getElementById('chat-text');
-	var chatInput = document.getElementById('chat-input');
-	var chatForm = document.getElementById('chat-form');
 
-	socket.on('addToChat',function(data){
-		chatText.innerHTML += '<div >' + data + '</div>';
-		chatText.scrollTop = chatText.scrollHeight;
-	});
-	socket.on('evalAnswer',function(data){
-		console.log(data);
-	});
-
-
-	chatForm.onsubmit = function(e){
-		e.preventDefault();
-		if(chatInput.value[0] === '/')
-			socket.emit('evalServer',chatInput.value.slice(1));
-		else
-			socket.emit('sendMsgToServer',chatInput.value);
-		chatInput.value = '';
-	}
 
 	//game
 	var Img = {};
-	Img.player = new Image();
-	Img.player.src = '/client/img/player.png';
+	Img.pu = new Image();
+	Img.pu.src = '/client/img/pu.png';
+	Img.pd = new Image();
+	Img.pd.src = '/client/img/pd.png';
+	Img.pl = new Image();
+	Img.pl.src = '/client/img/pl.png';
+	Img.pr = new Image();
+	Img.pr.src = '/client/img/pr.png';
+
+	Img.hp = new Image();
+	Img.hp.src = '/client/img/hp.png';
+	
+	Img.blue = new Image();
+	Img.yellow = new Image();
+	Img.red = new Image();
+	Img.black = new Image();
+	
+	Img.blue.src = '/client/img/bluebar.png';
+	Img.yellow.src = '/client/img/yellowbar.png';
+	Img.red.src = '/client/img/redbar.png';
+	Img.black.src = '/client/img/blackbar.png';
+
+	Img.bottom = new Image();
+	Img.bottom.src = '/client/img/bottom.png';
+	Img.bottomtop = new Image();
+	Img.bottomtop.src = '/client/img/bottom-top.png';
+
+	
+	Img.tower = new Image();
+	Img.tower.src = '/client/img/tower.png';
+	
 	Img.bullet = new Image();
 	Img.bullet.src = '/client/img/bullet.png';
 	Img.map = new Image();
-	Img.map.src = '/client/img/map.png';
+	Img.map.src = '/client/img/map1.png';
 
 	var ctx = document.getElementById("ctx").getContext("2d");
 	ctx.font = '30px Arial';
+	ctx.imageSmoothingEnabled = false;
+
+	var WIDTH = 1920;
+	var HEIGHT = 950;
+
+	var Map = function(initPack){
+		var self = {};
+		self.id = initPack.id;
+		self.rows = initPack.rows;
+		self.cols = initPack.cols;
+		self.tiles = initPack.tiles;
+
+		self.draw = function(){
+			var x = WIDTH/2 - Player.list[selfId].x;
+			var y = HEIGHT/2 - Player.list[selfId].y;
+			var tileWidth = 32;
+
+			ctx.drawImage(Img.map,x,y);
+
+			for(var r = 0; r < self.rows; r++){
+				for(var c = 0;c < self.cols;c++){
+					//ctx.fillStyle = self.tiles[r][c].color;
+					//console.log(self.tiles[r][c].type);
+
+					//ctx.fillRect(x + tileWidth*r , y + tileWidth*c , tileWidth,tileWidth);
+				}
+			}
+
+		}
+
+		Map.list[self.id] = self;
+
+
+		return self;
+	}
+	Map.list = {};
+
+	
+	var Tower = function(initPack){
+		var self = {};
+		self.id = initPack.id;
+		self.x = initPack.x;
+		self.y = initPack.y;
+		self.isDestroyed = initPack.destroyed;
+		self.hp = initPack.hp;
+		
+		Tower.list[self.id] = self;
+		
+		self.draw = function(){
+			var x = WIDTH/2 - Player.list[selfId].x;
+			var y = HEIGHT/2 - Player.list[selfId].y;
+			var tileWidth = 32;
+			ctx.drawImage(Img.tower,x+ self.x,y + self.y);
+		}
+		
+		return self;
+	}
+	
+	Tower.list = {};
+	
+	var Base = function(initPack){
+		var self = {};
+		self.id = initPack.id;
+		self.x = initPack.x;
+		self.y = initPack.y;
+		self.isDestroyed = initPack.destroyed;
+		self.hp = initPack.hp;
+		
+		Base.list[self.id] = self;
+		
+		self.draw = function(){
+			var x = WIDTH/2 - Player.list[selfId].x;
+			var y = HEIGHT/2 - Player.list[selfId].y;
+			var tileWidth = 32;
+			ctx.drawImage(Img.tower,x+ self.x,y + self.y);
+		}
+		
+		return self;
+	}
+	
+	Base.list = {};
+	
+
 
 	var Player = function(initPack){
 		var self = {};
@@ -224,27 +308,109 @@
 		self.hp = initPack.hp;
 		self.hpMax = initPack.hpMax;
 		self.score = initPack.score;
+		self.right = initPack.right;
+		self.left = initPack.left;
+		self.up = initPack.up;
+		self.down = initPack.down;
+		self.player = Img.pd;
+		self.mp = initPack.mp;
+		self.mpMax = initPack.mpMax;
+		self.xp = initPack.xp;
+		self.xpMax = initPack.xpMax;
+		self.lvl = initPack.lvl;
+		self.lvlPts = initPack.lvlPts;
+		self.team = initPack.team;
 
 		self.draw = function(){
 			var x = self.x - Player.list[selfId].x + WIDTH/2;
 			var y = self.y - Player.list[selfId].y + HEIGHT/2;
 
-			var hpWidth = 30 * self.hp / self.hpMax;
+			var hpWidth = 90 - (90 * self.hp / self.hpMax);
+			var mpWidth = 90 - (90* self.mp / self.mpMax);
+			
+			
+			//player hp bars mini
 			ctx.fillStyle = 'red';
-			ctx.fillRect(x - hpWidth/2,y - 40,hpWidth,4);
+			if(self.id === Player.list[selfId].id){//you
+				ctx.drawImage(Img.yellow,x - 65,y - 60);
+			}else  if(self.team !== Player.list[selfId].team){//enemy team
+				ctx.drawImage(Img.red,x - 65,y - 60);
+			} else if(self.team === Player.list[selfId].team){//friendly team
+				ctx.drawImage(Img.blue,x - 65,y - 60);
+			}
+			
+			//hp
+			ctx.fillStyle = ctx.fillStyle = 'rgb(32, 74, 74)';
+			//hp grey
+			ctx.fillRect(x - 65 + 23 + 90 - (hpWidth),y-60+3,hpWidth,9);
+			//mp grey
+			ctx.fillRect(x - 65 + 23 + 90 - (mpWidth),y-60+15,mpWidth,4);
+			
+			
+			//top layer
+			ctx.drawImage(Img.black,x-65,y-60);
+			ctx.fillStyle = 'white';
+			ctx.font = '20px Arial';
+			ctx.fillText(self.lvl,x-60,y-42);
+			
+			
+			//player self status bar
+			var hpWidthSelf = (395 * Player.list[selfId].hp / Player.list[selfId].hpMax);
+			var mpWidthSelf = (395 * Player.list[selfId].mp / Player.list[selfId].mpMax);
+			var xpWidthSelf = (90 * Player.list[selfId].xp / Player.list[selfId].xpMax);
 
-			var width = Img.player.width*2;
-			var height = Img.player.height*2;
+			var width = self.player.width*2;
+			var height = self.player.height*2;
 
-			ctx.fillStyle = 'blue';
-			ctx.fillRect(x-width/2 + 10,y-height/2 + 10,Img.player.width,Img.player.height);
+			//ctx.fillStyle = 'blue';
+			//ctx.fillRect(x-width/2 + 10,y-height/2 + 10,Img.player.width,Img.player.height);
 			//ctx.fillStyle = 'black';
 			//ctx.fillText(5,x-width/2,y-height/2);
-			//ctx.drawImage(Img.player,
-				//0,0,Img.player.width,Img.player.height,
-				//x-width/2,y-height/2,width,height);
+
+			if (self.down){
+				self.player = Img.pd;
+			} else if(self.up){
+				self.player = Img.pu;
+			} else if(self.right){
+				self.player = Img.pr;
+			} else if(self.left) {
+				self.player = Img.pl;
+			}
+
+			ctx.drawImage(self.player,
+				0,0,self.player.width,self.player.height,
+				x-width/2,y-height/2,width,height);
+
 
 			//ctx.fillText(self.score,self.x,self.y-60);
+			ctx.drawImage(Img.bottom,0, HEIGHT-Img.bottom.height);
+
+			ctx.fillStyle = 'black';
+			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +  20 + (350 * (self.hp/self.hpMax)),HEIGHT-Img.hp.height + 20,350 - ((350) * (self.hp/self.hpMax)) , 20 );
+			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 20,350 , 20 );
+			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 60,350 , 20 );
+
+			ctx.fillStyle = 'green';
+			ctx.fillRect(738 ,HEIGHT - 38,hpWidthSelf , 16 );
+
+			ctx.fillStyle = 'blue';
+			ctx.fillRect(738 ,HEIGHT-19,mpWidthSelf , 16 );
+			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 20,350 , 20 );
+			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 60,350 , 20 );
+
+			ctx.fillStyle = 'orange';
+			ctx.fillRect(3,HEIGHT -19, xpWidthSelf,16);
+
+			ctx.drawImage(Img.bottomtop,0, HEIGHT-Img.bottomtop.height);
+
+			
+			ctx.fillStyle = 'black';
+			ctx.fillRect(71,HEIGHT-47,25,25);
+			ctx.fillStyle = 'yellow';
+			ctx.font = '30px Arial';
+			ctx.fillText(Player.list[selfId].lvl,75,HEIGHT-20);
+			
+
 		}
 
 		Player.list[self.id] = self;
@@ -290,6 +456,13 @@
 		for(var i = 0 ; i < data.bullet.length; i++){
 			new Bullet(data.bullet[i]);
 		}
+		for(var i = 0 ; i < data.tower.length; i++){
+			console.log(data.tower[i]);
+			new Tower(data.tower[i]);
+		}
+		for(var i = 0 ; i < data.base.length; i++){
+			new Base(data.base[i]);
+		}
 	});
 
 	socket.on('update',function(data){
@@ -304,8 +477,20 @@
 					p.y = pack.y;
 				if(pack.hp !== undefined)
 					p.hp = pack.hp;
+				if(pack.mp !== undefined)
+					p.mp = pack.mp;
+				if(pack.xp !== undefined)
+					p.xp = pack.xp;
+				if(pack.lvl !== undefined)
+					p.lvl = pack.lvl;
+				if(pack.lvlPts !== undefined)
+					p.lvlPts = pack.lvlPts;
 				if(pack.score !== undefined)
 					p.score = pack.score;
+				p.right = pack.right;
+				p.left = pack.left;
+				p.up = pack.up;
+				p.down = pack.down;
 			}
 		}
 		for(var i = 0 ; i < data.bullet.length; i++){
@@ -318,6 +503,18 @@
 					b.y = pack.y;
 			}
 		}
+		
+		for(var i = 0 ; i < data.tower.length; i++){
+			var pack = data.tower[i];
+			var b = Tower.list[data.tower[i].id];
+			if(b){
+				if(pack.hp !== undefined)
+					b.hp = pack.hp;
+				if(pack.destroyed !== undefined)
+					b.destroyed = pack.destroyed;
+			}
+		}
+		
 	});
 
 	socket.on('remove',function(data){
@@ -330,22 +527,48 @@
 		}
 	});
 
+	socket.on('mapInit',function(data){
+
+		new Map(data.map[0]);
+
+	});
+
+	var focused = true;
+
 	setInterval(function(){
 		if(!selfId)
 			return;
-		ctx.clearRect(0,0,500,500);
-		drawMap();
+		ctx.clearRect(0,0,WIDTH,HEIGHT);
+
+		for(var i in Map.list)
+			Map.list[i].draw();
 		drawScore();
-		for(var i in Player.list)
-			Player.list[i].draw();
+		
 		for(var i in Bullet.list)
 			Bullet.list[i].draw();
+		for(var i in Tower.list)
+			Tower.list[i].draw();
+		for(var i in Base.list)
+			Base.list[i].draw();
+			
+		for(var i in Player.list)
+			Player.list[i].draw();
+			
+		if (!document.hasFocus() && focused === true) {
+			focused = false;
+			onLossOfFocus();
+		} else if (document.hasFocus() && !focused){
+			focused = true;
+		}
+
+		//drawHud();
 	},40);
 
-	var drawMap = function(){
-		var x = WIDTH/2 - Player.list[selfId].x;
-		var y = HEIGHT/2 - Player.list[selfId].y;
-		ctx.drawImage(Img.map,x,y);
+	var drawHud = function(){
+
+		//ctx.drawImage(Img.hp,(WIDTH/2)-(Img.hp.width/2), HEIGHT-Img.hp.height);
+		//ct.fillStyle = 'black';
+		//ctx.fillRect(Img.hp,(WIDTH/2)-(Img.hp.width/2) +  20,HEIGHT-Img.hp.height + 20,350 - (,20 );
 	}
 
 	var drawScore = function(){
@@ -382,20 +605,23 @@
 		socket.emit('keyPress',{inputId:'attack',state:false});
 	}
 	document.onmousemove = function(event){
-	
+
 		//var rect = ct.getBoundingClientRect();
 		//var top = rect.top;
 		//var right = rect.right;
 		var width = document.documentElement.clientWidth;
         var height = document.documentElement.clientHeight;
-	
-		var x =-(width/2) + event.clientX - 8;
-		var y = -(height/2) + 50 + event.clientY - 8;
+
+		var x = -(width / 2) + event.clientX;
+		var y = -(height / 2) + event.clientY;
 		var angle = Math.atan2(y,x) / Math.PI * 180;
 		socket.emit('keyPress',{inputId:'mouseAngle',state:angle});
 	}
 
+	var onLossOfFocus = function () {
 
+		socket.emit('keyPress', {inputId:'stop', state:false});
+	}
 
 
 </script>
