@@ -318,11 +318,11 @@ Base = function(team,id){
 	self.team = team;
 	self.id = id;
 	if(team === 0){
-		self.pos = Vector2(400,1920 - 400);
+		self.pos = Vector2(350, 1920 - 540);
 
 	}
 	if(team === 1){
-		self.pos = Vector2(1920 - 400,400);
+		self.pos = Vector2(1920 - 540, 350);
 	}
 
 	self.update = function(){
@@ -388,10 +388,10 @@ Tower = function(team, id){
 	self.team = team;
 	self.id = id;
 	if(self.team === 0){
-		self.pos = Vector2(600,1920 - 600);
+		self.pos = Vector2(600,1920 - 700);
 
 	} else if(self.team === 1){
-		self.pos = Vector2(1920 - 600,600);
+		self.pos = Vector2(1920 - 700,600);
 	}
 
 	self.update = function(){
