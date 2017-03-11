@@ -1,6 +1,6 @@
 var tmx = require("tmx-parser");
 var jsfile = require("jsonfile")
-tmx.parseFile('simplemap.tmx', function (err, data) {
+tmx.parseFile('colmap1.tmx', function (err, data) {
     var tiles = [];
     var cur = [];
     for (var i = 0; i < data.layers[0].tiles.length; i++) {

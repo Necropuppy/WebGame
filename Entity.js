@@ -3,6 +3,7 @@ var removePack = {player:[],bullet:[]};
 fps = 25;
 
 require('./Vector2');
+require('./Map');
 
 Entity = function(){
 	var self = {
@@ -16,6 +17,9 @@ Entity = function(){
 	}
 	self.updatePosition = function(){
 		self.pos = Vector2.add(self.pos, self.vel);
+	}
+	self.isPositionWall = function(pt){
+		return simple[(Math.floor(pt.y / 64) % simple.length)][(Math.floor(pt.x / 64) % simple[0].length)];
 	}
 	return self;
 }
@@ -66,7 +70,7 @@ Player = function(id, username){
 	self.update = function(){
 		self.updateSpd();
 		super_update();
-		
+
 		if(self.mp < self.mpMax){
 			self.mp +=1;
 		}
@@ -84,26 +88,28 @@ Player = function(id, username){
 	}
 
 	self.updateSpd = function(){
-		if(self.pressingRight)
+		if(self.pressingRight && !self.isPositionWall(Vector2.add(self.pos, Vector2(self.maxSpd, 0))))
 			self.vel.x = self.maxSpd;
-		else if(self.pressingLeft)
+		else if(self.pressingLeft && !self.isPositionWall(Vector2.add(self.pos, Vector2(-self.maxSpd, 0))))
 			self.vel.x = -self.maxSpd;
 		else
 			self.vel.x = 0;
 
-		if(self.pressingUp)
+		if(self.pressingUp && !self.isPositionWall(Vector2.add(self.pos, Vector2(0, -self.maxSpd))))
 			self.vel.y = -self.maxSpd;
-		else if(self.pressingDown)
+		else if(self.pressingDown && !self.isPositionWall(Vector2.add(self.pos, Vector2(0, self.maxSpd))))
 			self.vel.y = self.maxSpd;
 		else
 			self.vel.y = 0;
 	}
 
 	self.respawn = function (){
-		self.pos = Vector2(Math.random()*500, Math.random()*500);
+		self.pos = Vector2(256, 256);
 		self.hp = self.hpMax;
 	}
 
+	self.respawn();
+	
 	self.getInitPack = function(){
 		return {
 			id:self.id,
@@ -275,7 +281,7 @@ Base = function(){
 	self = Entity();
 	self.hp = 1000;
 	self.destroyed = false;
-	
+
 	self.getInitPack = function(){
 		return {
 			id:self.id,
@@ -290,16 +296,16 @@ Base = function(){
 			y:self.pos.y,
 		};
 	}
-	
+
 	return self;
-	
+
 }
 
 Tower = function(){
 	self = Entity();
 	self.hp = 500;
 	self.destroyed = false;
-	
+
 	self.getInitPack = function(){
 		return {
 			id:self.id,
@@ -314,7 +320,7 @@ Tower = function(){
 			y:self.pos.y,
 		};
 	}
-	
+
 	return self;
-	
+
 }
