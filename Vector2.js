@@ -34,3 +34,7 @@ Vector2.Polar = function (mag, angle) {
 Vector2.Random = function (x, y) {
     return Vector2(Math.random() * x, Math.random() * y);
 }
+
+Vector2.mult = function (vec, y) {
+    return Vector2(vec.x * y, vec.y * y);
+}

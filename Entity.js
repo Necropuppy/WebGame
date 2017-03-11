@@ -79,6 +79,7 @@ Player = function(id, username){
 			self.shootBullet(self.mouseAngle);
 		}
 	}
+
 	self.shootBullet = function(angle){
 		if(self.mp > 9){
 			var b = Bullet(self.id,angle);
@@ -109,7 +110,7 @@ Player = function(id, username){
 	}
 
 	self.respawn();
-	
+
 	self.getInitPack = function(){
 		return {
 			id:self.id,
@@ -218,6 +219,9 @@ Bullet = function(parent,angle){
 		if(self.timer++ > 100)
 			self.toRemove = true;
 		super_update();
+
+		if(self.isPositionWall(self.pos))
+			self.toRemove = true;
 
 		for(var i in Player.list){
 			var p = Player.list[i];
