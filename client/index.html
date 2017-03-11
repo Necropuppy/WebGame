@@ -185,14 +185,15 @@
 	Img.pl.src = '/client/img/pl.png';
 	Img.pr = new Image();
 	Img.pr.src = '/client/img/pr.png';
-	
+
 	Img.hp = new Image();
 	Img.hp.src = '/client/img/hp.png';
-	
+
 	Img.bottom = new Image();
 	Img.bottom.src = '/client/img/bottom.png';
 	Img.bottomtop = new Image();
 	Img.bottomtop.src = '/client/img/bottom-top.png';
+
 	
 	Img.tower = new Image();
 	Img.tower.src = '/client/img/tower.png';
@@ -208,38 +209,39 @@
 
 	var WIDTH = 1920;
 	var HEIGHT = 950;
-	
+
 	var Map = function(initPack){
 		var self = {};
 		self.id = initPack.id;
 		self.rows = initPack.rows;
 		self.cols = initPack.cols;
 		self.tiles = initPack.tiles;
-		
+
 		self.draw = function(){
 			var x = WIDTH/2 - Player.list[selfId].x;
 			var y = HEIGHT/2 - Player.list[selfId].y;
 			var tileWidth = 32;
-			
+
 			ctx.drawImage(Img.map,x,y);
-			
+
 			for(var r = 0; r < self.rows; r++){
 				for(var c = 0;c < self.cols;c++){
 					//ctx.fillStyle = self.tiles[r][c].color;
 					//console.log(self.tiles[r][c].type);
-					
+
 					//ctx.fillRect(x + tileWidth*r , y + tileWidth*c , tileWidth,tileWidth);
 				}
 			}
-			
+
 		}
-		
+
 		Map.list[self.id] = self;
 
 
 		return self;
 	}
 	Map.list = {};
+
 	
 	var Tower = function(initPack){
 		var self = {};
@@ -286,6 +288,7 @@
 	Base.list = {};
 	
 
+
 	var Player = function(initPack){
 		var self = {};
 		self.id = initPack.id;
@@ -315,7 +318,7 @@
 			var hpWidth = (395 * self.hp / self.hpMax);
 			ctx.fillStyle = 'red';
 			ctx.fillRect(x - hpWidth/2,y - 40,hpWidth,16);
-			
+
 			var hpWidthSelf = (395 * Player.list[selfId].hp / Player.list[selfId].hpMax);
 			var mpWidthSelf = (395 * Player.list[selfId].mp / Player.list[selfId].mpMax);
 			var xpWidthSelf = (90 * Player.list[selfId].xp / Player.list[selfId].xpMax);
@@ -327,7 +330,7 @@
 			//ctx.fillRect(x-width/2 + 10,y-height/2 + 10,Img.player.width,Img.player.height);
 			//ctx.fillStyle = 'black';
 			//ctx.fillText(5,x-width/2,y-height/2);
-			
+
 			if (self.down){
 				self.player = Img.pd;
 			} else if(self.up){
@@ -337,39 +340,40 @@
 			} else if(self.left) {
 				self.player = Img.pl;
 			}
-			
+
 			ctx.drawImage(self.player,
 				0,0,self.player.width,self.player.height,
 				x-width/2,y-height/2,width,height);
 
-				
+
 			//ctx.fillText(self.score,self.x,self.y-60);
 			ctx.drawImage(Img.bottom,0, HEIGHT-Img.bottom.height);
-			
+
 			ctx.fillStyle = 'black';
 			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +  20 + (350 * (self.hp/self.hpMax)),HEIGHT-Img.hp.height + 20,350 - ((350) * (self.hp/self.hpMax)) , 20 );
 			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 20,350 , 20 );
 			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 60,350 , 20 );
-			
+
 			ctx.fillStyle = 'green';
 			ctx.fillRect(738 ,HEIGHT - 38,hpWidthSelf , 16 );
-			
+
 			ctx.fillStyle = 'blue';
 			ctx.fillRect(738 ,HEIGHT-19,mpWidthSelf , 16 );
 			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 20,350 , 20 );
 			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 60,350 , 20 );
-			
+
 			ctx.fillStyle = 'orange';
 			ctx.fillRect(3,HEIGHT -19, xpWidthSelf,16);
-			
+
 			ctx.drawImage(Img.bottomtop,738, HEIGHT-38);
+
 			
 			ctx.fillStyle = 'black';
 			ctx.fillRect(71,HEIGHT-47,25,25);
 			ctx.fillStyle = 'yellow';
 			ctx.fillText(Player.list[selfId].lvl,75,HEIGHT-20);
 			
-			//console.log(hpWidth);
+
 		}
 
 		Player.list[self.id] = self;
@@ -485,11 +489,11 @@
 			delete Bullet.list[data.bullet[i]];
 		}
 	});
-	
+
 	socket.on('mapInit',function(data){
-		
+
 		new Map(data.map[0]);
-		
+
 	});
 
 	var focused = true;
@@ -498,7 +502,7 @@
 		if(!selfId)
 			return;
 		ctx.clearRect(0,0,WIDTH,HEIGHT);
-		
+
 		for(var i in Map.list)
 			Map.list[i].draw();
 		drawScore();
@@ -519,12 +523,12 @@
 		} else if (document.hasFocus() && !focused){
 			focused = true;
 		}
-		
+
 		//drawHud();
 	},40);
 
 	var drawHud = function(){
-		
+
 		//ctx.drawImage(Img.hp,(WIDTH/2)-(Img.hp.width/2), HEIGHT-Img.hp.height);
 		//ct.fillStyle = 'black';
 		//ctx.fillRect(Img.hp,(WIDTH/2)-(Img.hp.width/2) +  20,HEIGHT-Img.hp.height + 20,350 - (,20 );
@@ -571,14 +575,14 @@
 		var width = document.documentElement.clientWidth;
         var height = document.documentElement.clientHeight;
 
-		var x =-(width/2) + event.clientX - 8;
-		var y = -(height/2) + 50 + event.clientY - 8;
+		var x = -(width / 2) + event.clientX;
+		var y = -(height / 2) + event.clientY;
 		var angle = Math.atan2(y,x) / Math.PI * 180;
 		socket.emit('keyPress',{inputId:'mouseAngle',state:angle});
 	}
 
 	var onLossOfFocus = function () {
-		
+
 		socket.emit('keyPress', {inputId:'stop', state:false});
 	}
 

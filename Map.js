@@ -1,14 +1,15 @@
 var initPack = {map:[]};
 
 
-var simple = require('./simplemap.json');
+simple = require('./simplemap.json');
 
 
 
 World = function(){
 	var self = {
-		rows:simple.length,
-		cols:simple[0].length,
+
+		rows: simple.length,
+		cols: simple[0].length,
 		id:"",
 		tiles:[],
 	}
@@ -32,20 +33,12 @@ World.getMapUpdateData = function(){
 Map = function(id){
 	var self = World();
 	self.id = id;
-	
-
-	
 	for(var r = 0;r < self.rows;r++){
-		
 		self.tiles[r] = [];
-		
 		for(var c =0;c < self.cols;c++){
 			self.tiles[r][c] = new Tile(r,c,simple[r][c]);
 		}
-		
 	}
-
-	//console.log(self.tiles);
 
 	self.getInitPack = function(){
 		return {
@@ -53,7 +46,6 @@ Map = function(id){
 			rows:self.rows,
 			cols:self.cols,
 			tiles:self.tiles,
-
 		};
 	}
 	Map.list[0] = self;
@@ -72,10 +64,7 @@ Map.onStart = function(socket){
 		})
 }
 Map.getAllInitPack = function(){
-	//var maps = [];
-
-		return Map.list[0].getInitPack();
-
+	return Map.list[0].getInitPack();
 }
 
 var Tile = function(row, col, type){
@@ -85,7 +74,7 @@ var Tile = function(row, col, type){
 		solid: false,
 		type: 0,
 		width:64,
-		
+
 	}
 	self.row = row;
 	self.col = col;
