@@ -45,7 +45,6 @@ Map = function(id){
 			rows:self.rows,
 			cols:self.cols,
 			tiles:self.tiles,
-
 		};
 	}
 	Map.list[0] = self;

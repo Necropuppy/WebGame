@@ -20,6 +20,7 @@ app.get('/',function(req, res) {
 	res.sendFile(__dirname + '/client/index.html');
 });
 app.use('/client',express.static(__dirname + '/client'));
+Map("One");
 
 // Activates the server on the port in config.json
 serv.listen(config.port);
@@ -68,16 +69,9 @@ var addUser = function(data,cb){
 var io = require('socket.io')(serv,{});
 // Establishes data connection to client.
 
-var mapGen = false;
-
 io.sockets.on('connection', function(socket){
 	socket.id = Math.random();
 	SOCKET_LIST[socket.id] = socket;
-
-	if(!mapGen){
-		Map.onStart(socket);
-		mapGen = true;
-	}
 
 	socket.emit("mapInit", World.getMapUpdateData().initPack);
 
