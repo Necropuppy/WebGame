@@ -7,8 +7,8 @@ var simple = require('./simplemap.json');
 
 World = function(){
 	var self = {
-		rows:10,
-		cols:10,
+		rows:simple.length,
+		cols:simple[0].length,
 		id:"",
 		tiles:[],
 	}

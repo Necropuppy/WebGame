@@ -1,4 +1,4 @@
-var initPack = {player:[],bullet:[]};
+var initPack = {player:[],bullet:[],tower:[],base:[]};
 var removePack = {player:[],bullet:[]};
 fps = 25;
 
@@ -25,6 +25,8 @@ Entity.getFrameUpdateData = function(){
 		initPack:{
 			player:initPack.player,
 			bullet:initPack.bullet,
+			tower:initPack.tower,
+			base:initPack.base,
 		},
 		removePack:{
 			player:removePack.player,
@@ -33,16 +35,20 @@ Entity.getFrameUpdateData = function(){
 		updatePack:{
 			player:Player.update(),
 			bullet:Bullet.update(),
+			tower:Tower.update(),
+			base:Base.update(),
 		}
 	};
 	initPack.player = [];
 	initPack.bullet = [];
+	initPack.tower = [];
+	initPack.base = [];
 	removePack.player = [];
 	removePack.bullet = [];
 	return pack;
 }
 
-Player = function(id, username){
+Player = function(id, username,team){
 	var self = Entity();
 	self.id = id;
 	self.number = "" + Math.floor(10 * Math.random());
@@ -61,14 +67,26 @@ Player = function(id, username){
 	self.mpMax = 100;
 	self.xp = 0;
 	self.xpMax = 10;
+	self.lvl = 1;
+	self.lvlPts = 0;
+	self.team = team;
 
 	var super_update = self.update;
 	self.update = function(){
 		self.updateSpd();
 		super_update();
 		
+		//mana regen
 		if(self.mp < self.mpMax){
 			self.mp +=1;
+		}
+		
+		//update xp -- level up!
+		if(self.xp >= self.xpMax){
+			self.xp = self.xp - self.xpMax;
+			//self.xpMax *= 2;
+			self.lvl += 1;
+			self.lvlPts += 1;
 		}
 
 		if(self.pressingAttack){
@@ -77,7 +95,7 @@ Player = function(id, username){
 	}
 	self.shootBullet = function(angle){
 		if(self.mp > 9){
-			var b = Bullet(self.id,angle);
+			var b = Bullet(self,angle);
 			b.pos = self.pos;
 			self.mp -= 10;
 		}
@@ -122,6 +140,9 @@ Player = function(id, username){
 			mpMax:self.mpMax,
 			xp:self.xp,
 			xpMax:self.xpMax,
+			lvl:self.lvl,
+			lvlPts:self.lvlPts,
+			team:self.team,
 		};
 	}
 	self.getUpdatePack = function(){
@@ -140,6 +161,8 @@ Player = function(id, username){
 			mpMax:self.mpMax,
 			xp:self.xp,
 			xpMax:self.xpMax,
+			lvl:self.lvl,
+			lvlPts:self.lvlPts,
 		}
 	}
 
@@ -149,8 +172,8 @@ Player = function(id, username){
 	return self;
 }
 Player.list = {};
-Player.onConnect = function(socket, username){
-	var player = Player(socket.id, username);
+Player.onConnect = function(socket, username, team){
+	var player = Player(socket.id, username, team);
 	socket.on('keyPress',function(data){
 		if(data.inputId === 'left')
 			player.pressingLeft = data.state;
@@ -177,6 +200,8 @@ Player.onConnect = function(socket, username){
 		selfId:socket.id,
 		player:Player.getAllInitPack(),
 		bullet:Bullet.getAllInitPack(),
+		tower:Tower.getAllInitPack(),
+		base:Base.getAllInitPack(),
 	})
 }
 Player.getAllInitPack = function(){
@@ -204,7 +229,8 @@ Bullet = function(parent,angle){
 	var self = Entity();
 	self.id = Math.random();
 	self.vel = Vector2.Polar(250 / fps, angle);
-	self.parent = parent;
+	self.actuallyParent = parent;
+	self.parent = parent.id;
 	self.timer = 0;
 	self.toRemove = false;
 	var super_update = self.update;
@@ -215,14 +241,15 @@ Bullet = function(parent,angle){
 
 		for(var i in Player.list){
 			var p = Player.list[i];
-			if(self.pos.dist(p.pos) < 32 && self.parent !== p.id){
+			if(self.pos.dist(p.pos) < 32 && self.parent !== p.id && self.actuallyParent.team !== p.team){
 				p.hp -= 1;
 
 				if(p.hp <= 0){
 					var shooter = Player.list[self.parent];
-					if(shooter)
+					if(shooter) {
 						shooter.score += 1;
 						shooter.xp += 3;
+					}
 					p.respawn();
 				}
 				self.toRemove = true;
@@ -271,16 +298,34 @@ Bullet.getAllInitPack = function(){
 	return bullets;
 }
 
-Base = function(){
-	self = Entity();
+Base = function(team,id){
+	var self = Entity();
 	self.hp = 1000;
 	self.destroyed = false;
+	self.team = team;
+	self.id = id;
+	if(team === 0){
+		self.pos = Vector2(400,1920 - 400);
+		
+	}
+	if(team === 1){
+		self.pos = Vector2(1920 - 400,400);
+	}
+	
+	self.update = function(){
+		if(self.hp <= 0){
+			self.hp = 0;
+			self.destroyed = true;
+		}
+	}
 	
 	self.getInitPack = function(){
 		return {
 			id:self.id,
 			x:self.pos.x,
 			y:self.pos.y,
+			hp:self.hp,
+			destroyed:self.destroyed,
 		};
 	}
 	self.getUpdatePack = function(){
@@ -288,23 +333,65 @@ Base = function(){
 			id:self.id,
 			x:self.pos.x,
 			y:self.pos.y,
+			hp:self.hp,
+			destroyed:self.destroyed,
 		};
 	}
-	
+	Base.list[id] = self;
+	initPack.base.push(self.getInitPack());
 	return self;
-	
 }
 
-Tower = function(){
-	self = Entity();
+Base.list = {};
+
+Base.getAllInitPack = function(){
+	var bases = [];
+	for(var i in Base.list)
+		bases.push(Base.list[i].getInitPack());
+	return bases;
+}
+
+Base.update = function(){
+	var pack = [];
+	for(var i in Base.list){
+		Base.list[i].update();
+		pack.push(Base.list[i].getUpdatePack());
+	}
+	return pack;
+}
+
+Base.onStart = function(socket){
+	var base = Base(0,0);
+	var base2 = Base(1,1);
+}
+
+Tower = function(team, id){
+	var self = Entity();
 	self.hp = 500;
 	self.destroyed = false;
+	self.team = team;
+	self.id = id;
+	if(self.team === 0){
+		self.pos = Vector2(600,1920 - 600);
+		
+	} else if(self.team === 1){
+		self.pos = Vector2(1920 - 600,600);
+	}
+	
+	self.update = function(){
+		if(self.hp <= 0){
+			self.hp = 0;
+			self.destroyed = true;
+		}
+	}
 	
 	self.getInitPack = function(){
 		return {
 			id:self.id,
 			x:self.pos.x,
 			y:self.pos.y,
+			hp:self.hp,
+			destroyed:self.destroyed,
 		};
 	}
 	self.getUpdatePack = function(){
@@ -312,9 +399,34 @@ Tower = function(){
 			id:self.id,
 			x:self.pos.x,
 			y:self.pos.y,
+			hp:self.hp,
+			destroyed:self.destroyed,
 		};
 	}
-	
+	Tower.list[self.id] = self;
+	initPack.tower.push(self.getInitPack());
 	return self;
-	
+}
+
+Tower.getAllInitPack = function(){
+	var towers = [];
+	for(var i in Tower.list)
+		towers.push(Tower.list[i].getInitPack());
+	return towers;
+}
+
+Tower.update = function(){
+	var pack = [];
+	for(var i in Tower.list){
+		Tower.list[i].update();
+		pack.push(Tower.list[i].getUpdatePack());
+	}
+	return pack;
+}
+
+Tower.list = {};
+
+Tower.onStart = function(socket){
+	Tower(0,0);
+	Tower(1,1);
 }

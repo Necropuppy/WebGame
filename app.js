@@ -2,7 +2,7 @@
 
 // Mongo DB imports and setup
 var mongojs = require("mongojs");
-var db = mongojs('Pubic:secret@localhost:27017/myGame', ['account']);
+var db = mongojs('@localhost:27017/myGame', ['account']);
 
 require('./Entity');
 require('./Map');
@@ -27,6 +27,8 @@ console.log("Server started.");
 
 // List of connected clients
 var SOCKET_LIST = {};
+var team0size = 0;
+var team1size = 0;
 
 /******** SERVER CALLBACKS ********/
 // Allows DEBUG commands to be used in chat. DANGER!!!
@@ -77,16 +79,26 @@ io.sockets.on('connection', function(socket){
 	if(!mapGen){
 		Map.onStart(socket);
 		mapGen = true;
+		Tower.onStart(socket);
+		Base.onStart(socket);
 	}
 
 	socket.emit("mapInit", World.getMapUpdateData().initPack);
+	socket.emit("baseInit", Entity.getFrameUpdateData().initPack);
 
 	// Handles client sign-ins. 'data' contains the username and password
 	socket.on('signIn',function(data){
 		isValidPassword(data,function(res){
 			if(res){
 				// Log the client in and create a player in the game.
-				Player.onConnect(socket, data.username);
+				if(team0size > team1size){
+					Player.onConnect(socket, data.username,1);
+					team1size = team1size + 1;
+				}else{
+					Player.onConnect(socket, data.username,0);
+					team0size= team0size + 1;
+				}
+				
 				socket.emit('signInResponse',{success:true});
 			} else {
 				socket.emit('signInResponse',{success:false});
@@ -140,6 +152,7 @@ setInterval(function(){
 		socket.emit('init',packs.initPack);
 		socket.emit('update',packs.updatePack);
 		socket.emit('remove',packs.removePack);
+		//socket.emit('towerUpdate', packs.)
 		//socket.emit('mapInit',mapPacks.initPack);
 	}
 },1000/fps);
