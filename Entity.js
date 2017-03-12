@@ -1,5 +1,5 @@
-var initPack = {player:[],bullet:[],tower:[],base:[]};
-var removePack = {player:[],bullet:[]};
+var initPack = {player:[],bullet:[],tower:[],base:[],minion:[]};
+var removePack = {player:[],bullet:[],minion:[]};
 fps = 25;
 
 require('./Vector2');
@@ -19,7 +19,9 @@ Entity = function(){
 		self.pos = Vector2.add(self.pos, self.vel);
 	}
 	self.isPositionWall = function(pt){
-		return simple[(Math.floor(pt.y / 64) % simple.length)][(Math.floor(pt.x / 64) % simple[0].length)];
+		if (pt && pt.x && pt.y) {
+			return simple[Math.abs(Math.floor(pt.y / 64) % simple.length)][Math.abs(Math.floor(pt.x / 64) % simple[0].length)];
+		}
 	}
 	return self;
 }
@@ -31,24 +33,29 @@ Entity.getFrameUpdateData = function(){
 			bullet:initPack.bullet,
 			tower:initPack.tower,
 			base:initPack.base,
+			minion:initPack.minion,
 		},
 		removePack:{
 			player:removePack.player,
 			bullet:removePack.bullet,
+			minion:removePack.minion,
 		},
 		updatePack:{
 			player:Player.update(),
 			bullet:Bullet.update(),
 			tower:Tower.update(),
 			base:Base.update(),
+			minion:Minion.update(),
 		}
 	};
 	initPack.player = [];
 	initPack.bullet = [];
 	initPack.tower = [];
 	initPack.base = [];
+	initPack.minion = [];
 	removePack.player = [];
 	removePack.bullet = [];
+	removePack.minion = [];
 	return pack;
 }
 
@@ -101,7 +108,7 @@ Player = function(id, username,team){
 	}
 
 	self.shootBullet = function(angle){
-		if(self.mp > 9){
+		if(self.mp >= 10){
 			var b = Bullet(self,angle);
 			b.pos = self.pos;
 			self.mp -= 10;
@@ -211,7 +218,8 @@ Player.onConnect = function(socket, username, team){
 		bullet:Bullet.getAllInitPack(),
 		tower:Tower.getAllInitPack(),
 		base:Base.getAllInitPack(),
-	})
+		minion:Minion.getAllInitPack(),
+	});
 }
 Player.getAllInitPack = function(){
 	var players = [];
@@ -233,9 +241,128 @@ Player.update = function(){
 	return pack;
 }
 
+Minion = function(base, waypoints){
+	var self = Entity();
+	self.pos = base.pos;
+	self.id = Math.random();
+	self.team = base.team;
+	self.waypoints = waypoints;
+	self.toRemove = false;
+	self.maxSpd = 2;
+	self.waypoint = 0;
+	self.hp = 10;
+	var super_update = self.update;
+	self.update = function() {
+		self.updateSpd();
+		super_update();
+		if (self.hp <= 0) {
+			self.toRemove = true;
+		}
+	}
+
+	self.updateSpd = function() {
+		if (self.waypoint < self.waypoints.length) {
+			if (self.pos.dist(self.waypoints[self.waypoint]) < 32) self.waypoint++;
+
+			var diff = Vector2.sub(self.waypoints[self.waypoint], self.pos);
+			diff = Vector2.unit(diff);
+
+			self.vel = Vector2.mult(diff, self.maxSpd);
+		} else {
+			self.vel = Vector2(0,0);
+		}
+
+		for (var i in Minion.list) {
+			var m = Minion.list[i];
+			if (self.pos.dist(m.pos) < 64 && self.team !== m.team) {
+				self.vel = Vector2(0,0);
+				self.shootBullet(m.pos);
+				return;
+			}
+		}
+
+		for (var i in Tower.list) {
+			var t = Tower.list[i];
+			if (self.pos.dist(t.pos) < 96 && self.team !== t.team) {
+				self.vel = Vector2(0,0);
+				self.shootBullet(t.pos);
+				return;
+			}
+		}
+
+		for (var i in Base.list) {
+			var b = Base.list[i];
+			if (self.pos.dist(b.pos) < 96 && self.team !== b.team) {
+				self.vel = Vector2(0,0);
+				self.shootBullet(b.pos);
+				return;
+			}
+		}
+
+		for (var i in Player.list) {
+			var p = Player.list[i];
+			if (self.pos.dist(p.pos) < 32 && self.team !== p.team) {
+				self.vel = Vector2(0,0);
+				return;
+			}
+		}
+	}
+
+	self.shootBullet = function(pt) {
+		var b = Bullet(self, 180 * (1 / Math.PI) * Vector2.angle(Vector2.sub(pt, self.pos)));
+		b.pos = self.pos;
+	}
+
+	self.getInitPack = function() {
+		return {
+			id: self.id,
+			x: self.pos.x,
+			y: self.pos.y,
+			hp: self.hp,
+			team: self.team,
+		}
+	}
+
+	self.getUpdatePack = function() {
+		return {
+			id: self.id,
+			x: self.pos.x,
+			y: self.pos.y,
+			hp: self.hp,
+		}
+	}
+
+	Minion.list[self.id] = self;
+	initPack.minion.push(self.getInitPack());
+	return self;
+}
+
+Minion.list = {};
+
+Minion.getAllInitPack = function(){
+	var minions = [];
+	for(var i in Minion.list)
+		minions.push(Minion.list[i].getInitPack());
+	return minions;
+}
+
+Minion.update = function(){
+	var pack = [];
+	for(var i in Minion.list){
+		var m = Minion.list[i];
+		m.update();
+		if(m.toRemove){
+			delete Minion.list[i];
+			removePack.Minion.push(m.id);
+		} else
+			pack.push(m.getUpdatePack());
+	}
+	return pack;
+}
 
 Bullet = function(parent,angle){
 	var self = Entity();
+	self.pos = parent.pos;
 	self.id = Math.random();
 	self.vel = Vector2.Polar(250 / fps, angle);
 	self.actuallyParent = parent;
@@ -319,10 +446,13 @@ Base = function(team,id){
 	self.id = id;
 	if(team === 0){
 		self.pos = Vector2(350, 1920 - 540);
-
-	}
-	if(team === 1){
+	} else if(team === 1){
 		self.pos = Vector2(1920 - 540, 350);
+	}
+	if (team === 0) {
+		Minion(self, [Vector2(600, 1920 - 700), Vector2(1920 - 700, 600), Vector2(1920 - 540, 350)]);
+	} else {
+		Minion(self, [Vector2(1920-700, 600), Vector2(600, 1920 - 700), Vector2(350, 1920 - 540)]);
 	}
 
 	self.update = function(){
@@ -355,7 +485,6 @@ Base = function(team,id){
 	Base.list[id] = self;
 	initPack.base.push(self.getInitPack());
 	return self;
-
 }
 
 Base.list = {};
