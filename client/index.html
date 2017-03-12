@@ -188,12 +188,12 @@
 
 	Img.hp = new Image();
 	Img.hp.src = '/client/img/hp.png';
-	
+
 	Img.blue = new Image();
 	Img.yellow = new Image();
 	Img.red = new Image();
 	Img.black = new Image();
-	
+
 	Img.blue.src = '/client/img/bluebar.png';
 	Img.yellow.src = '/client/img/yellowbar.png';
 	Img.red.src = '/client/img/redbar.png';
@@ -204,10 +204,10 @@
 	Img.bottomtop = new Image();
 	Img.bottomtop.src = '/client/img/bottom-top.png';
 
-	
+
 	Img.tower = new Image();
 	Img.tower.src = '/client/img/tower.png';
-	
+
 	Img.bullet = new Image();
 	Img.bullet.src = '/client/img/bullet.png';
 	Img.map = new Image();
@@ -252,7 +252,7 @@
 	}
 	Map.list = {};
 
-	
+
 	var Tower = function(initPack){
 		var self = {};
 		self.id = initPack.id;
@@ -260,21 +260,21 @@
 		self.y = initPack.y;
 		self.isDestroyed = initPack.destroyed;
 		self.hp = initPack.hp;
-		
+
 		Tower.list[self.id] = self;
-		
+
 		self.draw = function(){
 			var x = WIDTH/2 - Player.list[selfId].x;
 			var y = HEIGHT/2 - Player.list[selfId].y;
 			var tileWidth = 32;
 			ctx.drawImage(Img.tower,x+ self.x,y + self.y);
 		}
-		
+
 		return self;
 	}
-	
+
 	Tower.list = {};
-	
+
 	var Base = function(initPack){
 		var self = {};
 		self.id = initPack.id;
@@ -282,21 +282,21 @@
 		self.y = initPack.y;
 		self.isDestroyed = initPack.destroyed;
 		self.hp = initPack.hp;
-		
+
 		Base.list[self.id] = self;
-		
+
 		self.draw = function(){
 			var x = WIDTH/2 - Player.list[selfId].x;
 			var y = HEIGHT/2 - Player.list[selfId].y;
 			var tileWidth = 32;
 			ctx.drawImage(Img.tower,x+ self.x,y + self.y);
 		}
-		
+
 		return self;
 	}
-	
+
 	Base.list = {};
-	
+
 
 
 	var Player = function(initPack){
@@ -327,8 +327,8 @@
 
 			var hpWidth = 90 - (90 * self.hp / self.hpMax);
 			var mpWidth = 90 - (90* self.mp / self.mpMax);
-			
-			
+
+
 			//player hp bars mini
 			ctx.fillStyle = 'red';
 			if(self.id === Player.list[selfId].id){//you
@@ -338,22 +338,22 @@
 			} else if(self.team === Player.list[selfId].team){//friendly team
 				ctx.drawImage(Img.blue,x - 65,y - 60);
 			}
-			
+
 			//hp
 			ctx.fillStyle = ctx.fillStyle = 'rgb(32, 74, 74)';
 			//hp grey
 			ctx.fillRect(x - 65 + 23 + 90 - (hpWidth),y-60+3,hpWidth,9);
 			//mp grey
 			ctx.fillRect(x - 65 + 23 + 90 - (mpWidth),y-60+15,mpWidth,4);
-			
-			
+
+
 			//top layer
 			ctx.drawImage(Img.black,x-65,y-60);
 			ctx.fillStyle = 'white';
 			ctx.font = '20px Arial';
 			ctx.fillText(self.lvl,x-60,y-42);
-			
-			
+
+
 			//player self status bar
 			var hpWidthSelf = 395 -(395 * Player.list[selfId].hp / Player.list[selfId].hpMax);
 			var mpWidthSelf = 395 -(395 * Player.list[selfId].mp / Player.list[selfId].mpMax);
@@ -418,13 +418,13 @@
 			//draw UI overlay
 			ctx.drawImage(Img.bottomtop,0, HEIGHT-Img.bottomtop.height);
 
-			
+
 			ctx.fillStyle = 'black';
 			ctx.fillRect(71,HEIGHT-47,25,25);
 			ctx.fillStyle = 'yellow';
 			ctx.font = '30px Arial';
 			ctx.fillText(Player.list[selfId].lvl,75,HEIGHT-20);
-			
+
 
 		}
 
@@ -459,12 +459,54 @@
 	}
 	Bullet.list = {};
 
+	var Minion = function(initPack) {
+		var self = {};
+		self.id = initPack.id;
+		self.x = initPack.x;
+		self.y = initPack.y;
+		self.hp = initPack.hp;
+		self.team = initPack.team;
+
+		self.draw = function() {
+			var width = Img.bullet.width/2;
+			var height = Img.bullet.height/2;
+
+			var x = self.x - Player.list[selfId].x + WIDTH/2;
+			var y = self.y - Player.list[selfId].y + HEIGHT/2;
+
+			ctx.drawImage(Img.bullet,
+				0,0,Img.bullet.width,Img.bullet.height,
+				x-width/2,y-height/2,width,height);
+
+			var hpWidth = 90 - (90 * self.hp / 10);
+
+			//player hp bars mini
+			ctx.fillStyle = 'red';
+			if(self.team !== Player.list[selfId].team){//enemy team
+				ctx.drawImage(Img.red,x - 65,y - 60);
+			} else if(self.team === Player.list[selfId].team){//friendly team
+				ctx.drawImage(Img.blue,x - 65,y - 60);
+			}
+
+			//hp
+			ctx.fillStyle = ctx.fillStyle = 'rgb(32, 74, 74)';
+			//hp grey
+			ctx.fillRect(x - 65 + 23 + 90 - (hpWidth),y-60+3,hpWidth,9);
+
+			//top layer
+			ctx.drawImage(Img.black,x-65,y-60);
+		}
+
+		Minion.list[self.id] = self;
+		return self;
+	}
+	Minion.list = {};
+
 	var selfId = null;
 
 	socket.on('init',function(data){
 		if(data.selfId)
 			selfId = data.selfId;
-		//{ player : [{id:123,number:'1',x:0,y:0},{id:1,number:'2',x:0,y:0}], bullet: []}
 		for(var i = 0 ; i < data.player.length; i++){
 			new Player(data.player[i]);
 		}
@@ -472,16 +514,17 @@
 			new Bullet(data.bullet[i]);
 		}
 		for(var i = 0 ; i < data.tower.length; i++){
-			console.log(data.tower[i]);
 			new Tower(data.tower[i]);
 		}
 		for(var i = 0 ; i < data.base.length; i++){
 			new Base(data.base[i]);
 		}
+		for(var i = 0; i < data.minion.length; i++) {
+			new Minion(data.minion[i]);
+		}
 	});
 
 	socket.on('update',function(data){
-		//{ player : [{id:123,x:0,y:0},{id:1,x:0,y:0}], bullet: []}
 		for(var i = 0 ; i < data.player.length; i++){
 			var pack = data.player[i];
 			var p = Player.list[pack.id];
@@ -508,7 +551,22 @@
 				p.down = pack.down;
 			}
 		}
-		for(var i = 0 ; i < data.bullet.length; i++){
+		for(var i = 0; i < data.minion.length; i++) {
+			var pack = data.minion[i];
+			var m = Minion.list[pack.id];
+			if (m){
+				if(pack.x !== undefined) {
+					m.x = pack.x;
+				}
+				if(pack.y !== undefined) {
+					m.y = pack.y;
+				}
+				if(pack.hp !== undefined) {
+					m.hp = pack.hp;
+				}
+			}
+		}
+ 		for(var i = 0 ; i < data.bullet.length; i++){
 			var pack = data.bullet[i];
 			var b = Bullet.list[data.bullet[i].id];
 			if(b){
@@ -518,7 +576,7 @@
 					b.y = pack.y;
 			}
 		}
-		
+
 		for(var i = 0 ; i < data.tower.length; i++){
 			var pack = data.tower[i];
 			var b = Tower.list[data.tower[i].id];
@@ -529,7 +587,7 @@
 					b.destroyed = pack.destroyed;
 			}
 		}
-		
+
 	});
 
 	socket.on('remove',function(data){
@@ -539,6 +597,9 @@
 		}
 		for(var i = 0 ; i < data.bullet.length; i++){
 			delete Bullet.list[data.bullet[i]];
+		}
+		for(var i = 0; i < data.minion.length; i++) {
+			delete Minion.list[data.minion[i]];
 		}
 	});
 
@@ -558,17 +619,19 @@
 		for(var i in Map.list)
 			Map.list[i].draw();
 		drawScore();
-		
+
 		for(var i in Bullet.list)
 			Bullet.list[i].draw();
+		for(var i in Minion.list)
+			Minion.list[i].draw();
 		for(var i in Tower.list)
 			Tower.list[i].draw();
 		for(var i in Base.list)
 			Base.list[i].draw();
-			
+
 		for(var i in Player.list)
 			Player.list[i].draw();
-			
+
 		if (!document.hasFocus() && focused === true) {
 			focused = false;
 			onLossOfFocus();
