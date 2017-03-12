@@ -213,6 +213,9 @@
 	Img.map = new Image();
 	Img.map.src = '/client/img/map1.png';
 
+	Img.rakshasa = new Image();
+	Img.rakshasa.src = '/client/img/rakshasa.png';
+
 	var ctx = document.getElementById("ctx").getContext("2d");
 	ctx.font = '30px Arial';
 	ctx.imageSmoothingEnabled = false;
@@ -543,14 +546,14 @@
 		self.team = initPack.team;
 
 		self.draw = function() {
-			var width = Img.bullet.width/2;
-			var height = Img.bullet.height/2;
+			var width = Img.rakshasa.width/2;
+			var height = Img.rakshasa.height/2;
 
 			var x = self.x - Player.list[selfId].x + WIDTH/2;
 			var y = self.y - Player.list[selfId].y + HEIGHT/2;
 
-			ctx.drawImage(Img.bullet,
-				0,0,Img.bullet.width,Img.bullet.height,
+			ctx.drawImage(Img.rakshasa,
+				0,0,Img.rakshasa.width,Img.rakshasa.height,
 				x-width/2,y-height/2,width,height);
 
 			var hpWidth = 90 - (90 * self.hp / 10);
