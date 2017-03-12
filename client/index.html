@@ -355,9 +355,9 @@
 			
 			
 			//player self status bar
-			var hpWidthSelf = (395 * Player.list[selfId].hp / Player.list[selfId].hpMax);
-			var mpWidthSelf = (395 * Player.list[selfId].mp / Player.list[selfId].mpMax);
-			var xpWidthSelf = (90 * Player.list[selfId].xp / Player.list[selfId].xpMax);
+			var hpWidthSelf = 395 -(395 * Player.list[selfId].hp / Player.list[selfId].hpMax);
+			var mpWidthSelf = 395 -(395 * Player.list[selfId].mp / Player.list[selfId].mpMax);
+			var xpWidthSelf = 90 -(90 * Player.list[selfId].xp / Player.list[selfId].xpMax);
 
 			var width = self.player.width*2;
 			var height = self.player.height*2;
@@ -383,6 +383,8 @@
 
 
 			//ctx.fillText(self.score,self.x,self.y-60);
+			
+			//draw UI image
 			ctx.drawImage(Img.bottom,0, HEIGHT-Img.bottom.height);
 
 			ctx.fillStyle = 'black';
@@ -391,16 +393,29 @@
 			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 60,350 , 20 );
 
 			ctx.fillStyle = 'green';
-			ctx.fillRect(738 ,HEIGHT - 38,hpWidthSelf , 16 );
+			//ctx.fillRect(738 ,HEIGHT - 38,hpWidthSelf , 16 );
 
 			ctx.fillStyle = 'blue';
-			ctx.fillRect(738 ,HEIGHT-19,mpWidthSelf , 16 );
+			//ctx.fillRect(738 ,HEIGHT-19,mpWidthSelf , 16 );
 			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 20,350 , 20 );
 			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 60,350 , 20 );
 
 			ctx.fillStyle = 'orange';
-			ctx.fillRect(3,HEIGHT -19, xpWidthSelf,16);
+			//ctx.fillRect(3,HEIGHT -19, xpWidthSelf,16);
+			
+			console.log(hpWidthSelf);
+			
+			//draw over bars
+			//hp
+			ctx.fillStyle = ctx.fillStyle = 'rgb(32, 74, 74)';
+			//hp grey
+			ctx.fillRect(738 + 395 - (hpWidthSelf),HEIGHT - 38,hpWidthSelf,16);
+			//mp grey
+			ctx.fillRect(738 + 395 - (mpWidthSelf),HEIGHT - 19,mpWidthSelf,16);
+			//xp grey
+			ctx.fillRect(3 + 90 - (xpWidthSelf),HEIGHT - 19,xpWidthSelf,16);
 
+			//draw UI overlay
 			ctx.drawImage(Img.bottomtop,0, HEIGHT-Img.bottomtop.height);
 
 			
