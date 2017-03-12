@@ -260,6 +260,9 @@
 		self.y = initPack.y;
 		self.isDestroyed = initPack.destroyed;
 		self.hp = initPack.hp;
+		self.target = initPack.target;
+		self.attacking = initPack.attacking;
+		
 
 		Tower.list[self.id] = self;
 
@@ -268,6 +271,18 @@
 			var y = HEIGHT/2 - Player.list[selfId].y;
 			var tileWidth = 32;
 			ctx.drawImage(Img.tower,x+ self.x,y + self.y);
+			
+			console.log(self.attacking);
+			
+			if(self.attacking){
+				ctx.fillStyle = 'white';
+				ctx.lineWidth = '20';
+				ctx.beginPath();
+				ctx.moveTo(x + self.x,y + self.y);
+				
+				ctx.lineTo(x + self.target.pos.x,y +self.target.pos.y);
+				ctx.stroke();
+			}
 		}
 
 		return self;
@@ -403,7 +418,7 @@
 			ctx.fillStyle = 'orange';
 			//ctx.fillRect(3,HEIGHT -19, xpWidthSelf,16);
 			
-			console.log(hpWidthSelf);
+			//console.log(hpWidthSelf);
 			
 			//draw over bars
 			//hp
@@ -585,6 +600,10 @@
 					b.hp = pack.hp;
 				if(pack.destroyed !== undefined)
 					b.destroyed = pack.destroyed;
+				
+					b.attacking = pack.attacking;
+				
+					b.target = pack.target;
 			}
 		}
 

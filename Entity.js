@@ -10,10 +10,15 @@ Entity = function(){
 		pos: Vector2(250, 250),
 		vel: Vector2(0, 0),
 		size: Vector2(0, 0),
+		hp:10,
+		toRemove:false,
 		id:"",
 	}
 	self.update = function(){
 		self.updatePosition();
+		if(self.hp <= 0){
+			self.toRemove = true;
+		}
 	}
 	self.updatePosition = function(){
 		self.pos = Vector2.add(self.pos, self.vel);
@@ -86,6 +91,11 @@ Player = function(id, username,team){
 	self.update = function(){
 		self.updateSpd();
 		super_update();
+		
+		//check dead
+		if(self.toRemove){
+			self.respawn();
+		}
 
 
 		//mana regen
@@ -134,6 +144,7 @@ Player = function(id, username,team){
 	self.respawn = function (){
 		self.pos = Vector2(256, 256);
 		self.hp = self.hpMax;
+		self.toRemove = false;
 	}
 
 	self.respawn();
@@ -516,6 +527,10 @@ Tower = function(team, id){
 	self.destroyed = false;
 	self.team = team;
 	self.id = id;
+	self.range = 400;
+	self.attacking = false;
+	self.target;
+	self.damage = 0.1;
 	if(self.team === 0){
 		self.pos = Vector2(600,1920 - 700);
 
@@ -528,6 +543,40 @@ Tower = function(team, id){
 			self.hp = 0;
 			self.destroyed = true;
 		}
+		
+		if(!self.attacking){
+			for(var i in Minion.list){
+				if(Minion.list[i].pos.dist(self.pos) < self.range && Minion.list[i].team !== self.team){
+					self.target = Minion.list[i];
+					self.attacking = true;
+					break;
+				}
+			}
+			for(var i in Player.list){
+				if(!self.attacking && Player.list[i].pos.dist(self.pos) < self.range && Player.list[i].team !== self.team){
+					self.target = Player.list[i];
+					self.attacking = true;
+				}
+			}
+			
+
+		}
+		
+		self.attack();
+		
+	}
+	
+	self.attack = function(){
+		
+		if(self.target){
+			if(self.target.pos.dist(self.pos) < self.range){
+				self.target.hp -= self.damage;
+			}else{
+				self.target = undefined;
+				self.attacking = false;
+			}
+		}
+		
 	}
 
 
@@ -538,6 +587,8 @@ Tower = function(team, id){
 			y:self.pos.y,
 			hp:self.hp,
 			destroyed:self.destroyed,
+			attacking:self.attacking,
+			target:self.target,
 		};
 	}
 	self.getUpdatePack = function(){
@@ -547,6 +598,8 @@ Tower = function(team, id){
 			y:self.pos.y,
 			hp:self.hp,
 			destroyed:self.destroyed,
+			attacking:self.attacking,
+			target:self.target,
 		};
 	}
 	Tower.list[self.id] = self;
