@@ -259,7 +259,7 @@ Minion = function(base, waypoints){
 	self.team = base.team;
 	self.waypoints = waypoints;
 	self.toRemove = false;
-	self.maxSpd = 2;
+	self.maxSpd = 6;
 	self.waypoint = 0;
 	self.hp = 10;
 	var super_update = self.update;
@@ -273,12 +273,11 @@ Minion = function(base, waypoints){
 
 	self.updateSpd = function() {
 		if (self.waypoint < self.waypoints.length) {
-			if (self.pos.dist(self.waypoints[self.waypoint]) < 32) self.waypoint++;
-
 			var diff = Vector2.sub(self.waypoints[self.waypoint], self.pos);
 			diff = Vector2.unit(diff);
 
 			self.vel = Vector2.mult(diff, self.maxSpd);
+			if (self.pos.dist(self.waypoints[self.waypoint]) < 32) self.waypoint++;
 		} else {
 			self.vel = Vector2(0,0);
 		}
@@ -294,7 +293,7 @@ Minion = function(base, waypoints){
 
 		for (var i in Tower.list) {
 			var t = Tower.list[i];
-			if (self.pos.dist(t.pos) < 96 && self.team !== t.team) {
+			if (self.pos.dist(t.pos) < 96 && self.team !== t.team && !t.toRemove) {
 				self.vel = Vector2(0,0);
 				self.shootBullet(t.pos);
 				return;
@@ -303,7 +302,7 @@ Minion = function(base, waypoints){
 
 		for (var i in Base.list) {
 			var b = Base.list[i];
-			if (self.pos.dist(b.pos) < 96 && self.team !== b.team) {
+			if (self.pos.dist(b.pos) < 96 && self.team !== b.team && !b.toRemove) {
 				self.vel = Vector2(0,0);
 				self.shootBullet(b.pos);
 				return;
@@ -364,7 +363,7 @@ Minion.update = function(){
 		m.update();
 		if(m.toRemove){
 			delete Minion.list[i];
-			removePack.Minion.push(m.id);
+			removePack.minion.push(m.id);
 		} else
 			pack.push(m.getUpdatePack());
 	}
@@ -378,6 +377,7 @@ Bullet = function(parent,angle){
 	self.vel = Vector2.Polar(250 / fps, angle);
 	self.actuallyParent = parent;
 	self.parent = parent.id;
+	self.damage = 50;
 	self.timer = 0;
 	self.toRemove = false;
 	var super_update = self.update;
@@ -392,7 +392,7 @@ Bullet = function(parent,angle){
 		for(var i in Player.list){
 			var p = Player.list[i];
 			if(self.pos.dist(p.pos) < 32 && self.parent !== p.id && self.actuallyParent.team !== p.team){
-				p.hp -= 1;
+				p.hp -= self.damage;
 
 				if(p.hp <= 0){
 					var shooter = Player.list[self.parent];
@@ -403,6 +403,36 @@ Bullet = function(parent,angle){
 					p.respawn();
 				}
 				self.toRemove = true;
+			}
+		}
+		
+		if(!self.toRemove) {
+			for(var i in Minion.list){
+				var m = Minion.list[i];
+				if(self.pos.dist(m.pos) < 32 && self.actuallyParent.team !== m.team) {
+					m.hp -= self.damage;
+					self.toRemove = true;
+				}
+			}
+		}
+		
+		if(!self.toRemove) {
+			for(var i in Tower.list){
+				var m = Tower.list[i];
+				if(self.pos.dist(m.pos) < 32 && self.actuallyParent.team !== m.team) {
+					m.hp -= self.damage;
+					self.toRemove = true;
+				}
+			}
+		}
+		
+		if(!self.toRemove) {
+			for(var i in Base.list){
+				var m = Base.list[i];
+				if(self.pos.dist(m.pos) < 128 && self.actuallyParent.team !== m.team) {
+					m.hp -= self.damage;
+					self.toRemove = true;
+				}
 			}
 		}
 	}
@@ -451,8 +481,7 @@ Bullet.getAllInitPack = function(){
 Base = function(team,id){
 	var self = Entity();
 	self.hp = 1000;
-	self.destroyed = false;
-
+	self.batch = 0;
 	self.team = team;
 	self.id = id;
 	if(team === 0){
@@ -460,16 +489,21 @@ Base = function(team,id){
 	} else if(team === 1){
 		self.pos = Vector2(1920 - 540, 350);
 	}
-	if (team === 0) {
-		Minion(self, [Vector2(600, 1920 - 700), Vector2(1920 - 700, 600), Vector2(1920 - 540, 350)]);
-	} else {
-		Minion(self, [Vector2(1920-700, 600), Vector2(600, 1920 - 700), Vector2(350, 1920 - 540)]);
-	}
 
 	self.update = function(){
 		if(self.hp <= 0){
 			self.hp = 0;
-			self.destroyed = true;
+			self.toRemove = true;
+		}
+		if (team === 0) {
+			if (self.batch === 0 && !self.toRemove){
+				Minion(self, [Vector2(600, 1920 - 700), Vector2(1920 - 700, 600), Vector2(1920 - 540, 350)]);
+				Minion(self, [Vector2(300,300),Vector2(1920-540,350)]);
+				Minion(self, [Vector2(1920-300,1920-200),Vector2(1920-540,350)]);
+			}
+			self.batch = (self.batch + 1) % 50;
+		} else {
+			//Minion(self, [Vector2(1920-700, 600), Vector2(600, 1920 - 700), Vector2(350, 1920 - 540)]);
 		}
 	}
 
@@ -480,7 +514,7 @@ Base = function(team,id){
 			x:self.pos.x,
 			y:self.pos.y,
 			hp:self.hp,
-			destroyed:self.destroyed,
+			destroyed:self.toRemove
 		};
 	}
 	self.getUpdatePack = function(){
@@ -489,7 +523,7 @@ Base = function(team,id){
 			x:self.pos.x,
 			y:self.pos.y,
 			hp:self.hp,
-			destroyed:self.destroyed,
+			destroyed:self.toRemove,
 		};
 	}
 
@@ -524,7 +558,6 @@ Base.onStart = function(){
 Tower = function(team, id){
 	var self = Entity();
 	self.hp = 500;
-	self.destroyed = false;
 	self.team = team;
 	self.id = id;
 	self.range = 400;
@@ -541,10 +574,10 @@ Tower = function(team, id){
 	self.update = function(){
 		if(self.hp <= 0){
 			self.hp = 0;
-			self.destroyed = true;
+			self.toRemove = true;
 		}
 		
-		if(!self.attacking){
+		if(!self.attacking && !self.toRemove){
 			for(var i in Minion.list){
 				if(Minion.list[i].pos.dist(self.pos) < self.range && Minion.list[i].team !== self.team){
 					self.target = Minion.list[i];
@@ -558,8 +591,6 @@ Tower = function(team, id){
 					self.attacking = true;
 				}
 			}
-			
-
 		}
 		
 		self.attack();
@@ -571,11 +602,16 @@ Tower = function(team, id){
 		if(self.target){
 			if(self.target.pos.dist(self.pos) < self.range){
 				self.target.hp -= self.damage;
+				if(self.target.hp <= 0){
+					self.target = undefined;
+					self.attacking = false;
+				}
 			}else{
 				self.target = undefined;
 				self.attacking = false;
 			}
 		}
+		
 		
 	}
 
@@ -586,7 +622,7 @@ Tower = function(team, id){
 			x:self.pos.x,
 			y:self.pos.y,
 			hp:self.hp,
-			destroyed:self.destroyed,
+			destroyed:self.toRemove,
 			attacking:self.attacking,
 			target:self.target,
 		};
@@ -597,7 +633,7 @@ Tower = function(team, id){
 			x:self.pos.x,
 			y:self.pos.y,
 			hp:self.hp,
-			destroyed:self.destroyed,
+			destroyed:self.toRemove,
 			attacking:self.attacking,
 			target:self.target,
 		};

@@ -267,12 +267,17 @@
 		Tower.list[self.id] = self;
 
 		self.draw = function(){
+			//console.log(self.hp);
+			
 			var x = WIDTH/2 - Player.list[selfId].x;
 			var y = HEIGHT/2 - Player.list[selfId].y;
 			var tileWidth = 32;
-			ctx.drawImage(Img.tower,x+ self.x,y + self.y);
 			
-			console.log(self.attacking);
+			if (self.isDestroyed) {
+				ctx.drawImage(Img.pd, x + self.x, y + self.y);
+			} else {
+				ctx.drawImage(Img.tower,x+ self.x,y + self.y);
+			}
 			
 			if(self.attacking){
 				ctx.fillStyle = 'white';
@@ -301,10 +306,17 @@
 		Base.list[self.id] = self;
 
 		self.draw = function(){
+			console.log(self.hp);
+			console.log(":" + self.isDestroyed);
 			var x = WIDTH/2 - Player.list[selfId].x;
 			var y = HEIGHT/2 - Player.list[selfId].y;
 			var tileWidth = 32;
-			ctx.drawImage(Img.tower,x+ self.x,y + self.y);
+			if (self.isDestroyed){
+				ctx.drawImage(Img.pd, x + self.x, y + self.y);
+			} else {
+				ctx.drawImage(Img.tower,x+ self.x,y + self.y);
+			}
+			
 		}
 
 		return self;
@@ -598,12 +610,29 @@
 			if(b){
 				if(pack.hp !== undefined)
 					b.hp = pack.hp;
-				if(pack.destroyed !== undefined)
-					b.destroyed = pack.destroyed;
+				
+					b.isDestroyed = pack.destroyed;
 				
 					b.attacking = pack.attacking;
 				
 					b.target = pack.target;
+					
+			}
+		}
+		
+		for(var i = 0 ; i < data.base.length; i++){
+			var pack = data.base[i];
+			var b = Base.list[data.base[i].id];
+			if(b){
+				if(pack.hp !== undefined)
+					b.hp = pack.hp;
+				
+					b.isDestroyed = pack.destroyed;
+				
+					//b.attacking = pack.attacking;
+				
+					//b.target = pack.target;
+					
 			}
 		}
 
