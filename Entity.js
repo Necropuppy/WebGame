@@ -87,11 +87,17 @@ Player = function(id, username,team){
 	self.lvlPts = 0;
 	self.team = team;
 
+	if (self.team === 0) {
+		self.respawnPoint = Vector2(350, 1920 - 540);
+	} else {
+		self.respawnPoint = Vector2(1920 - 540, 350);
+	}
+
 	var super_update = self.update;
 	self.update = function(){
 		self.updateSpd();
 		super_update();
-		
+
 		//check dead
 		if(self.toRemove){
 			self.respawn();
@@ -142,7 +148,7 @@ Player = function(id, username,team){
 	}
 
 	self.respawn = function (){
-		self.pos = Vector2(256, 256);
+		self.pos = self.respawnPoint;
 		self.hp = self.hpMax;
 		self.toRemove = false;
 	}
@@ -406,7 +412,7 @@ Bullet = function(parent,angle){
 				self.toRemove = true;
 			}
 		}
-		
+
 		if(!self.toRemove) {
 			for(var i in Minion.list){
 				var m = Minion.list[i];
@@ -416,7 +422,7 @@ Bullet = function(parent,angle){
 				}
 			}
 		}
-		
+
 		if(!self.toRemove) {
 			for(var i in Tower.list){
 				var m = Tower.list[i];
@@ -426,7 +432,7 @@ Bullet = function(parent,angle){
 				}
 			}
 		}
-		
+
 		if(!self.toRemove) {
 			for(var i in Base.list){
 				var m = Base.list[i];
@@ -578,7 +584,7 @@ Tower = function(team, id){
 			self.hp = 0;
 			self.toRemove = true;
 		}
-		
+
 		if(!self.attacking && !self.toRemove){
 			for(var i in Minion.list){
 				if(Minion.list[i].pos.dist(self.pos) < self.range && Minion.list[i].team !== self.team){
@@ -594,13 +600,13 @@ Tower = function(team, id){
 				}
 			}
 		}
-		
+
 		self.attack();
-		
+
 	}
-	
+
 	self.attack = function(){
-		
+
 		if(self.target){
 			if(self.target.pos.dist(self.pos) < self.range){
 				self.target.hp -= self.damage;
@@ -613,8 +619,8 @@ Tower = function(team, id){
 				self.attacking = false;
 			}
 		}
-		
-		
+
+
 	}
 
 
