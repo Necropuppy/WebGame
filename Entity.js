@@ -280,6 +280,7 @@ Minion = function(base, waypoints){
 			if (self.pos.dist(self.waypoints[self.waypoint]) < 32) self.waypoint++;
 		} else {
 			self.vel = Vector2(0,0);
+			self.toRemove = true;
 		}
 
 		for (var i in Minion.list) {
@@ -377,7 +378,7 @@ Bullet = function(parent,angle){
 	self.vel = Vector2.Polar(250 / fps, angle);
 	self.actuallyParent = parent;
 	self.parent = parent.id;
-	self.damage = 50;
+	self.damage = 1;
 	self.timer = 0;
 	self.toRemove = false;
 	var super_update = self.update;
@@ -514,7 +515,8 @@ Base = function(team,id){
 			x:self.pos.x,
 			y:self.pos.y,
 			hp:self.hp,
-			destroyed:self.toRemove
+			destroyed:self.toRemove,
+			team:self.team,
 		};
 	}
 	self.getUpdatePack = function(){
@@ -625,6 +627,7 @@ Tower = function(team, id){
 			destroyed:self.toRemove,
 			attacking:self.attacking,
 			target:self.target,
+			team:self.team,
 		};
 	}
 	self.getUpdatePack = function(){
