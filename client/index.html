@@ -213,6 +213,9 @@
 	Img.map = new Image();
 	Img.map.src = '/client/img/map1.png';
 
+	Img.rakshasa = new Image();
+	Img.rakshasa.src = '/client/img/rakshasa.png';
+
 	var ctx = document.getElementById("ctx").getContext("2d");
 	ctx.font = '30px Arial';
 	ctx.imageSmoothingEnabled = false;
@@ -263,41 +266,41 @@
 		self.target = initPack.target;
 		self.attacking = initPack.attacking;
 		self.team = initPack.team;
-		
+
 
 		Tower.list[self.id] = self;
 
 		self.draw = function(){
 			//console.log(self.hp);
-			
+
 			var x = self.x + WIDTH/2 - Player.list[selfId].x;
 			var y = self.y + HEIGHT/2 - Player.list[selfId].y;
 			var tileWidth = 32;
-			
+
 			if (self.isDestroyed) {
 				ctx.drawImage(Img.pd, x , y );
 			} else {
 				ctx.drawImage(Img.tower,x,y);
 			}
-			
-			
-			
+
+
+
 			if(self.attacking){
 				ctx.fillStyle = 'white';
 				ctx.lineWidth = '20';
 				ctx.beginPath();
 				ctx.moveTo(x  ,y );
-				
+
 				ctx.lineTo(x + self.target.pos.x - self.x,y +self.target.pos.y - self.y);
 				ctx.stroke();
-				
-				
-				
 
 
-				
-				
-					
+
+
+
+
+
+
 			}
 			if(!self.isDestroyed){
 				var hpWidth = 90 - (90 * self.hp / 500);
@@ -346,7 +349,7 @@
 				ctx.drawImage(Img.pd, x, y);
 			} else {
 				ctx.drawImage(Img.tower,x,y);
-				
+
 				var hpWidth = 90 - (90 * self.hp / 1000);
 				//player hp bars mini
 				ctx.fillStyle = 'red';
@@ -364,7 +367,7 @@
 				//top layer
 				ctx.drawImage(Img.black,x-65,y-60);
 			}
-			
+
 		}
 
 		return self;
@@ -458,7 +461,7 @@
 
 
 			//ctx.fillText(self.score,self.x,self.y-60);
-			
+
 			//draw UI image
 			ctx.drawImage(Img.bottom,0, HEIGHT-Img.bottom.height);
 
@@ -477,9 +480,9 @@
 
 			ctx.fillStyle = 'orange';
 			//ctx.fillRect(3,HEIGHT -19, xpWidthSelf,16);
-			
+
 			//console.log(hpWidthSelf);
-			
+
 			//draw over bars
 			//hp
 			ctx.fillStyle = ctx.fillStyle = 'rgb(32, 74, 74)';
@@ -543,14 +546,14 @@
 		self.team = initPack.team;
 
 		self.draw = function() {
-			var width = Img.bullet.width/2;
-			var height = Img.bullet.height/2;
+			var width = Img.rakshasa.width/2;
+			var height = Img.rakshasa.height/2;
 
 			var x = self.x - Player.list[selfId].x + WIDTH/2;
 			var y = self.y - Player.list[selfId].y + HEIGHT/2;
 
-			ctx.drawImage(Img.bullet,
-				0,0,Img.bullet.width,Img.bullet.height,
+			ctx.drawImage(Img.rakshasa,
+				0,0,Img.rakshasa.width,Img.rakshasa.height,
 				x-width/2,y-height/2,width,height);
 
 			var hpWidth = 90 - (90 * self.hp / 10);
@@ -658,31 +661,31 @@
 			if(b){
 				if(pack.hp !== undefined)
 					b.hp = pack.hp;
-				
+
 					b.isDestroyed = pack.destroyed;
-				
+
 					b.attacking = pack.attacking;
-				
+
 					b.target = pack.target;
-					
-					
-					
+
+
+
 			}
 		}
-		
+
 		for(var i = 0 ; i < data.base.length; i++){
 			var pack = data.base[i];
 			var b = Base.list[data.base[i].id];
 			if(b){
 				if(pack.hp !== undefined)
 					b.hp = pack.hp;
-				
+
 					b.isDestroyed = pack.destroyed;
-				
+
 					//b.attacking = pack.attacking;
-				
+
 					//b.target = pack.target;
-					
+
 			}
 		}
 
@@ -718,17 +721,23 @@
 			Map.list[i].draw();
 		drawScore();
 
+		var entities = [];
 		for(var i in Bullet.list)
-			Bullet.list[i].draw();
+			entities.push(Bullet.list[i]);
 		for(var i in Minion.list)
-			Minion.list[i].draw();
+			entities.push(Minion.list[i]);
 		for(var i in Tower.list)
-			Tower.list[i].draw();
+			entities.push(Tower.list[i]);
 		for(var i in Base.list)
-			Base.list[i].draw();
-
+			entities.push(Base.list[i]);
 		for(var i in Player.list)
-			Player.list[i].draw();
+			entities.push(Player.list[i]);
+		console.log(entities);
+		entities.sort(function (a, b) {
+			return a.y - b.y;
+		});
+
+		for (var i = 0; i < entities.length; i++) entities[i].draw();
 
 		if (!document.hasFocus() && focused === true) {
 			focused = false;
