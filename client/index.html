@@ -98,7 +98,14 @@
 
 
 
+		<div id="pickChar" style="display:none;">
+			<button id="sam" onclick="selectSam()">Sam</button>
+			<button id="yama" onclick="selectYama()">Yama</button>
+		
+		
 
+
+		</div>
 
 
 
@@ -136,6 +143,10 @@
 	var loginError = document.getElementById('loginError');
 	var signupError = document.getElementById('signupError');
 	var signupPass = document.getElementById('signupPass');
+	
+	var charDiv = document.getElementById('pickChar');
+	var samBt = document.getElementById('sam');
+	var yamaBt = document.getElementById('yama');
 
 	loginForm.onsubmit = function(e){
 		e.preventDefault();
@@ -148,7 +159,7 @@
 		if(data.success){
 			//alert("Sign up successul.");
 			signDiv.style.display = 'none';
-			gameDiv.style.display = 'inline-block';
+			charDiv.style.display = 'inline-block';
 		} else
 			//alert("Sign in unsuccessul.");
 			signupError.style.display = 'none';
@@ -171,8 +182,21 @@
 			signupError.style.display = 'inline';
 		}
 	});
+	
+	//character selection
 
-	//chat
+	var selectYama = function(){
+		socket.emit('charSelect',{hero:"yama"});
+		charDiv.style.display = 'none';
+		gameDiv.style.display = 'inline-block';
+	}
+	
+	var selectSam = function(){
+		socket.emit('charSelect',{hero:"sam"});
+		charDiv.style.display = 'none';
+		gameDiv.style.display = 'inline-block';
+	}
+	
 
 
 	//game
@@ -185,9 +209,23 @@
 	Img.pl.src = '/client/img/pl.png';
 	Img.pr = new Image();
 	Img.pr.src = '/client/img/pr.png';
+	
+	Img.gu = new Image();
+	Img.gu.src = '/client/img/gu.png';
+	Img.gd = new Image();
+	Img.gd.src = '/client/img/gd.png';
+	Img.gl = new Image();
+	Img.gl.src = '/client/img/gl.png';
+	Img.gr = new Image();
+	Img.gr.src = '/client/img/gr.png';
+	
+	
 
 	Img.hp = new Image();
 	Img.hp.src = '/client/img/hp.png';
+	
+	Img.rak = new Image();
+	Img.rak.src = '/client/img/rak.png';
 
 	Img.blue = new Image();
 	Img.yellow = new Image();
@@ -215,6 +253,9 @@
 
 	Img.rakshasa = new Image();
 	Img.rakshasa.src = '/client/img/rakshasa.png';
+	
+	Img.base = new Image();
+	Img.base.src = '/client/img/prayerMachine.png';
 
 	var ctx = document.getElementById("ctx").getContext("2d");
 	ctx.font = '30px Arial';
@@ -348,7 +389,7 @@
 			if (self.isDestroyed){
 				ctx.drawImage(Img.pd, x, y);
 			} else {
-				ctx.drawImage(Img.tower,x,y);
+				ctx.drawImage(Img.base,x,y);
 
 				var hpWidth = 90 - (90 * self.hp / 1000);
 				//player hp bars mini
@@ -390,7 +431,7 @@
 		self.left = initPack.left;
 		self.up = initPack.up;
 		self.down = initPack.down;
-		self.player = Img.pd;
+		
 		self.mp = initPack.mp;
 		self.mpMax = initPack.mpMax;
 		self.xp = initPack.xp;
@@ -398,6 +439,13 @@
 		self.lvl = initPack.lvl;
 		self.lvlPts = initPack.lvlPts;
 		self.team = initPack.team;
+		self.hero = initPack.hero;
+		if(self.hero === "sam"){
+			self.player = Img.pd;
+		}
+		if(self.hero === "yama"){
+			self.player = Img.gd;
+		}
 
 		self.draw = function(){
 			var x = self.x - Player.list[selfId].x + WIDTH/2;
@@ -444,15 +492,27 @@
 			//ctx.fillRect(x-width/2 + 10,y-height/2 + 10,Img.player.width,Img.player.height);
 			//ctx.fillStyle = 'black';
 			//ctx.fillText(5,x-width/2,y-height/2);
-
-			if (self.down){
-				self.player = Img.pd;
-			} else if(self.up){
-				self.player = Img.pu;
-			} else if(self.right){
-				self.player = Img.pr;
-			} else if(self.left) {
-				self.player = Img.pl;
+			if(self.hero === "sam"){
+				if (self.down){
+					self.player = Img.pd;
+				} else if(self.up){
+					self.player = Img.pu;
+				} else if(self.right){
+					self.player = Img.pr;
+				} else if(self.left) {
+					self.player = Img.pl;
+				}
+			}
+			if(self.hero === "yama"){
+				if (self.down){
+					self.player = Img.gd;
+				} else if(self.up){
+					self.player = Img.gu;
+				} else if(self.right){
+					self.player = Img.gr;
+				} else if(self.left) {
+					self.player = Img.gl;
+				}
 			}
 
 			ctx.drawImage(self.player,
@@ -552,8 +612,8 @@
 			var x = self.x - Player.list[selfId].x + WIDTH/2;
 			var y = self.y - Player.list[selfId].y + HEIGHT/2;
 
-			ctx.drawImage(Img.rakshasa,
-				0,0,Img.rakshasa.width,Img.rakshasa.height,
+			ctx.drawImage(Img.rak,
+				0,0,Img.rakshasa.width,Img.rakshasa.height + 40,
 				x-width/2,y-height/2,width,height);
 
 			var hpWidth = 90 - (90 * self.hp / 10);
@@ -694,6 +754,12 @@
 	socket.on('remove',function(data){
 		//{player:[12323],bullet:[12323,123123]}
 		for(var i = 0 ; i < data.player.length; i++){
+			if(Player.list[data.player[i]].team ===0){
+				team0size = team0size-1;
+			}else{
+				team1size = team1size -1;
+			}
+			console.log(team0size);
 			delete Player.list[data.player[i]];
 		}
 		for(var i = 0 ; i < data.bullet.length; i++){
@@ -732,7 +798,7 @@
 			entities.push(Base.list[i]);
 		for(var i in Player.list)
 			entities.push(Player.list[i]);
-		console.log(entities);
+		//console.log(entities);
 		entities.sort(function (a, b) {
 			return a.y - b.y;
 		});

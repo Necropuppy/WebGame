@@ -64,7 +64,7 @@ Entity.getFrameUpdateData = function(){
 	return pack;
 }
 
-Player = function(id, username,team){
+Player = function(id, username,team,hero){
 	var self = Entity();
 	self.id = id;
 	self.number = "" + Math.floor(10 * Math.random());
@@ -86,6 +86,7 @@ Player = function(id, username,team){
 	self.lvl = 1;
 	self.lvlPts = 0;
 	self.team = team;
+	self.hero = hero;
 
 	if (self.team === 0) {
 		self.respawnPoint = Vector2(350, 1920 - 540);
@@ -176,6 +177,7 @@ Player = function(id, username,team){
 			lvl:self.lvl,
 			lvlPts:self.lvlPts,
 			team:self.team,
+			hero:self.hero,
 		};
 	}
 	self.getUpdatePack = function(){
@@ -205,8 +207,8 @@ Player = function(id, username,team){
 	return self;
 }
 Player.list = {};
-Player.onConnect = function(socket, username, team){
-	var player = Player(socket.id, username, team);
+Player.onConnect = function(socket, username, team,hero){
+	var player = Player(socket.id, username, team,hero);
 	socket.on('keyPress',function(data){
 		if(data.inputId === 'left')
 			player.pressingLeft = data.state;
@@ -248,6 +250,9 @@ Player.getAllInitPack = function(){
 Player.onDisconnect = function(socket){
 	delete Player.list[socket.id];
 	removePack.player.push(socket.id);
+}
+Player.getTeam = function(socket){
+	return Player.list[socket.id].x;
 }
 Player.update = function(){
 	var pack = [];
