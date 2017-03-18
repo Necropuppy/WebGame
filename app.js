@@ -121,11 +121,7 @@ io.sockets.on('connection', function(socket){
 	socket.on('disconnect',function(){
 		delete SOCKET_LIST[socket.id];
 		console.log("server delete player");
-		if(Player.getTeam(socket) === 0){
-			team0size--;
-		}else{
-			team1size--;
-		}
+		
 		Player.onDisconnect(socket);
 	});
 

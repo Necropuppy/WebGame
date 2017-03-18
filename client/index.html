@@ -99,8 +99,15 @@
 
 
 		<div id="pickChar" style="display:none;">
+		<h1>Choose Your God</h1>
+			<img src="/client/img/sampic.png">
 			<button id="sam" onclick="selectSam()">Sam</button>
+			<img src="/client/img/yamapic.png">
 			<button id="yama" onclick="selectYama()">Yama</button>
+			<img src="/client/img/agnipic.png">
+			<button id="sam" onclick="">Agni</button>
+			<img src="/client/img/shiva.png">
+			<button id="sam" onclick="">Shiva</button>
 		
 		
 
@@ -256,6 +263,9 @@
 	
 	Img.base = new Image();
 	Img.base.src = '/client/img/prayerMachine.png';
+	
+	Img.samPic = new Image();
+	Img.samPic.src = "/client/img/sampic.png";
 
 	var ctx = document.getElementById("ctx").getContext("2d");
 	ctx.font = '30px Arial';
@@ -754,12 +764,8 @@
 	socket.on('remove',function(data){
 		//{player:[12323],bullet:[12323,123123]}
 		for(var i = 0 ; i < data.player.length; i++){
-			if(Player.list[data.player[i]].team ===0){
-				team0size = team0size-1;
-			}else{
-				team1size = team1size -1;
-			}
-			console.log(team0size);
+		
+		
 			delete Player.list[data.player[i]];
 		}
 		for(var i = 0 ; i < data.bullet.length; i++){
