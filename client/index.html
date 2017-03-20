@@ -221,22 +221,22 @@
 	//game
 	var Img = {};
 	Img.pu = new Image();
-	Img.pu.src = '/client/img/pu.png';
+	Img.pu.src = '/client/img/su.png';
 	Img.pd = new Image();
-	Img.pd.src = '/client/img/pd.png';
+	Img.pd.src = '/client/img/sd.png';
 	Img.pl = new Image();
-	Img.pl.src = '/client/img/pl.png';
+	Img.pl.src = '/client/img/sl.png';
 	Img.pr = new Image();
-	Img.pr.src = '/client/img/pr.png';
+	Img.pr.src = '/client/img/sr.png';
 	
 	Img.gu = new Image();
-	Img.gu.src = '/client/img/gu.png';
+	Img.gu.src = '/client/img/yu.png';
 	Img.gd = new Image();
-	Img.gd.src = '/client/img/gd.png';
+	Img.gd.src = '/client/img/yd.png';
 	Img.gl = new Image();
-	Img.gl.src = '/client/img/gl.png';
+	Img.gl.src = '/client/img/yl.png';
 	Img.gr = new Image();
-	Img.gr.src = '/client/img/gr.png';
+	Img.gr.src = '/client/img/yr.png';
 	
 	Img.bluerak = new Image();
 	Img.bluerak.src = '/client/img/bluerak.png';
@@ -616,6 +616,15 @@
 
 			//draw UI overlay
 			ctx.drawImage(Img.bottomtop,0, HEIGHT-Img.bottomtop.height);
+			
+			//player stats
+			ctx.font= '12px Arial';
+			ctx.fillText("ATK:" + self.damage, 100, HEIGHT - 100);
+			ctx.fillText("DEF:" + self.armor, 100, HEIGHT - 80);
+			ctx.fillText("SPD:" + self.speed, 100, HEIGHT - 60);
+			ctx.fillText("KILLS:" + self.kills, 100, HEIGHT - 40);
+			ctx.fillText("DTHS:" + self.deaths, 100, HEIGHT - 20);
+			ctx.fillText("FAITH:" + self.faith, 100, HEIGHT - 0);
 
 
 			ctx.fillStyle = 'black';
@@ -753,6 +762,18 @@
 						p.lvlPts = pack.lvlPts;
 					if(pack.score !== undefined)
 						p.score = pack.score;
+					if(pack.armor !== undefined)
+						p.armor = pack.armor;
+					if(pack.speed !== undefined)
+						p.speed = pack.speed;
+					if(pack.damage !== undefined)
+						p.damage = pack.damage;
+					if(pack.kills !== undefined)
+						p.kills = pack.kills;
+					if(pack.deaths !== undefined)
+						p.deaths = pack.deaths;
+					if(pack.faith !== undefined)
+						p.faith = pack.faith;
 					p.right = pack.right;
 					p.left = pack.left;
 					p.up = pack.up;
