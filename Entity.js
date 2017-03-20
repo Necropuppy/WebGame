@@ -1,6 +1,8 @@
 var initPack = {player:[],bullet:[],tower:[],base:[],minion:[]};
 var removePack = {player:[],bullet:[],minion:[]};
 fps = 25;
+var gameOver = false;
+var victory = -1;
 
 require('./Vector2');
 require('./Map');
@@ -34,6 +36,7 @@ Entity = function(){
 Entity.getFrameUpdateData = function(){
 	var pack = {
 		initPack:{
+			
 			player:initPack.player,
 			bullet:initPack.bullet,
 			tower:initPack.tower,
@@ -46,6 +49,8 @@ Entity.getFrameUpdateData = function(){
 			minion:removePack.minion,
 		},
 		updatePack:{
+			victory:victory,
+			end:gameOver,
 			player:Player.update(),
 			bullet:Bullet.update(),
 			tower:Tower.update(),
@@ -87,11 +92,17 @@ Player = function(id, username,team,hero){
 	self.lvlPts = 0;
 	self.team = team;
 	self.hero = hero;
+	self.faith = 0;
+	self.kills = 0;
+	self.deaths = 0;
+	self.damage = 5;
+	self.speed = 20;
+	self.armor = 2;
 
 	if (self.team === 0) {
-		self.respawnPoint = Vector2(350, 1920 - 540);
+		self.respawnPoint = Vector2(1616, 8080);
 	} else {
-		self.respawnPoint = Vector2(1920 - 540, 350);
+		self.respawnPoint = Vector2(8080, 1616);
 	}
 
 	var super_update = self.update;
@@ -101,6 +112,7 @@ Player = function(id, username,team,hero){
 
 		//check dead
 		if(self.toRemove){
+			self.deaths += 1;
 			self.respawn();
 		}
 
@@ -178,6 +190,12 @@ Player = function(id, username,team,hero){
 			lvlPts:self.lvlPts,
 			team:self.team,
 			hero:self.hero,
+			faith:self.faith,
+			kills:self.kills,
+			deaths:self.deaths,
+			damage:self.damge,
+			speed:self.speed,
+			armor:self.armor,
 		};
 	}
 	self.getUpdatePack = function(){
@@ -198,6 +216,12 @@ Player = function(id, username,team,hero){
 			xpMax:self.xpMax,
 			lvl:self.lvl,
 			lvlPts:self.lvlPts,
+			faith:self.faith,
+			kills:self.kills,
+			deaths:self.deaths,
+			damage:self.damge,
+			speed:self.speed,
+			armor:self.armor,
 		}
 	}
 
@@ -411,6 +435,8 @@ Bullet = function(parent,angle){
 					if(shooter) {
 						shooter.score += 1;
 						shooter.xp += 3;
+						shooter.kills +=1;
+						shooter.faith+=10;
 					}
 					p.respawn();
 				}
@@ -497,15 +523,17 @@ Base = function(team,id){
 	self.team = team;
 	self.id = id;
 	if(team === 0){
-		self.pos = Vector2(350, 1920 - 540);
+		self.pos = Vector2(1920, 7488);
 	} else if(team === 1){
-		self.pos = Vector2(1920 - 540, 350);
+		self.pos = Vector2(7488, 1920);
 	}
 
 	self.update = function(){
 		if(self.hp <= 0){
 			self.hp = 0;
 			self.toRemove = true;
+			gameOver = true;
+			victory = self.team;
 		}
 		if (team === 0) {
 			if (self.batch === 0 && !self.toRemove){

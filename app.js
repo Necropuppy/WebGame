@@ -154,5 +154,7 @@ setInterval(function(){
 		socket.emit('remove',packs.removePack);
 		//socket.emit('towerUpdate', packs.)
 		//socket.emit('mapInit',mapPacks.initPack);
+		
 	}
+	//console.log(process.uptime());
 },1000/fps);

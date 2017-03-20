@@ -1,10 +1,18 @@
 /* config.css */
 
 /* helpers/align.css */
+.charDiv{
+	width:200px;
+	position:relative;
+	float:left;
+	align:center;
+}
 #gameDiv{
 	margin:0;
 	padding:0;
 	background-color:purple;
+	width:1000px;
+	float:left;
 }
 #ctx{
 	position:absolute;
