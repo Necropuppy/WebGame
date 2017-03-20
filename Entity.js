@@ -79,7 +79,7 @@ Player = function(id, username,team,hero){
 	self.pressingDown = false;
 	self.pressingAttack = false;
 	self.mouseAngle = 0;
-	self.maxSpd = 250 / fps;
+	self.maxSpd = 400 / fps;
 	self.hp = 10;
 	self.hpMax = 10;
 	self.score = 0;
@@ -95,8 +95,8 @@ Player = function(id, username,team,hero){
 	self.faith = 0;
 	self.kills = 0;
 	self.deaths = 0;
-	self.damage = 5;
-	self.speed = 20;
+	self.damage = 100;
+	self.speed = self.maxSpd*fps;
 	self.armor = 2;
 
 	if (self.team === 0) {
@@ -126,9 +126,15 @@ Player = function(id, username,team,hero){
 		//update xp -- level up!
 		if(self.xp >= self.xpMax){
 			self.xp = self.xp - self.xpMax;
-			//self.xpMax *= 2;
+			self.xpMax = self.xpMax + self.xpMax;
 			self.lvl += 1;
-			self.lvlPts += 1;
+			self.lvlPts += 1; 
+			self.hpMax += 10;
+			self.hp = self.hpMax;
+			self.mpMax += 20;
+			self.mp = self.mpMax;
+			self.damage+=1;
+			
 		}
 
 		if(self.pressingAttack){
@@ -296,6 +302,7 @@ Minion = function(base, waypoints){
 	self.toRemove = false;
 	self.maxSpd = 6;
 	self.waypoint = 0;
+	self.damage = 2;
 	self.hp = 10;
 	var super_update = self.update;
 	self.update = function() {
@@ -413,7 +420,7 @@ Bullet = function(parent,angle){
 	self.vel = Vector2.Polar(250 / fps, angle);
 	self.actuallyParent = parent;
 	self.parent = parent.id;
-	self.damage = 1;
+	self.damage = parent.damage;
 	self.timer = 0;
 	self.toRemove = false;
 	var super_update = self.update;

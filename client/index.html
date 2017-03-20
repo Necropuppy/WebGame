@@ -318,6 +318,11 @@
 	Img.samPic = new Image();
 	Img.samPic.src = "/client/img/sampic.png";
 	
+	Img.victory = new Image();
+	Img.victory.src = '/client/img/victory.png';
+	Img.defeat = new Image();
+	Img.defeat.src = '/client/img/defeat.png';
+	
 	var gameOver = false;
 	var winner = -1;
 
@@ -676,11 +681,11 @@
 			//player stats
 			ctx.font= '12px Arial';
 			ctx.fillText("ATK:" + self.damage, 100, HEIGHT - 100);
-			ctx.fillText("DEF:" + self.armor, 100, HEIGHT - 80);
-			ctx.fillText("SPD:" + self.speed, 100, HEIGHT - 60);
-			ctx.fillText("KILLS:" + self.kills, 100, HEIGHT - 40);
-			ctx.fillText("DTHS:" + self.deaths, 100, HEIGHT - 20);
-			ctx.fillText("FAITH:" + self.faith, 100, HEIGHT - 0);
+			//ctx.fillText("DEF:" + self.armor, 100, HEIGHT - 80);
+			ctx.fillText("SPD:" + self.speed, 100, HEIGHT - 80);
+			ctx.fillText("KILLS:" + self.kills, 100, HEIGHT - 60);
+			ctx.fillText("DTHS:" + self.deaths, 100, HEIGHT - 40);
+			ctx.fillText("FAITH:" + self.faith, 100, HEIGHT - 20);
 
 
 			ctx.fillStyle = 'black';
@@ -690,6 +695,16 @@
 			ctx.fillText(Player.list[selfId].lvl,75,HEIGHT-20);
 
 
+		}
+		self.drawEnd = function(){
+		
+			if(winner === self.team){
+				ctx.drawImage(Img.defeat,0,0);
+			
+			}else if(winner !== -1){
+				ctx.drawImage(Img.victory,0,0);
+			}
+			
 		}
 
 		Player.list[self.id] = self;
@@ -791,8 +806,7 @@
 		for(var i = 0; i < data.minion.length; i++) {
 			new Minion(data.minion[i]);
 		}
-		winner = -1;
-		gameOver = false;
+		
 	});
 
 	socket.on('update',function(data){
@@ -930,33 +944,40 @@
 			return;
 		ctx.clearRect(0,0,WIDTH,HEIGHT);
 
-		for(var i in Map.list)
-			Map.list[i].draw();
-		drawScore();
+		
+		if(!gameOver){
+			for(var i in Map.list)
+				Map.list[i].draw();
+			drawScore();
 
-		var entities = [];
-		for(var i in Bullet.list)
-			entities.push(Bullet.list[i]);
-		for(var i in Minion.list)
-			entities.push(Minion.list[i]);
-		for(var i in Tower.list)
-			entities.push(Tower.list[i]);
-		for(var i in Base.list)
-			entities.push(Base.list[i]);
-		for(var i in Player.list)
-			entities.push(Player.list[i]);
-		//console.log(entities);
-		entities.sort(function (a, b) {
-			return a.y - b.y;
-		});
+			var entities = [];
+			for(var i in Bullet.list)
+				entities.push(Bullet.list[i]);
+			for(var i in Minion.list)
+				entities.push(Minion.list[i]);
+			for(var i in Tower.list)
+				entities.push(Tower.list[i]);
+			for(var i in Base.list)
+				entities.push(Base.list[i]);
+			for(var i in Player.list)
+				entities.push(Player.list[i]);
+			//console.log(entities);
+			entities.sort(function (a, b) {
+				return a.y - b.y;
+			});
 
-		for (var i = 0; i < entities.length; i++) entities[i].draw();
+			for (var i = 0; i < entities.length; i++) entities[i].draw();
 
-		if (!document.hasFocus() && focused === true) {
-			focused = false;
-			onLossOfFocus();
-		} else if (document.hasFocus() && !focused){
-			focused = true;
+			if (!document.hasFocus() && focused === true) {
+				focused = false;
+				onLossOfFocus();
+			} else if (document.hasFocus() && !focused){
+				focused = true;
+			}
+		} else {
+			for(var i in Player.list){
+				Player.list[i].drawEnd();
+			}
 		}
 
 		//drawHud();
