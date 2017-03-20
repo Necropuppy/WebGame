@@ -113,12 +113,12 @@
 		<div class="charDiv">
 			<img src="/client/img/agnipic.png">
 			<p style="color:lightblue">Agni, God of Fire, can scortch the moons with his wand of Universal Fire</p>
-			<button id="sam" onclick="">Agni</button>
+			<button id="sam" onclick="selectAgni()">Agni</button>
 		</div>
 		<div class="charDiv">
 			<img src="/client/img/shiva.png">
 			<p style="color:lightblue">Shiva, one of the Trimurti, wield a trident of deatomization</p>
-			<button id="sam" onclick="">Shiva</button>
+			<button id="sam" onclick="selectShiva()">Shiva</button>
 		</div>
 		
 		
@@ -215,6 +215,16 @@
 		charDiv.style.display = 'none';
 		gameDiv.style.display = 'inline-block';
 	}
+	var selectShiva = function(){
+		socket.emit('charSelect',{hero:"shiva"});
+		charDiv.style.display = 'none';
+		gameDiv.style.display = 'inline-block';
+	}
+	var selectAgni = function(){
+		socket.emit('charSelect',{hero:"agni"});
+		charDiv.style.display = 'none';
+		gameDiv.style.display = 'inline-block';
+	}
 	
 
 
@@ -237,6 +247,24 @@
 	Img.gl.src = '/client/img/yl.png';
 	Img.gr = new Image();
 	Img.gr.src = '/client/img/yr.png';
+	
+	Img.shu = new Image();
+	Img.shu.src = '/client/img/shu.png';
+	Img.shd = new Image();
+	Img.shd.src = '/client/img/shd.png';
+	Img.shl = new Image();
+	Img.shl.src = '/client/img/shl.png';
+	Img.shr = new Image();
+	Img.shr.src = '/client/img/srr.png';
+	
+	Img.au = new Image();
+	Img.au.src = '/client/img/au.png';
+	Img.ad = new Image();
+	Img.ad.src = '/client/img/agnid.png';
+	Img.al = new Image();
+	Img.al.src = '/client/img/al.png';
+	Img.ar = new Image();
+	Img.ar.src = '/client/img/ar.png';
 	
 	Img.bluerak = new Image();
 	Img.bluerak.src = '/client/img/bluerak.png';
@@ -489,6 +517,12 @@
 		if(self.hero === "yama"){
 			self.player = Img.gd;
 		}
+		if(self.hero === "shiva"){
+			self.player = Img.shd;
+		}
+		if(self.hero === "agni"){
+			self.player = Img.ad;
+		}
 
 		self.draw = function(){
 			var x = self.x - Player.list[selfId].x + WIDTH/2;
@@ -555,6 +589,28 @@
 					self.player = Img.gr;
 				} else if(self.left) {
 					self.player = Img.gl;
+				}
+			}
+			if(self.hero === "shiva"){
+				if (self.down){
+					self.player = Img.shd;
+				} else if(self.up){
+					self.player = Img.shu;
+				} else if(self.right){
+					self.player = Img.shr;
+				} else if(self.left) {
+					self.player = Img.shl;
+				}
+			}
+			if(self.hero === "agni"){
+				if (self.down){
+					self.player = Img.ad;
+				} else if(self.up){
+					self.player = Img.au;
+				} else if(self.right){
+					self.player = Img.ar;
+				} else if(self.left) {
+					self.player = Img.al;
 				}
 			}
 
