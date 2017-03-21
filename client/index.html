@@ -333,6 +333,16 @@
 	Img.defeat = new Image();
 	Img.defeat.src = '/client/img/defeat.png';
 	
+	Img.stiny = new Image();
+	Img.atiny = new Image();
+	Img.ytiny = new Image();
+	Img.shtiny = new Image();
+	
+	Img.stiny.src = '/client/img/samtiny.png';
+	Img.atiny.src = '/client/img/agnitiny.png';
+	Img.shtiny.src = '/client/img/shivatiny.png';
+	Img.ytiny.src = '/client/img/yamatiny.png';
+	
 	var gameOver = false;
 	var winner = -1;
 
@@ -537,14 +547,18 @@
 		self.armor = initPack.armor;
 		if(self.hero === "sam"){
 			self.player = Img.pd;
+			self.proPic = Img.stiny;
 		}
 		if(self.hero === "yama"){
+			self.proPic = Img.ytiny;
 			self.player = Img.gd;
 		}
 		if(self.hero === "shiva"){
+			self.proPic = Img.shtiny;
 			self.player = Img.shd;
 		}
 		if(self.hero === "agni"){
+			self.proPic = Img.atiny;
 			self.player = Img.ad;
 		}
 
@@ -647,6 +661,9 @@
 
 			//draw UI image
 			ctx.drawImage(Img.bottom,0, HEIGHT-Img.bottom.height);
+			
+			//draw profile pic
+			ctx.drawImage(self.proPic,0,HEIGHT-118);
 
 			ctx.fillStyle = 'black';
 			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +  20 + (350 * (self.hp/self.hpMax)),HEIGHT-Img.hp.height + 20,350 - ((350) * (self.hp/self.hpMax)) , 20 );
