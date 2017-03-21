@@ -144,9 +144,8 @@ Player = function(id, username,team,hero){
 
 	self.shootBullet = function(angle){
 		if(self.mp >= 10){
-			var b = Bullet(self,angle);
+			var b = Bullet(self,angle, self.hero);
 			b.pos = self.pos;
-			b.hero = self.hero;
 			self.mp -= 10;
 		}
 	}
@@ -200,7 +199,7 @@ Player = function(id, username,team,hero){
 			faith:self.faith,
 			kills:self.kills,
 			deaths:self.deaths,
-			damage:self.damge,
+			damage:self.damage,
 			speed:self.speed,
 			armor:self.armor,
 		};
@@ -328,7 +327,7 @@ Minion = function(base, waypoints){
 
 		for (var i in Minion.list) {
 			var m = Minion.list[i];
-			if (self.pos.dist(m.pos) < 64 && self.team !== m.team) {
+			if (self.pos.dist(m.pos) < 256 && self.team !== m.team) {
 				self.vel = Vector2(0,0);
 				self.shootBullet(m.pos);
 				return;
@@ -337,7 +336,7 @@ Minion = function(base, waypoints){
 
 		for (var i in Tower.list) {
 			var t = Tower.list[i];
-			if (self.pos.dist(t.pos) < 96 && self.team !== t.team && !t.toRemove) {
+			if (self.pos.dist(t.pos) < 256 && self.team !== t.team && !t.toRemove) {
 				self.vel = Vector2(0,0);
 				self.shootBullet(t.pos);
 				return;
@@ -346,7 +345,7 @@ Minion = function(base, waypoints){
 
 		for (var i in Base.list) {
 			var b = Base.list[i];
-			if (self.pos.dist(b.pos) < 96 && self.team !== b.team && !b.toRemove) {
+			if (self.pos.dist(b.pos) < 256 && self.team !== b.team && !b.toRemove) {
 				self.vel = Vector2(0,0);
 				self.shootBullet(b.pos);
 				return;
@@ -355,7 +354,7 @@ Minion = function(base, waypoints){
 
 		for (var i in Player.list) {
 			var p = Player.list[i];
-			if (self.pos.dist(p.pos) < 32 && self.team !== p.team) {
+			if (self.pos.dist(p.pos) < 64 && self.team !== p.team) {
 				self.vel = Vector2(0,0);
 				return;
 			}
@@ -363,7 +362,7 @@ Minion = function(base, waypoints){
 	}
 
 	self.shootBullet = function(pt) {
-		var b = Bullet(self, 180 * (1 / Math.PI) * Vector2.angle(Vector2.sub(pt, self.pos)));
+		var b = Bullet(self, 180 * (1 / Math.PI) * Vector2.angle(Vector2.sub(pt, self.pos)), "agni");
 		b.pos = self.pos;
 	}
 
@@ -414,7 +413,7 @@ Minion.update = function(){
 	return pack;
 }
 
-Bullet = function(parent,angle){
+Bullet = function(parent,angle, hero){
 	var self = Entity();
 	self.pos = parent.pos;
 	self.id = Math.random();
@@ -424,15 +423,28 @@ Bullet = function(parent,angle){
 	self.damage = parent.damage;
 	self.timer = 0;
 	self.toRemove = false;
-	self.hero = "agni";
+	self.hero = hero;
 	var super_update = self.update;
 	self.update = function(){
 		if(self.timer++ > 100)
 			self.toRemove = true;
 		super_update();
 
-		if(self.isPositionWall(self.pos))
+		if(self.isPositionWall(self.pos)) {
 			self.toRemove = true;
+			for (var i in Tower.list) {
+				var t = Tower.list[i];
+				if (self.pos.dist(Vector2.add(t.pos, Vector2(32,128))) < 192 && t.team !== self.actuallyParent.team) {
+					t.hp -= self.damage;
+				}
+			}
+			for (var i in Base.list) {
+				var b = Base.list[i];
+				if (self.pos.dist(Vector2.add(b.pos, Vector2(32,128))) < 192 && b.team !== self.actuallyParent.team) {
+					b.hp -= self.damage;
+				}
+			}
+		}
 
 		for(var i in Player.list){
 			var p = Player.list[i];
@@ -635,6 +647,7 @@ Tower = function(team, id,x ,y){
 		if(self.hp <= 0){
 			self.hp = 0;
 			self.toRemove = true;
+			self.attacking = false;
 		}
 
 		if(!self.attacking && !self.toRemove){
