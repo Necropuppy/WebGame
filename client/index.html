@@ -300,6 +300,16 @@
 
 	Img.tower = new Image();
 	Img.tower.src = '/client/img/tower.png';
+	
+	Img.rtower = new Image();
+	Img.btower = new Image();
+	Img.btower.src = '/client/img/bluetower.png';
+	Img.rtower.src = '/client/img/redtower.png';
+	
+	Img.rtowerruin = new Image();
+	Img.btowerruin = new Image()
+	Img.rtowerruin.src = '/client/img/redtowerruin.png';
+	Img.btowerruin.src = '/client/img/bluetowerruin.png';
 
 	Img.bullet = new Image();
 	Img.bullet.src = '/client/img/bullet.png';
@@ -377,6 +387,14 @@
 		self.target = initPack.target;
 		self.attacking = initPack.attacking;
 		self.team = initPack.team;
+		if(self.team === 0){
+			self.Img = Img.btower;
+			self.ruinImg = Img.btowerruin;
+		}
+		if(self.team === 1){
+			self.Img = Img.rtower;
+			self.ruinImg = Img.rtowerruin;
+		}
 
 
 		Tower.list[self.id] = self;
@@ -389,9 +407,9 @@
 			var tileWidth = 32;
 
 			if (self.isDestroyed) {
-				ctx.drawImage(Img.pd, x , y );
+				ctx.drawImage(self.ruinImg, x , y );
 			} else {
-				ctx.drawImage(Img.tower,x,y);
+				ctx.drawImage(self.Img,x,y);
 			}
 
 
