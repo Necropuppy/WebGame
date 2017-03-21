@@ -438,18 +438,18 @@
 			//player hp bars mini
 			ctx.fillStyle = 'red';
 			if(self.team !== Player.list[selfId].team){//enemy team
-				ctx.drawImage(Img.red,x - 65,y - 60);
+				ctx.drawImage(Img.redmhp,x - 65 + 60,y - 60);
 			} else if(self.team === Player.list[selfId].team){//friendly team
-				ctx.drawImage(Img.blue,x - 65,y - 60);
+				ctx.drawImage(Img.bluemhp,x - 65 + 60,y - 60);
 			}
 
 			//hp
 			ctx.fillStyle = ctx.fillStyle = 'rgb(32, 74, 74)';
-			//hp grey
-			ctx.fillRect(x - 65 + 23 + 90 - (hpWidth),y-60+3,hpWidth,9);
+			//mp grey
+			ctx.fillRect(x -65+2 + 60 + 90 - (hpWidth),y-60+3,hpWidth,4);
 
 			//top layer
-			ctx.drawImage(Img.black,x-65,y-60);
+			//ctx.drawImage(Img.black,x-65,y-60);
 			}
 		}
 
@@ -484,18 +484,18 @@
 				//player hp bars mini
 				ctx.fillStyle = 'red';
 				if(self.team !== Player.list[selfId].team){//enemy team
-					ctx.drawImage(Img.red,x - 65,y - 60);
+					ctx.drawImage(Img.redmhp,x - 65 + 60,y - 60);
 				} else if(self.team === Player.list[selfId].team){//friendly team
-					ctx.drawImage(Img.blue,x - 65,y - 60);
+					ctx.drawImage(Img.bluemhp,x - 65 + 60,y - 60);
 				}
 
 				//hp
 				ctx.fillStyle = ctx.fillStyle = 'rgb(32, 74, 74)';
-				//hp grey
-				ctx.fillRect(x - 65 + 23 + 90 - (hpWidth),y-60+3,hpWidth,9);
+				//mp grey
+				ctx.fillRect(x -65+2 + 25 + 90 - (hpWidth),y-60+3,hpWidth,4);
 
 				//top layer
-				ctx.drawImage(Img.black,x-65,y-60);
+				//ctx.drawImage(Img.black,x-65,y-60);
 			}
 
 		}
@@ -786,15 +786,15 @@
 			//player hp bars mini
 			ctx.fillStyle = 'red';
 			if(self.team !== Player.list[selfId].team){//enemy team
-				ctx.drawImage(Img.redmhp,x - 65,y - 60);
+				ctx.drawImage(Img.redmhp,x - 65 + 25,y - 60);
 			} else if(self.team === Player.list[selfId].team){//friendly team
-				ctx.drawImage(Img.bluemhp,x - 65,y - 60);
+				ctx.drawImage(Img.bluemhp,x - 65 + 25,y - 60);
 			}
 
 			//hp
 			ctx.fillStyle = ctx.fillStyle = 'rgb(32, 74, 74)';
 			//mp grey
-			ctx.fillRect(x -65+2 - (hpWidth),y-60+3,hpWidth,4);
+			ctx.fillRect(x -65+2 + 25 + 90 - (hpWidth),y-60+3,hpWidth,4);
 
 			//top layer
 			//ctx.drawImage(Img.black,x-65,y-60);

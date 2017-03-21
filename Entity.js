@@ -544,13 +544,22 @@ Base = function(team,id){
 		}
 		if (team === 0) {
 			if (self.batch === 0 && !self.toRemove){
-				Minion(self, [Vector2(600, 1920 - 700), Vector2(1920 - 700, 600), Vector2(1920 - 540, 350)]);
-				Minion(self, [Vector2(300,300),Vector2(1920-540,350)]);
-				Minion(self, [Vector2(1920-300,1920-200),Vector2(1920-540,350)]);
+				//Minion(self, [Vector2(600, 1920 - 700), Vector2(1920 - 700, 600), Vector2(1920 - 540, 350)]);
+				//Minion(self, [Vector2(300,300),Vector2(1920-540,350)]);
+				//Minion(self, [Vector2(1920-300,1920-200),Vector2(1920-540,350)]);
+				Minion(self,[Vector2(6848,2496)]);
 			}
 			self.batch = (self.batch + 1) % 50;
 		} else {
 			//Minion(self, [Vector2(1920-700, 600), Vector2(600, 1920 - 700), Vector2(350, 1920 - 540)]);
+			
+			if (self.batch === 0 && !self.toRemove){
+				//Minion(self, [Vector2(600, 1920 - 700), Vector2(1920 - 700, 600), Vector2(1920 - 540, 350)]);
+				//Minion(self, [Vector2(300,300),Vector2(1920-540,350)]);
+				//Minion(self, [Vector2(1920-300,1920-200),Vector2(1920-540,350)]);
+				Minion(self, [Vector2(2496,6848)]);
+			}
+			self.batch = (self.batch + 1) % 50;
 		}
 	}
 
