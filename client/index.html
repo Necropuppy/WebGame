@@ -416,9 +416,10 @@
 
 			if(self.attacking){
 				ctx.fillStyle = 'white';
-				ctx.lineWidth = '20';
+				ctx.strokeStyle = 'red';
+				ctx.lineWidth = '8';
 				ctx.beginPath();
-				ctx.moveTo(x  ,y );
+				ctx.moveTo(x + 50  ,y  + 20);
 
 				ctx.lineTo(x + self.target.pos.x - self.x,y +self.target.pos.y - self.y);
 				ctx.stroke();
