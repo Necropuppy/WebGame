@@ -102,7 +102,7 @@
 		<h1>Choose Your God</h1>
 		<div class="charDiv">
 			<img src="/client/img/sampic.png">
-			<p style="color:lightblue">Known as the False Buddha and one of the First. Sam uses Electro Direction to defeat his enemies.</p>																																		
+			<p style="color:lightblue">Known as the False Buddha and one of the First. Sam uses Electro Direction to defeat his enemies.</p>
 			<button id="sam" onclick="selectSam()">Sam</button>
 		</div>
 		<div class="charDiv">
@@ -120,8 +120,8 @@
 			<p style="color:lightblue">Shiva, one of the Trimurti, wield a trident of deatomization</p>
 			<button id="sam" onclick="selectShiva()">Shiva</button>
 		</div>
-		
-		
+
+
 
 
 		</div>
@@ -162,7 +162,7 @@
 	var loginError = document.getElementById('loginError');
 	var signupError = document.getElementById('signupError');
 	var signupPass = document.getElementById('signupPass');
-	
+
 	var charDiv = document.getElementById('pickChar');
 	var samBt = document.getElementById('sam');
 	var yamaBt = document.getElementById('yama');
@@ -201,7 +201,7 @@
 			signupError.style.display = 'inline';
 		}
 	});
-	
+
 	//character selection
 
 	var selectYama = function(){
@@ -209,7 +209,7 @@
 		charDiv.style.display = 'none';
 		gameDiv.style.display = 'inline-block';
 	}
-	
+
 	var selectSam = function(){
 		socket.emit('charSelect',{hero:"sam"});
 		charDiv.style.display = 'none';
@@ -225,7 +225,7 @@
 		charDiv.style.display = 'none';
 		gameDiv.style.display = 'inline-block';
 	}
-	
+
 
 
 	//game
@@ -238,7 +238,7 @@
 	Img.pl.src = '/client/img/sl.png';
 	Img.pr = new Image();
 	Img.pr.src = '/client/img/sr.png';
-	
+
 	Img.gu = new Image();
 	Img.gu.src = '/client/img/yu.png';
 	Img.gd = new Image();
@@ -247,7 +247,7 @@
 	Img.gl.src = '/client/img/yl.png';
 	Img.gr = new Image();
 	Img.gr.src = '/client/img/yr.png';
-	
+
 	Img.shu = new Image();
 	Img.shu.src = '/client/img/shu.png';
 	Img.shd = new Image();
@@ -256,7 +256,7 @@
 	Img.shl.src = '/client/img/shl.png';
 	Img.shr = new Image();
 	Img.shr.src = '/client/img/srr.png';
-	
+
 	Img.au = new Image();
 	Img.au.src = '/client/img/au.png';
 	Img.ad = new Image();
@@ -265,20 +265,20 @@
 	Img.al.src = '/client/img/al.png';
 	Img.ar = new Image();
 	Img.ar.src = '/client/img/ar.png';
-	
+
 	Img.bluerak = new Image();
 	Img.bluerak.src = '/client/img/bluerak.png';
-	
+
 	Img.bluemhp = new Image();
 	Img.bluemhp.src = '/client/img/bluemhp.png';
 	Img.redmhp = new Image();
 	Img.redmhp.src = 'client/img/redmhp.png';
-	
-	
+
+
 
 	Img.hp = new Image();
 	Img.hp.src = '/client/img/hp.png';
-	
+
 	Img.rak = new Image();
 	Img.rak.src = '/client/img/rak.png';
 
@@ -300,12 +300,12 @@
 
 	Img.tower = new Image();
 	Img.tower.src = '/client/img/tower.png';
-	
+
 	Img.rtower = new Image();
 	Img.btower = new Image();
 	Img.btower.src = '/client/img/bluetower.png';
 	Img.rtower.src = '/client/img/redtower.png';
-	
+
 	Img.rtowerruin = new Image();
 	Img.btowerruin = new Image()
 	Img.rtowerruin.src = '/client/img/redtowerruin.png';
@@ -315,34 +315,34 @@
 	Img.bullet.src = '/client/img/bullet.png';
 	Img.map = new Image();
 	Img.map.src = '/client/img/mapProgress.png';
-	
+
 	Img.realMap = new Image();
 	Img.realMap.src = "/client/img/mapProgress.png";
 
 	Img.rakshasa = new Image();
 	Img.rakshasa.src = '/client/img/rakshasa.png';
-	
+
 	Img.base = new Image();
 	Img.base.src = '/client/img/prayerMachine.png';
-	
+
 	Img.samPic = new Image();
 	Img.samPic.src = "/client/img/sampic.png";
-	
+
 	Img.victory = new Image();
 	Img.victory.src = '/client/img/victory.png';
 	Img.defeat = new Image();
 	Img.defeat.src = '/client/img/defeat.png';
-	
+
 	Img.stiny = new Image();
 	Img.atiny = new Image();
 	Img.ytiny = new Image();
 	Img.shtiny = new Image();
-	
+
 	Img.stiny.src = '/client/img/samtiny.png';
 	Img.atiny.src = '/client/img/agnitiny.png';
 	Img.shtiny.src = '/client/img/shivatiny.png';
 	Img.ytiny.src = '/client/img/yamatiny.png';
-	
+
 	var gameOver = false;
 	var winner = -1;
 
@@ -433,17 +433,9 @@
 
 				ctx.lineTo(x + self.target.pos.x - self.x,y +self.target.pos.y - self.y);
 				ctx.stroke();
-
-
-
-
-
-
-
-
 			}
 			if(!self.isDestroyed){
-				var hpWidth = 90 - (90 * self.hp / 500);
+				var hpWidth = 90 - 9 * (self.hp / 500);
 
 			//player hp bars mini
 			ctx.fillStyle = 'red';
@@ -490,7 +482,7 @@
 			} else {
 				ctx.drawImage(Img.base,x,y);
 
-				var hpWidth = 90 - (90 * self.hp / 1000);
+				var hpWidth = 90 - 9 * (self.hp / 1000);
 				//player hp bars mini
 				ctx.fillStyle = 'red';
 				if(self.team !== Player.list[selfId].team){//enemy team
@@ -502,7 +494,7 @@
 				//hp
 				ctx.fillStyle = ctx.fillStyle = 'rgb(32, 74, 74)';
 				//mp grey
-				ctx.fillRect(x -65+2 + 25 + 90 - (hpWidth),y-60+3,hpWidth,4);
+				ctx.fillRect(x -65+2 + 60 + 90 - hpWidth,y-60+3,hpWidth,4);
 
 				//top layer
 				//ctx.drawImage(Img.black,x-65,y-60);
@@ -530,7 +522,7 @@
 		self.left = initPack.left;
 		self.up = initPack.up;
 		self.down = initPack.down;
-		
+
 		self.mp = initPack.mp;
 		self.mpMax = initPack.mpMax;
 		self.xp = initPack.xp;
@@ -661,7 +653,7 @@
 
 			//draw UI image
 			ctx.drawImage(Img.bottom,0, HEIGHT-Img.bottom.height);
-			
+
 			//draw profile pic
 			ctx.drawImage(self.proPic,0,HEIGHT-118);
 
@@ -692,7 +684,7 @@
 			ctx.fillRect(738 + 395 - (mpWidthSelf),HEIGHT - 19,mpWidthSelf,16);
 			//xp grey
 			ctx.fillRect(3 + 90 - (xpWidthSelf),HEIGHT - 19,xpWidthSelf,16);
-			
+
 			//draw hp text
 			ctx.fillStyle = 'black';
 			ctx.font = '15px Arial';
@@ -701,7 +693,7 @@
 			ctx.fillText("Mana:" + self.mp + "/" + self.mpMax, 738 + (395/3+25),HEIGHT - 38+33);
 			//karma
 			ctx.fillText("Karma:" + self.xp + "/" + self.xpMax, 6,HEIGHT - 38+33);
-			
+
 			//black text
 			ctx.fillStyle = 'white';
 			ctx.font = '15px Arial';
@@ -713,7 +705,7 @@
 
 			//draw UI overlay
 			ctx.drawImage(Img.bottomtop,0, HEIGHT-Img.bottomtop.height);
-			
+
 			//player stats
 			ctx.font= '12px Arial';
 			ctx.fillText("ATK:" + self.damage, 100, HEIGHT - 100);
@@ -733,14 +725,14 @@
 
 		}
 		self.drawEnd = function(){
-		
+
 			if(winner === self.team){
 				ctx.drawImage(Img.defeat,0,0);
-			
+
 			}else if(winner !== -1){
 				ctx.drawImage(Img.victory,0,0);
 			}
-			
+
 		}
 
 		Player.list[self.id] = self;
@@ -798,7 +790,7 @@
 				0,0,Img.rakshasa.width,Img.rakshasa.height + 40,
 				x-width/2,y-height/2,width,height);
 
-			var hpWidth = 90 - (90 * self.hp / 10);
+			var hpWidth = 90 - 9 * (self.hp / 100);
 
 			//player hp bars mini
 			ctx.fillStyle = 'red';
@@ -811,7 +803,8 @@
 			//hp
 			ctx.fillStyle = ctx.fillStyle = 'rgb(32, 74, 74)';
 			//mp grey
-			ctx.fillRect(x -65+2 + 25 + 90 - (hpWidth),y-60+3,hpWidth,4);
+			ctx.fillRect(x - 65 + 2 + 25 + 90 - hpWidth,y-60+3,hpWidth,4);
+			console.log(hpWidth);
 
 			//top layer
 			//ctx.drawImage(Img.black,x-65,y-60);
@@ -842,7 +835,7 @@
 		for(var i = 0; i < data.minion.length; i++) {
 			new Minion(data.minion[i]);
 		}
-		
+
 	});
 
 	socket.on('update',function(data){
@@ -955,8 +948,8 @@
 	socket.on('remove',function(data){
 		//{player:[12323],bullet:[12323,123123]}
 		for(var i = 0 ; i < data.player.length; i++){
-		
-		
+
+
 			delete Player.list[data.player[i]];
 		}
 		for(var i = 0 ; i < data.bullet.length; i++){
@@ -980,7 +973,7 @@
 			return;
 		ctx.clearRect(0,0,WIDTH,HEIGHT);
 
-		
+
 		if(!gameOver){
 			for(var i in Map.list)
 				Map.list[i].draw();

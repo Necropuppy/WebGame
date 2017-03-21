@@ -36,7 +36,7 @@ Entity = function(){
 Entity.getFrameUpdateData = function(){
 	var pack = {
 		initPack:{
-			
+
 			player:initPack.player,
 			bullet:initPack.bullet,
 			tower:initPack.tower,
@@ -79,9 +79,9 @@ Player = function(id, username,team,hero){
 	self.pressingDown = false;
 	self.pressingAttack = false;
 	self.mouseAngle = 0;
-	self.maxSpd = 400 / fps;
+	self.maxSpd = 500 / fps;
 	self.hp = 10;
-	self.hpMax = 10;
+	self.hpMax = 2000;
 	self.score = 0;
 	self.username = username;
 	self.mp = 100;
@@ -128,13 +128,13 @@ Player = function(id, username,team,hero){
 			self.xp = self.xp - self.xpMax;
 			self.xpMax = self.xpMax + self.xpMax;
 			self.lvl += 1;
-			self.lvlPts += 1; 
+			self.lvlPts += 1;
 			self.hpMax += 10;
 			self.hp = self.hpMax;
 			self.mpMax += 20;
 			self.mp = self.mpMax;
 			self.damage+=1;
-			
+
 		}
 
 		if(self.pressingAttack){
@@ -525,7 +525,7 @@ Bullet.getAllInitPack = function(){
 
 Base = function(team,id){
 	var self = Entity();
-	self.hp = 1000;
+	self.hp = 10000;
 	self.batch = 0;
 	self.team = team;
 	self.id = id;
@@ -554,7 +554,7 @@ Base = function(team,id){
 			self.batch = (self.batch + 1) % 50;
 		} else {
 			//Minion(self, [Vector2(1920-700, 600), Vector2(600, 1920 - 700), Vector2(350, 1920 - 540)]);
-			
+
 			if (self.batch === 0 && !self.toRemove){
 				//Minion(self, [Vector2(600, 1920 - 700), Vector2(1920 - 700, 600), Vector2(1920 - 540, 350)]);
 				//Minion(self, [Vector2(300,300),Vector2(1920-540,350)]);
@@ -618,14 +618,14 @@ Base.onStart = function(){
 
 Tower = function(team, id,x ,y){
 	var self = Entity();
-	self.hp = 500;
+	self.hp = 5000;
 	self.team = team;
 	self.id = id;
 	self.range = 400;
 	self.attacking = false;
 	self.target;
 	self.damage = 1;
-	
+
 	self.pos = Vector2(x,y);
 
 	self.update = function(){
@@ -724,29 +724,29 @@ Tower.onStart = function(){
 	Tower(0,0,1600,6528);
 	Tower(0,1,1472,4288);
 	Tower(0,2,1600,2496);
-	
+
 	Tower(1,3,6720,1408);
 	Tower(1,4,4544,1472);
 	Tower(1,5,2304,1344);
-	
+
 	//middle
 	Tower(0,6,2688,6656);
 	Tower(0,7,3456,5824);
 	Tower(0,8,4416,4864);
-	
+
 	Tower(1,9,6848,2496);
 	Tower(1,10,6208,3072);
 	Tower(1,11,5312,3904);
-	
+
 	//bottom
 	Tower(0,12,2816,7744);
 	Tower(0,13,5056,7808);
 	Tower(0,14,7104,7744);
-	
+
 	Tower(1,15,7938,2624);
 	Tower(1,16,7936,4864);
 	Tower(1,17,7936,6976);
-	
+
 	//Tower(1,1);
 
 }
