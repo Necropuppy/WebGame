@@ -603,7 +603,7 @@ Base.onStart = function(){
 	var base2 = Base(1,1);
 }
 
-Tower = function(team, id){
+Tower = function(team, id,x ,y){
 	var self = Entity();
 	self.hp = 500;
 	self.team = team;
@@ -611,13 +611,9 @@ Tower = function(team, id){
 	self.range = 400;
 	self.attacking = false;
 	self.target;
-	self.damage = 0.1;
-	if(self.team === 0){
-		self.pos = Vector2(600,1920 - 700);
-
-	} else if(self.team === 1){
-		self.pos = Vector2(1920 - 700,600);
-	}
+	self.damage = 1;
+	
+	self.pos = Vector2(x,y);
 
 	self.update = function(){
 		if(self.hp <= 0){
@@ -711,7 +707,33 @@ Tower.update = function(){
 Tower.list = {};
 
 Tower.onStart = function(){
-	Tower(0,0);
-	Tower(1,1);
+	//top
+	Tower(0,0,1600,6528);
+	Tower(0,1,1472,4288);
+	Tower(0,2,1600,2496);
+	
+	Tower(1,3,6720,1408);
+	Tower(1,4,4544,1472);
+	Tower(1,5,2304,1344);
+	
+	//middle
+	Tower(0,6,2688,6656);
+	Tower(0,7,3456,5824);
+	Tower(0,8,4416,4864);
+	
+	Tower(1,9,6848,2496);
+	Tower(1,10,6208,3072);
+	Tower(1,11,5312,3904);
+	
+	//bottom
+	Tower(0,12,2816,7744);
+	Tower(0,13,5056,7808);
+	Tower(0,14,7104,7744);
+	
+	Tower(1,15,7938,2624);
+	Tower(1,16,7936,4864);
+	Tower(1,17,7936,6976);
+	
+	//Tower(1,1);
 
 }
