@@ -79,7 +79,7 @@ Player = function(id, username,team,hero){
 	self.pressingDown = false;
 	self.pressingAttack = false;
 	self.mouseAngle = 0;
-	self.maxSpd = 500 / fps;
+	self.maxSpd = 400 / fps;
 	self.hp = 10;
 	self.hpMax = 2000;
 	self.score = 0;
@@ -146,6 +146,7 @@ Player = function(id, username,team,hero){
 		if(self.mp >= 10){
 			var b = Bullet(self,angle);
 			b.pos = self.pos;
+			b.hero = self.hero;
 			self.mp -= 10;
 		}
 	}
@@ -423,6 +424,7 @@ Bullet = function(parent,angle){
 	self.damage = parent.damage;
 	self.timer = 0;
 	self.toRemove = false;
+	self.hero = "agni";
 	var super_update = self.update;
 	self.update = function(){
 		if(self.timer++ > 100)
@@ -486,6 +488,7 @@ Bullet = function(parent,angle){
 			id:self.id,
 			x:self.pos.x,
 			y:self.pos.y,
+			hero:self.hero
 		};
 	}
 	self.getUpdatePack = function(){

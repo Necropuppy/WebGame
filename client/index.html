@@ -313,6 +313,12 @@
 
 	Img.bullet = new Image();
 	Img.bullet.src = '/client/img/bullet.png';
+	Img.bulletFire = new Image();
+	Img.bulletFire.src = '/client/img/fireBall.png';
+	Img.bulletDeath = new Image();
+	Img.bulletDeath.src = '/client/img/deathBall.png';
+	Img.bulletLightning = new Image();
+	Img.bulletLightning.src= '/client/img/lightningBall.png';
 	Img.map = new Image();
 	Img.map.src = '/client/img/mapProgress.png';
 
@@ -748,6 +754,7 @@
 		self.id = initPack.id;
 		self.x = initPack.x;
 		self.y = initPack.y;
+		self.hero = initPack.hero;
 
 		self.draw = function(){
 			var width = Img.bullet.width/2;
@@ -756,9 +763,24 @@
 			var x = self.x - Player.list[selfId].x + WIDTH/2;
 			var y = self.y - Player.list[selfId].y + HEIGHT/2;
 
-			ctx.drawImage(Img.bullet,
-				0,0,Img.bullet.width,Img.bullet.height,
-				x-width/2,y-height/2,width,height);
+			if (self.hero == "sam") {
+				ctx.drawImage(Img.bulletLightning,
+					0,0,Img.bulletLightning.width,Img.bulletLightning.height,
+					x-width/2,y-height/2,width,height);
+			} else if (self.hero == "yama") {
+				ctx.drawImage(Img.bulletDeath,
+					0,0,Img.bulletDeath.width,Img.bulletDeath.height,
+					x-width/2,y-height/2,width,height);
+			} else if (self.hero == "agni") {
+				ctx.drawImage(Img.bulletFire,
+					0,0,Img.bulletFire.width,Img.bulletFire.height,
+					x-width/2,y-height/2,width,height);
+			} else {
+				ctx.drawImage(Img.bullet,
+					0,0,Img.bullet.width,Img.bullet.height,
+					x-width/2,y-height/2,width,height);
+			}
+
 		}
 
 		Bullet.list[self.id] = self;
