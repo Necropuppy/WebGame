@@ -300,10 +300,10 @@ Minion = function(base, waypoints){
 	self.team = base.team;
 	self.waypoints = waypoints;
 	self.toRemove = false;
-	self.maxSpd = 6;
+	self.maxSpd = 10;
 	self.waypoint = 0;
 	self.damage = 2;
-	self.hp = 10;
+	self.hp = 1000;
 	var super_update = self.update;
 	self.update = function() {
 		self.updateSpd();
@@ -547,8 +547,10 @@ Base = function(team,id){
 				//Minion(self, [Vector2(600, 1920 - 700), Vector2(1920 - 700, 600), Vector2(1920 - 540, 350)]);
 				//Minion(self, [Vector2(300,300),Vector2(1920-540,350)]);
 				//Minion(self, [Vector2(1920-300,1920-200),Vector2(1920-540,350)]);
-				Minion(self,[Vector2(6848,2496)]);
-			}
+				/*Minion(self,[Vector2(7559,2020)]);
+				Minion(self,[Vector2(1600,6718),Vector2(1609,1576),Vector2(6707,1591),Vector2(7559,2020)]);
+				Minion(self,[Vector2(2885,7864),Vector2(8003,8031),Vector2(7947,2891),Vector2(7559,2020)]);
+			*/}
 			self.batch = (self.batch + 1) % 50;
 		} else {
 			//Minion(self, [Vector2(1920-700, 600), Vector2(600, 1920 - 700), Vector2(350, 1920 - 540)]);
@@ -557,7 +559,9 @@ Base = function(team,id){
 				//Minion(self, [Vector2(600, 1920 - 700), Vector2(1920 - 700, 600), Vector2(1920 - 540, 350)]);
 				//Minion(self, [Vector2(300,300),Vector2(1920-540,350)]);
 				//Minion(self, [Vector2(1920-300,1920-200),Vector2(1920-540,350)]);
-				Minion(self, [Vector2(2496,6848)]);
+				Minion(self, [Vector2(2020,7559)]);
+			Minion(self,[Vector2(6707,1591),Vector2(1609,1576),Vector2(1600,6718),Vector2(2020,7559)]);
+			Minion(self,[Vector2(7947,2891),Vector2(8003,8031),Vector2(2885,7864),Vector2(2020,7559)]);
 			}
 			self.batch = (self.batch + 1) % 50;
 		}
