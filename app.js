@@ -4,6 +4,7 @@
 var mongojs = require("mongojs");
 var db = mongojs('Public:secret@localhost:27017/myGame', ['account']);
 
+
 require('./Entity');
 require('./Map');
 
@@ -69,6 +70,7 @@ var addUser = function(data,cb){
 // Import the socket.io library.
 var io = require('socket.io')(serv,{});
 // Establishes data connection to client.
+var username;
 
 io.sockets.on('connection', function(socket){
 	socket.id = Math.random();
@@ -82,20 +84,26 @@ io.sockets.on('connection', function(socket){
 	socket.on('signIn',function(data){
 		isValidPassword(data,function(res){
 			if(res){
+				username = data.username;
 				// Log the client in and create a player in the game.
-				if(team0size > team1size){
-					Player.onConnect(socket, data.username,1);
-					team1size = team1size + 1;
-				}else{
-					Player.onConnect(socket, data.username,0);
-					team0size= team0size + 1;
-				}
+
 
 				socket.emit('signInResponse',{success:true});
 			} else {
 				socket.emit('signInResponse',{success:false});
 			}
 		});
+	});
+
+	socket.on('charSelect',function(data){
+		if(team0size > team1size){
+					Player.onConnect(socket, username,1,data.hero);
+					team1size = team1size + 1;
+					
+				}else{
+					Player.onConnect(socket, username,0,data.hero);
+					team0size = team0size + 1;
+				}
 	});
 
 	// Handles registration of new players.
@@ -114,6 +122,8 @@ io.sockets.on('connection', function(socket){
 	// Removes the client and its player when the client disconnects.
 	socket.on('disconnect',function(){
 		delete SOCKET_LIST[socket.id];
+		console.log("server delete player");
+
 		Player.onDisconnect(socket);
 	});
 
@@ -134,6 +144,7 @@ io.sockets.on('connection', function(socket){
 	});
 });
 
+var crashTimer = 100;
 // The main game loop.
 setInterval(function(){
 	var packs = Entity.getFrameUpdateData();
@@ -146,5 +157,13 @@ setInterval(function(){
 		socket.emit('remove',packs.removePack);
 		//socket.emit('towerUpdate', packs.)
 		//socket.emit('mapInit',mapPacks.initPack);
+		if (packs.updatePack.end) {
+			if (crashTimer > 0) {
+				crashTimer -= 1;
+			} else {
+				crash();
+			}
+		}
 	}
+	//console.log(process.uptime());
 },1000/fps);

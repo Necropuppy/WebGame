@@ -38,3 +38,11 @@ Vector2.Random = function (x, y) {
 Vector2.mult = function (vec, y) {
     return Vector2(vec.x * y, vec.y * y);
 }
+
+Vector2.unit = function (vec) {
+    return Vector2.mult(vec, 1 / vec.mag());
+}
+
+Vector2.angle = function (vec) {
+    return Math.atan2(vec.y, vec.x);
+}
