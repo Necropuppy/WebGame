@@ -94,7 +94,7 @@ Player = function(id, username,team,hero){
 	self.hero = hero;
 	self.faith = 0;
 	self.kills = 0;
-	self.deaths = 0;
+	self.deaths = -1;
 	self.damage = 100;
 	self.speed = self.maxSpd*fps;
 	self.armor = 2;
@@ -761,7 +761,7 @@ Tower.onStart = function(){
 	//top
 	Tower(0,0,1600,6528);
 	Tower(0,1,1472,4288);
-	Tower(0,2,1600,2496);
+	Tower(0,2,1600,2112);
 
 	Tower(1,3,6720,1408);
 	Tower(1,4,4544,1472);
