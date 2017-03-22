@@ -348,6 +348,11 @@
 	Img.atiny.src = '/client/img/agnitiny.png';
 	Img.shtiny.src = '/client/img/shivatiny.png';
 	Img.ytiny.src = '/client/img/yamatiny.png';
+	
+	Img.accel = new Image();
+	Img.accel.src = '/client/img/Accelerationists.png';
+	Img.deity = new Image();
+	Img.deity.src = '/client/img/Deitists.png';
 
 	var gameOver = false;
 	var winner = -1;
@@ -536,6 +541,11 @@
 		self.lvl = initPack.lvl;
 		self.lvlPts = initPack.lvlPts;
 		self.team = initPack.team;
+		if(self.team === 0){
+			self.teamBanner = Img.accel;
+		}else if(self.team === 1){
+			self.teamBanner = Img.deity;
+		}
 		self.hero = initPack.hero;
 		self.faith = initPack.faith;
 		self.kills = initPack.kills;
@@ -591,6 +601,9 @@
 			ctx.fillStyle = 'white';
 			ctx.font = '20px Arial';
 			ctx.fillText(self.lvl,x-60,y-42);
+			
+			//draw team banner
+			ctx.drawImage(self.teamBanner,(WIDTH -400)/2,0);
 
 
 			//player self status bar
@@ -826,7 +839,6 @@
 			ctx.fillStyle = ctx.fillStyle = 'rgb(32, 74, 74)';
 			//mp grey
 			ctx.fillRect(x - 65 + 2 + 25 + 90 - hpWidth,y-60+3,hpWidth,4);
-			console.log(hpWidth);
 
 			//top layer
 			//ctx.drawImage(Img.black,x-65,y-60);
@@ -861,7 +873,6 @@
 	});
 
 	socket.on('update',function(data){
-	console.log(data.end);
 		if(!data.end){
 			for(var i = 0 ; i < data.player.length; i++){
 				var pack = data.player[i];
