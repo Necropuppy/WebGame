@@ -446,7 +446,7 @@ Bullet = function(parent,angle, hero){
 	var self = Entity();
 	self.pos = parent.pos;
 	self.id = Math.random();
-	self.vel = Vector2.Polar(250 / fps, angle);
+	self.vel = Vector2.Polar(1000 / fps, angle);
 	self.actuallyParent = parent;
 	self.parent = parent.id;
 	self.damage = parent.damage;
@@ -455,7 +455,7 @@ Bullet = function(parent,angle, hero){
 	self.hero = hero;
 	var super_update = self.update;
 	self.update = function(){
-		if(self.timer++ > 100)
+		if(self.timer++ > 10)
 			self.toRemove = true;
 		super_update();
 
@@ -591,11 +591,11 @@ Base = function(team,id){
 				//Minion(self, [Vector2(600, 1920 - 700), Vector2(1920 - 700, 600), Vector2(1920 - 540, 350)]);
 				//Minion(self, [Vector2(300,300),Vector2(1920-540,350)]);
 				//Minion(self, [Vector2(1920-300,1920-200),Vector2(1920-540,350)]);
-				/*Minion(self,[Vector2(7559,2020)]);
+				Minion(self,[Vector2(7559,2020)]);
 				Minion(self,[Vector2(1600,6718),Vector2(1609,1576),Vector2(6707,1591),Vector2(7559,2020)]);
 				Minion(self,[Vector2(2885,7864),Vector2(8003,8031),Vector2(7947,2891),Vector2(7559,2020)]);
-			*/}
-			self.batch = (self.batch + 1) % 50;
+			}
+			self.batch = (self.batch + 1) % 150;
 		} else {
 			//Minion(self, [Vector2(1920-700, 600), Vector2(600, 1920 - 700), Vector2(350, 1920 - 540)]);
 
@@ -603,11 +603,11 @@ Base = function(team,id){
 				//Minion(self, [Vector2(600, 1920 - 700), Vector2(1920 - 700, 600), Vector2(1920 - 540, 350)]);
 				//Minion(self, [Vector2(300,300),Vector2(1920-540,350)]);
 				//Minion(self, [Vector2(1920-300,1920-200),Vector2(1920-540,350)]);
-				//Minion(self, [Vector2(2020,7559)]);
-				//Minion(self,[Vector2(6707,1591),Vector2(1609,1576),Vector2(1600,6718),Vector2(2020,7559)]);
-				//Minion(self,[Vector2(7947,2891),Vector2(8003,8031),Vector2(2885,7864),Vector2(2020,7559)]);
+				Minion(self, [Vector2(2020,7559)]);
+				Minion(self,[Vector2(6707,1591),Vector2(1609,1576),Vector2(1600,6718),Vector2(2020,7559)]);
+				Minion(self,[Vector2(7947,2891),Vector2(8003,8031),Vector2(2885,7864),Vector2(2020,7559)]);
 			}
-			self.batch = (self.batch + 1) % 50;
+			self.batch = (self.batch + 1) % 150;
 		}
 	}
 
