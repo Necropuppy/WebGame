@@ -81,7 +81,7 @@ Player = function(id, username,team,hero){
 	self.mouseAngle = 0;
 	self.maxSpd = 400 / fps;
 	self.hp = 10;
-	self.hpMax = 2000;
+	self.hpMax = 300;
 	self.score = 0;
 	self.username = username;
 	self.mp = 100;
@@ -98,6 +98,11 @@ Player = function(id, username,team,hero){
 	self.damage = 100;
 	self.speed = self.maxSpd*fps;
 	self.armor = 2;
+	self.time = process.uptime;
+	self.respawnTimer = 10;
+	self.tempTime = 0;
+	self.timerStart = false;
+	self.difference = 0;
 
 	if (self.team === 0) {
 		self.respawnPoint = Vector2(1616, 8080);
@@ -107,15 +112,31 @@ Player = function(id, username,team,hero){
 
 	var super_update = self.update;
 	self.update = function(){
-		self.updateSpd();
-		super_update();
+		if(!self.toRemove){
+			self.updateSpd();
+			super_update();
+		}
+		
 
 		//check dead
 		if(self.toRemove){
-			self.deaths += 1;
-			self.respawn();
+			
+			
+			if(self.timerStart === false){
+				self.timerStart = true;
+				self.tempTime = self.time;
+			}
+			self.difference = self.time - self.tempTime;
+			if(self.difference > self.respawnTimer){
+				self.difference = 0;
+				self.timerStart = false;
+				self.respawn();
+			}
+			
 		}
-
+		
+		//time
+		self.time = process.uptime();
 
 		//mana regen
 
@@ -137,7 +158,7 @@ Player = function(id, username,team,hero){
 
 		}
 
-		if(self.pressingAttack){
+		if(self.pressingAttack && !self.toRemove){
 			self.shootBullet(self.mouseAngle);
 		}
 	}
@@ -151,6 +172,7 @@ Player = function(id, username,team,hero){
 	}
 
 	self.updateSpd = function(){
+		
 		if(self.pressingRight && !self.isPositionWall(Vector2.add(Vector2.add(self.pos, Vector2(0, 24)), Vector2(self.maxSpd, 0))))
 			self.vel.x = self.maxSpd;
 		else if(self.pressingLeft && !self.isPositionWall(Vector2.add(Vector2.add(self.pos, Vector2(0, 24)), Vector2(-self.maxSpd, 0))))
@@ -167,6 +189,7 @@ Player = function(id, username,team,hero){
 	}
 
 	self.respawn = function (){
+		self.deaths += 1;
 		self.pos = self.respawnPoint;
 		self.hp = self.hpMax;
 		self.toRemove = false;
@@ -202,6 +225,9 @@ Player = function(id, username,team,hero){
 			damage:self.damage,
 			speed:self.speed,
 			armor:self.armor,
+			time:self.time,
+			difference:self.difference,
+			timerStart:self.timerStart,
 		};
 	}
 	self.getUpdatePack = function(){
@@ -228,6 +254,9 @@ Player = function(id, username,team,hero){
 			damage:self.damge,
 			speed:self.speed,
 			armor:self.armor,
+			time:self.time,
+			difference:self.difference,
+			timerStart:self.timerStart,
 		}
 	}
 
@@ -574,9 +603,9 @@ Base = function(team,id){
 				//Minion(self, [Vector2(600, 1920 - 700), Vector2(1920 - 700, 600), Vector2(1920 - 540, 350)]);
 				//Minion(self, [Vector2(300,300),Vector2(1920-540,350)]);
 				//Minion(self, [Vector2(1920-300,1920-200),Vector2(1920-540,350)]);
-				Minion(self, [Vector2(2020,7559)]);
-			Minion(self,[Vector2(6707,1591),Vector2(1609,1576),Vector2(1600,6718),Vector2(2020,7559)]);
-			Minion(self,[Vector2(7947,2891),Vector2(8003,8031),Vector2(2885,7864),Vector2(2020,7559)]);
+				//Minion(self, [Vector2(2020,7559)]);
+				//Minion(self,[Vector2(6707,1591),Vector2(1609,1576),Vector2(1600,6718),Vector2(2020,7559)]);
+				//Minion(self,[Vector2(7947,2891),Vector2(8003,8031),Vector2(2885,7864),Vector2(2020,7559)]);
 			}
 			self.batch = (self.batch + 1) % 50;
 		}

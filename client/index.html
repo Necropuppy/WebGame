@@ -353,6 +353,8 @@
 	Img.accel.src = '/client/img/Accelerationists.png';
 	Img.deity = new Image();
 	Img.deity.src = '/client/img/Deitists.png';
+	Img.respawn = new Image();
+	Img.respawn.src = '/client/img/summon.png';
 
 	var gameOver = false;
 	var winner = -1;
@@ -533,6 +535,8 @@
 		self.left = initPack.left;
 		self.up = initPack.up;
 		self.down = initPack.down;
+		self.timerStart = initPack.timerStart;
+		self.difference = initPack.difference;
 
 		self.mp = initPack.mp;
 		self.mpMax = initPack.mpMax;
@@ -540,6 +544,7 @@
 		self.xpMax = initPack.xpMax;
 		self.lvl = initPack.lvl;
 		self.lvlPts = initPack.lvlPts;
+		self.time = initPack.time;
 		self.team = initPack.team;
 		if(self.team === 0){
 			self.teamBanner = Img.accel;
@@ -571,6 +576,7 @@
 		}
 
 		self.draw = function(){
+			console.log(self.time);
 			var x = self.x - Player.list[selfId].x + WIDTH/2;
 			var y = self.y - Player.list[selfId].y + HEIGHT/2;
 
@@ -756,6 +762,13 @@
 					ctx.fillRect(1745 + (Player.list[i].x/9600)*175, HEIGHT - 175 + (Player.list[i].y/9600)*175,5,5);
 				}
 			}
+			
+			if(self.timerStart){
+				ctx.drawImage(Img.respawn,750,450);
+				ctx.fillStyle = 'white';
+				ctx.font='30px Arial';
+				ctx.fillText(Math.ceil(10 - self.difference),750+270+50,450+30);
+			}
 
 
 		}
@@ -926,6 +939,11 @@
 					p.left = pack.left;
 					p.up = pack.up;
 					p.down = pack.down;
+					p.time = pack.time;
+					if(pack.timerStart !== undefined)
+						p.timerStart = pack.timerStart;
+					
+					p.difference = pack.difference;
 				}
 			}
 			for(var i = 0; i < data.minion.length; i++) {
