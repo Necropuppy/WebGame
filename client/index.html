@@ -776,9 +776,23 @@
 
 			if(winner === self.team){
 				ctx.drawImage(Img.defeat,0,0);
+				
 
 			}else if(winner !== -1){
 				ctx.drawImage(Img.victory,0,0);
+				
+			}
+			
+			if(winner === 1){
+				ctx.drawImage(Img.deity,0,Img.victory.height);
+				ctx.fillStyle = 'white';
+				ctx.font = '50px Arial';
+				ctx.fillText("Win",0,Img.victory.height+Img.deity.height);
+			}else if(winner === 0){
+				ctx.drawImage(Img.accel,0,Img.victory.height);
+				ctx.fillStyle = 'white';
+				ctx.font = '50px Arial';
+				ctx.fillText("Win",0,Img.victory.height+Img.accel.height);
 			}
 
 		}
