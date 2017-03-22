@@ -142,6 +142,7 @@ io.sockets.on('connection', function(socket){
 	});
 });
 
+var crashTimer = 100;
 // The main game loop.
 setInterval(function(){
 	var packs = Entity.getFrameUpdateData();
@@ -154,7 +155,13 @@ setInterval(function(){
 		socket.emit('remove',packs.removePack);
 		//socket.emit('towerUpdate', packs.)
 		//socket.emit('mapInit',mapPacks.initPack);
-
+		if (packs.updatePack.end) {
+			if (crashTimer > 0) {
+				crashTimer -= 1;
+			} else {
+				crash();
+			}
+		}
 	}
 	//console.log(process.uptime());
 },1000/fps);

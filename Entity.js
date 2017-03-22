@@ -365,7 +365,7 @@ Minion = function(base, waypoints){
 
 		for (var i in Tower.list) {
 			var t = Tower.list[i];
-			if (self.pos.dist(Vector2.add(t.pos, Vector2(20, 100))) < 256 && self.team !== t.team && !t.toRemove) {
+			if (self.pos.dist(Vector2.add(t.pos, Vector2(20, 128))) < 320 && self.team !== t.team && !t.toRemove) {
 				self.vel = Vector2(0,0);
 				self.shootBullet(t.pos);
 				return;
@@ -385,6 +385,7 @@ Minion = function(base, waypoints){
 			var p = Player.list[i];
 			if (self.pos.dist(p.pos) < 64 && self.team !== p.team) {
 				self.vel = Vector2(0,0);
+				self.shootBullet(p.pos);
 				return;
 			}
 		}
@@ -658,7 +659,7 @@ Tower = function(team, id,x ,y){
 	self.hp = 5000;
 	self.team = team;
 	self.id = id;
-	self.range = 400;
+	self.range = 540;
 	self.attacking = false;
 	self.target;
 	self.damage = 1;
