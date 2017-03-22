@@ -489,7 +489,7 @@ Bullet = function(parent,angle, hero){
 						shooter.kills +=1;
 						shooter.faith+=10;
 					}
-					p.respawn();
+					
 				}
 				self.toRemove = true;
 			}
