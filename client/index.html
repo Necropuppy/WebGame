@@ -358,6 +358,11 @@
 	Img.deity.src = '/client/img/Deitists.png';
 	Img.respawn = new Image();
 	Img.respawn.src = '/client/img/summon.png';
+	
+	Img.bluebase = new Image();
+	Img.bluebase.src = '/client/img/blueBase.png';
+	Img.redbase = new Image();
+	Img.redbase.src = 'client/img/redBase.png';
 
 	var gameOver = false;
 	var winner = -1;
@@ -484,6 +489,13 @@
 		self.isDestroyed = initPack.destroyed;
 		self.hp = initPack.hp;
 		self.team = initPack.team;
+		
+		if(self.team === 0){
+			self.Img = Img.bluebase;
+		}
+		if(self.team === 1){
+			self.Img = Img.redbase;
+		}
 
 		Base.list[self.id] = self;
 
@@ -496,7 +508,7 @@
 			if (self.isDestroyed){
 				ctx.drawImage(Img.pd, x, y);
 			} else {
-				ctx.drawImage(Img.base,x,y);
+				ctx.drawImage(self.Img,x,y);
 
 				var hpWidth = 90 - 9 * (self.hp / 1000);
 				//player hp bars mini

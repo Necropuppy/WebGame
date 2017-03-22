@@ -576,6 +576,7 @@ Base = function(team,id){
 	self.id = id;
 	if(team === 0){
 		self.pos = Vector2(1920, 7488);
+		
 	} else if(team === 1){
 		self.pos = Vector2(7488, 1920);
 	}
