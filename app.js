@@ -4,6 +4,7 @@
 var mongojs = require("mongojs");
 var db = mongojs('Public:secret@localhost:27017/myGame', ['account']);
 
+
 require('./Entity');
 require('./Map');
 
@@ -98,6 +99,7 @@ io.sockets.on('connection', function(socket){
 		if(team0size > team1size){
 					Player.onConnect(socket, username,1,data.hero);
 					team1size = team1size + 1;
+					
 				}else{
 					Player.onConnect(socket, username,0,data.hero);
 					team0size = team0size + 1;
