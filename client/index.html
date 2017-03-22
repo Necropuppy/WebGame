@@ -740,6 +740,22 @@
 			ctx.fillStyle = 'yellow';
 			ctx.font = '30px Arial';
 			ctx.fillText(Player.list[selfId].lvl,75,HEIGHT-20);
+			
+			//draw minimap icons
+			for(var i in Player.list){
+				if(Player.list[i].id === Player.list[selfId].id){
+					ctx.fillStyle = 'yellow';
+					ctx.fillRect(1745 + (Player.list[i].x/9600)*175, HEIGHT - 175 + (Player.list[i].y/9600)*175,5,5);
+				}
+				else if(Player.list[i].team === Player.list[selfId].team){
+					ctx.fillStyle = 'blue';
+					ctx.fillRect(1745 + (Player.list[i].x/9600)*175, HEIGHT - 175 + (Player.list[i].y/9600)*175,5,5);
+				}
+				else{
+					ctx.fillStyle = 'red';
+					ctx.fillRect(1745 + (Player.list[i].x/9600)*175, HEIGHT - 175 + (Player.list[i].y/9600)*175,5,5);
+				}
+			}
 
 
 		}
