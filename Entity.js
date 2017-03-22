@@ -116,12 +116,12 @@ Player = function(id, username,team,hero){
 			self.updateSpd();
 			super_update();
 		}
-		
+
 
 		//check dead
 		if(self.toRemove){
-			
-			
+
+
 			if(self.timerStart === false){
 				self.timerStart = true;
 				self.tempTime = self.time;
@@ -132,9 +132,9 @@ Player = function(id, username,team,hero){
 				self.timerStart = false;
 				self.respawn();
 			}
-			
+
 		}
-		
+
 		//time
 		self.time = process.uptime();
 
@@ -172,7 +172,7 @@ Player = function(id, username,team,hero){
 	}
 
 	self.updateSpd = function(){
-		
+
 		if(self.pressingRight && !self.isPositionWall(Vector2.add(Vector2.add(self.pos, Vector2(0, 24)), Vector2(self.maxSpd, 0))))
 			self.vel.x = self.maxSpd;
 		else if(self.pressingLeft && !self.isPositionWall(Vector2.add(Vector2.add(self.pos, Vector2(0, 24)), Vector2(-self.maxSpd, 0))))
@@ -365,7 +365,7 @@ Minion = function(base, waypoints){
 
 		for (var i in Tower.list) {
 			var t = Tower.list[i];
-			if (self.pos.dist(t.pos) < 256 && self.team !== t.team && !t.toRemove) {
+			if (self.pos.dist(Vector2.add(t.pos, Vector2(20, 100))) < 256 && self.team !== t.team && !t.toRemove) {
 				self.vel = Vector2(0,0);
 				self.shootBullet(t.pos);
 				return;
@@ -374,7 +374,7 @@ Minion = function(base, waypoints){
 
 		for (var i in Base.list) {
 			var b = Base.list[i];
-			if (self.pos.dist(b.pos) < 256 && self.team !== b.team && !b.toRemove) {
+			if (self.pos.dist(b.pos) < 320 && self.team !== b.team && !b.toRemove) {
 				self.vel = Vector2(0,0);
 				self.shootBullet(b.pos);
 				return;
@@ -588,24 +588,17 @@ Base = function(team,id){
 		}
 		if (team === 0) {
 			if (self.batch === 0 && !self.toRemove){
-				//Minion(self, [Vector2(600, 1920 - 700), Vector2(1920 - 700, 600), Vector2(1920 - 540, 350)]);
-				//Minion(self, [Vector2(300,300),Vector2(1920-540,350)]);
-				//Minion(self, [Vector2(1920-300,1920-200),Vector2(1920-540,350)]);
-				Minion(self,[Vector2(7559,2020)]);
-				Minion(self,[Vector2(1600,6718),Vector2(1609,1576),Vector2(6707,1591),Vector2(7559,2020)]);
-				Minion(self,[Vector2(2885,7864),Vector2(8003,8031),Vector2(7947,2891),Vector2(7559,2020)]);
+				Minion(self,[Vector2(2832, 6576), Vector2(3664, 6112), Vector2(6784, 2992), Vector2(7559,2020)]);
+				Minion(self,[Vector2(1760,6718), Vector2(1760,1632),Vector2(6880,1540),Vector2(7559,2020)]);
+				Minion(self,[Vector2(2885,7864),Vector2(5152, 7856), Vector2(7104, 8064), Vector2(7808,8064), Vector2(7808, 7248), Vector2(7947,2891),Vector2(7559,2020)]);
 			}
 			self.batch = (self.batch + 1) % 150;
 		} else {
-			//Minion(self, [Vector2(1920-700, 600), Vector2(600, 1920 - 700), Vector2(350, 1920 - 540)]);
 
 			if (self.batch === 0 && !self.toRemove){
-				//Minion(self, [Vector2(600, 1920 - 700), Vector2(1920 - 700, 600), Vector2(1920 - 540, 350)]);
-				//Minion(self, [Vector2(300,300),Vector2(1920-540,350)]);
-				//Minion(self, [Vector2(1920-300,1920-200),Vector2(1920-540,350)]);
-				Minion(self, [Vector2(2020,7559)]);
-				Minion(self,[Vector2(6707,1591),Vector2(1609,1576),Vector2(1600,6718),Vector2(2020,7559)]);
-				Minion(self,[Vector2(7947,2891),Vector2(8003,8031),Vector2(2885,7864),Vector2(2020,7559)]);
+				Minion(self, [Vector2(6784, 2992), Vector2(3664, 6112), Vector2(2832, 6576), Vector2(2020,7559)]);
+				Minion(self,[Vector2(6880, 1540), Vector2(1760, 1632), Vector2(1760, 6718), Vector2(2020,7559)]);
+				Minion(self,[Vector2(7947, 2891), Vector2(7808, 7248), Vector2(7808, 8064), Vector2(7104, 8064), Vector2(5152, 7856), Vector2(2885, 7864), Vector2(2020,7559)]);
 			}
 			self.batch = (self.batch + 1) % 150;
 		}
