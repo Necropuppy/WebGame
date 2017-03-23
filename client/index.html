@@ -359,6 +359,11 @@
 	Img.respawn = new Image();
 	Img.respawn.src = '/client/img/summon.png';
 
+	Img.bluebase = new Image();
+	Img.bluebase.src = '/client/img/blueBase.png';
+	Img.redbase = new Image();
+	Img.redbase.src = 'client/img/redBase.png';
+
 	var gameOver = false;
 	var winner = -1;
 
@@ -485,6 +490,13 @@
 		self.hp = initPack.hp;
 		self.team = initPack.team;
 
+		if(self.team === 0){
+			self.Img = Img.bluebase;
+		}
+		if(self.team === 1){
+			self.Img = Img.redbase;
+		}
+
 		Base.list[self.id] = self;
 
 		self.draw = function(){
@@ -496,7 +508,7 @@
 			if (self.isDestroyed){
 				ctx.drawImage(Img.pd, x, y);
 			} else {
-				ctx.drawImage(Img.base,x,y);
+				ctx.drawImage(self.Img,x,y);
 
 				var hpWidth = 90 - 9 * (self.hp / 1000);
 				//player hp bars mini
@@ -597,6 +609,7 @@
 				ctx.drawImage(Img.blue,x - 65,y - 60);
 			}
 
+
 			//hp
 			ctx.fillStyle = ctx.fillStyle = 'rgb(32, 74, 74)';
 			//hp grey
@@ -610,23 +623,6 @@
 			ctx.fillStyle = 'white';
 			ctx.font = '20px Arial';
 			ctx.fillText(self.lvl,x-60,y-42);
-
-			//draw team banner
-			ctx.drawImage(self.teamBanner,(WIDTH -400)/2,0);
-
-
-			//player self status bar
-			var hpWidthSelf = 395 -(395 * Player.list[selfId].hp / Player.list[selfId].hpMax);
-			var mpWidthSelf = 395 -(395 * Player.list[selfId].mp / Player.list[selfId].mpMax);
-			var xpWidthSelf = 90 -(90 * Player.list[selfId].xp / Player.list[selfId].xpMax);
-
-			var width = self.player.width*2;
-			var height = self.player.height*2;
-
-			//ctx.fillStyle = 'blue';
-			//ctx.fillRect(x-width/2 + 10,y-height/2 + 10,Img.player.width,Img.player.height);
-			//ctx.fillStyle = 'black';
-			//ctx.fillText(5,x-width/2,y-height/2);
 			if(self.hero === "sam"){
 				if (self.down){
 					self.player = Img.pd;
@@ -672,107 +668,102 @@
 				}
 			}
 
+			var width = self.player.width*2;
+			var height = self.player.height*2;
+
 			ctx.drawImage(self.player,
 				0,0,self.player.width,self.player.height,
 				x-width/2,y-height/2,width,height);
 
-
-			//ctx.fillText(self.score,self.x,self.y-60);
-
-			//draw UI image
-			ctx.drawImage(Img.bottom,0, HEIGHT-Img.bottom.height);
-
-			//draw profile pic
-			ctx.drawImage(self.proPic,0,HEIGHT-118);
-
-			ctx.fillStyle = 'black';
-			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +  20 + (350 * (self.hp/self.hpMax)),HEIGHT-Img.hp.height + 20,350 - ((350) * (self.hp/self.hpMax)) , 20 );
-			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 20,350 , 20 );
-			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 60,350 , 20 );
-
-			ctx.fillStyle = 'green';
-			//ctx.fillRect(738 ,HEIGHT - 38,hpWidthSelf , 16 );
-
-			ctx.fillStyle = 'blue';
-			//ctx.fillRect(738 ,HEIGHT-19,mpWidthSelf , 16 );
-			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 20,350 , 20 );
-			//ctx.fillRect((WIDTH/2)-(Img.hp.width/2) +25 ,HEIGHT-Img.hp.height + 60,350 , 20 );
-
-			ctx.fillStyle = 'orange';
-			//ctx.fillRect(3,HEIGHT -19, xpWidthSelf,16);
-
-			//console.log(hpWidthSelf);
-
-			//draw over bars
-			//hp
-			ctx.fillStyle = ctx.fillStyle = 'rgb(32, 74, 74)';
-			//hp grey
-			ctx.fillRect(738 + 395 - (hpWidthSelf),HEIGHT - 38,hpWidthSelf,16);
-			//mp grey
-			ctx.fillRect(738 + 395 - (mpWidthSelf),HEIGHT - 19,mpWidthSelf,16);
-			//xp grey
-			ctx.fillRect(3 + 90 - (xpWidthSelf),HEIGHT - 19,xpWidthSelf,16);
-
-			//draw hp text
-			ctx.fillStyle = 'black';
-			ctx.font = '15px Arial';
-			ctx.fillText("Health:" + self.hp + "/" + self.hpMax, 738 + (395/3)+25,HEIGHT - 38+15);
-			//mp
-			ctx.fillText("Mana:" + self.mp + "/" + self.mpMax, 738 + (395/3+25),HEIGHT - 38+33);
-			//karma
-			ctx.fillText("Karma:" + self.xp + "/" + self.xpMax, 6,HEIGHT - 38+33);
-
-			//black text
-			ctx.fillStyle = 'white';
-			ctx.font = '15px Arial';
-			ctx.fillText("Health:" + self.hp + "/" + self.hpMax, 739 + (395/3)+25,HEIGHT - 38+14);
-			//mp
-			ctx.fillText("Mana:" + self.mp + "/" + self.mpMax, 739 + (395/3+25),HEIGHT - 38+32);
-			//karma
-			ctx.fillText("Karma:" + self.xp + "/" + self.xpMax, 7,HEIGHT - 38+32);
-
-			//draw UI overlay
-			ctx.drawImage(Img.bottomtop,0, HEIGHT-Img.bottomtop.height);
-
-			//player stats
-			ctx.font= '12px Arial';
-			ctx.fillText("ATK:" + self.damage, 100, HEIGHT - 100);
-			//ctx.fillText("DEF:" + self.armor, 100, HEIGHT - 80);
-			ctx.fillText("SPD:" + self.speed, 100, HEIGHT - 80);
-			ctx.fillText("KILLS:" + self.kills, 100, HEIGHT - 60);
-			ctx.fillText("DTHS:" + self.deaths, 100, HEIGHT - 40);
-			ctx.fillText("FAITH:" + self.faith, 100, HEIGHT - 20);
+				if (Player.list[selfId] === self) {
+				//draw team banner
+				ctx.drawImage(self.teamBanner,(WIDTH -400)/2,0);
 
 
-			ctx.fillStyle = 'black';
-			ctx.fillRect(71,HEIGHT-47,25,25);
-			ctx.fillStyle = 'yellow';
-			ctx.font = '30px Arial';
-			ctx.fillText(Player.list[selfId].lvl,75,HEIGHT-20);
+				//player self status bar
+				var hpWidthSelf = 395 -(395 * Player.list[selfId].hp / Player.list[selfId].hpMax);
+				var mpWidthSelf = 395 -(395 * Player.list[selfId].mp / Player.list[selfId].mpMax);
+				var xpWidthSelf = 90 -(90 * Player.list[selfId].xp / Player.list[selfId].xpMax);
 
-			//draw minimap icons
-			for(var i in Player.list){
-				if(Player.list[i].id === Player.list[selfId].id){
-					ctx.fillStyle = 'yellow';
-					ctx.fillRect(1745 + (Player.list[i].x/9600)*175, HEIGHT - 175 + (Player.list[i].y/9600)*175,5,5);
-				}
-				else if(Player.list[i].team === Player.list[selfId].team){
-					ctx.fillStyle = 'blue';
-					ctx.fillRect(1745 + (Player.list[i].x/9600)*175, HEIGHT - 175 + (Player.list[i].y/9600)*175,5,5);
-				}
-				else{
-					ctx.fillStyle = 'red';
-					ctx.fillRect(1745 + (Player.list[i].x/9600)*175, HEIGHT - 175 + (Player.list[i].y/9600)*175,5,5);
-				}
-			}
 
-			if(self.timerStart){
-				ctx.drawImage(Img.respawn,750,450);
+				//draw UI image
+				ctx.drawImage(Img.bottom,0, HEIGHT-Img.bottom.height);
+
+				//draw profile pic
+				ctx.drawImage(self.proPic,0,HEIGHT-118);
+
+				ctx.fillStyle = 'orange';
+
+				//draw over bars
+				//hp
+				ctx.fillStyle = ctx.fillStyle = 'rgb(32, 74, 74)';
+				//hp grey
+				ctx.fillRect(738 + 395 - (hpWidthSelf),HEIGHT - 38,hpWidthSelf,16);
+				//mp grey
+				ctx.fillRect(738 + 395 - (mpWidthSelf),HEIGHT - 19,mpWidthSelf,16);
+				//xp grey
+				ctx.fillRect(3 + 90 - (xpWidthSelf),HEIGHT - 19,xpWidthSelf,16);
+
+				//draw hp text
+				ctx.fillStyle = 'black';
+				ctx.font = '15px Arial';
+				ctx.fillText("Health:" + self.hp + "/" + self.hpMax, 738 + (395/3)+25,HEIGHT - 38+15);
+				//mp
+				ctx.fillText("Mana:" + self.mp + "/" + self.mpMax, 738 + (395/3+25),HEIGHT - 38+33);
+				//karma
+				ctx.fillText("Karma:" + self.xp + "/" + self.xpMax, 6,HEIGHT - 38+33);
+
+				//black text
 				ctx.fillStyle = 'white';
-				ctx.font='30px Arial';
-				ctx.fillText(Math.ceil(10 - self.difference),750+270+50,450+30);
-			}
+				ctx.font = '15px Arial';
+				ctx.fillText("Health:" + self.hp + "/" + self.hpMax, 739 + (395/3)+25,HEIGHT - 38+14);
+				//mp
+				ctx.fillText("Mana:" + self.mp + "/" + self.mpMax, 739 + (395/3+25),HEIGHT - 38+32);
+				//karma
+				ctx.fillText("Karma:" + self.xp + "/" + self.xpMax, 7,HEIGHT - 38+32);
 
+				//draw UI overlay
+				ctx.drawImage(Img.bottomtop,0, HEIGHT-Img.bottomtop.height);
+
+				//player stats
+				ctx.font= '12px Arial';
+				ctx.fillText("ATK:" + self.damage, 100, HEIGHT - 100);
+				//ctx.fillText("DEF:" + self.armor, 100, HEIGHT - 80);
+				ctx.fillText("SPD:" + self.speed, 100, HEIGHT - 80);
+				ctx.fillText("KILLS:" + self.kills, 100, HEIGHT - 60);
+				ctx.fillText("DTHS:" + self.deaths, 100, HEIGHT - 40);
+				ctx.fillText("FAITH:" + self.faith, 100, HEIGHT - 20);
+
+
+				ctx.fillStyle = 'black';
+				ctx.fillRect(71,HEIGHT-47,25,25);
+				ctx.fillStyle = 'yellow';
+				ctx.font = '30px Arial';
+				ctx.fillText(Player.list[selfId].lvl,75,HEIGHT-20);
+
+				//draw minimap icons
+				for(var i in Player.list){
+					if(Player.list[i].id === Player.list[selfId].id){
+						ctx.fillStyle = 'yellow';
+						ctx.fillRect(1745 + (Player.list[i].x/9600)*175, HEIGHT - 175 + (Player.list[i].y/9600)*175,5,5);
+					}
+					else if(Player.list[i].team === Player.list[selfId].team){
+						ctx.fillStyle = 'blue';
+						ctx.fillRect(1745 + (Player.list[i].x/9600)*175, HEIGHT - 175 + (Player.list[i].y/9600)*175,5,5);
+					}
+					else{
+						ctx.fillStyle = 'red';
+						ctx.fillRect(1745 + (Player.list[i].x/9600)*175, HEIGHT - 175 + (Player.list[i].y/9600)*175,5,5);
+					}
+				}
+
+				if(self.timerStart){
+					ctx.drawImage(Img.respawn,750,450);
+					ctx.fillStyle = 'white';
+					ctx.font='30px Arial';
+					ctx.fillText(Math.ceil(10 - self.difference),750+270+50,450+30);
+				}
+			}
 
 		}
 		self.drawEnd = function(){

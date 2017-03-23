@@ -354,9 +354,15 @@ Minion = function(base, waypoints){
 			self.toRemove = true;
 		}
 
-		for (var i in Minion.list) {
-			var m = Minion.list[i];
-			if (self.pos.dist(m.pos) < 256 && self.team !== m.team) {
+		if (self.team === 0) {
+			var mlist = Minion.list1;
+		} else {
+			var mlist = Minion.list0;
+		}
+
+		for (var i in mlist) {
+			var m = mlist[i];
+			if (self.pos.dist(m.pos) < 256) {
 				self.vel = Vector2(0,0);
 				self.shootBullet(m.pos);
 				return;
@@ -416,11 +422,18 @@ Minion = function(base, waypoints){
 	}
 
 	Minion.list[self.id] = self;
+	if (self.team === 0) {
+		Minion.list0[self.id] = self;
+	} else {
+		Minion.list1[self.id] = self;
+	}
 	initPack.minion.push(self.getInitPack());
 	return self;
 }
 
 Minion.list = {};
+Minion.list0 = {};
+Minion.list1 = {};
 
 Minion.getAllInitPack = function(){
 	var minions = [];
@@ -436,6 +449,11 @@ Minion.update = function(){
 		m.update();
 		if(m.toRemove){
 			delete Minion.list[i];
+			if (m.team === 0) {
+				delete Minion.list0[i];
+			} else {
+				delete Minion.list1[i];
+			}
 			removePack.minion.push(m.id);
 		} else
 			pack.push(m.getUpdatePack());
@@ -489,7 +507,7 @@ Bullet = function(parent,angle, hero){
 						shooter.kills +=1;
 						shooter.faith+=10;
 					}
-					p.respawn();
+
 				}
 				self.toRemove = true;
 			}
@@ -576,6 +594,7 @@ Base = function(team,id){
 	self.id = id;
 	if(team === 0){
 		self.pos = Vector2(1920, 7488);
+
 	} else if(team === 1){
 		self.pos = Vector2(7488, 1920);
 	}
